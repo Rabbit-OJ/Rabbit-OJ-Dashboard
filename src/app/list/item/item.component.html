@@ -1,0 +1,7 @@
+<div class="item-container">
+  <button mat-button (click)="redirectDetail()">{{ item.name }}</button>
+  <div class="info-container">
+    {{ item.acCount }} / {{ item.attemptCount }}, {{ ((item.acCount / item.attemptCount) * 100.0).toFixed(2) }}%
+  </div>
+</div>
+<mat-divider></mat-divider>
