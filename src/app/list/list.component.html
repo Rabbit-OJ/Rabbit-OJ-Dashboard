@@ -1,3 +1,10 @@
 <mat-list>
-  <app-item *ngFor="let item of itemList" [item]="item"></app-item>
+  <h3 mat-subheader>题库</h3>
+  <mat-list-item *ngFor="let item of itemList">
+    <h4 mat-line (click)="redirectDetail(item.id)" class="question-title">{{ item.name }}</h4>
+    <p mat-line class="info-container">
+      {{ item.acCount }} / {{ item.attemptCount }}, {{ ((item.acCount / item.attemptCount) * 100.0).toFixed(2) }}%
+    </p>
+    <mat-divider></mat-divider>
+  </mat-list-item>
 </mat-list>
