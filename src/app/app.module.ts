@@ -3,6 +3,7 @@ import { NgModule } from "@angular/core";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppRoutingModule } from "./app-routing.module";
 import { FormsModule } from "@angular/forms";
+import { HttpClientModule } from "@angular/common/http";
 
 import { MatButtonModule } from "@angular/material/button";
 import { MatToolbarModule } from "@angular/material/toolbar";
@@ -20,6 +21,8 @@ import { CodeComponent } from "./submit/code/code.component";
 import { ResultComponent } from "./submit/result/result.component";
 import { LoginComponent } from "./user/login/login.component";
 import { RegisterComponent } from "./user/register/register.component";
+
+import { httpInterceptorProviders } from "./http-interceptors";
 
 @NgModule({
   declarations: [
@@ -43,9 +46,10 @@ import { RegisterComponent } from "./user/register/register.component";
     MatFormFieldModule,
     MatChipsModule,
     MatCardModule,
-    MatInputModule
+    MatInputModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
