@@ -4,5 +4,27 @@
   margin: 24px 12px;
 }
 .nav-bar {
-  @include mat-elevation(2);
+  @include mat-elevation(5);
+  position: fixed;
+  top: 0;
+  z-index: 9999;
+}
+.reserve-space {
+  height: 64px;
+}
+@media screen and (min-width: 800px) {
+  .oj-pc {
+    display: inline;
+  }
+  .oj-mobile {
+    display: none;
+  }
+}
+@media screen and (max-width: 800px) {
+  .oj-pc {
+    display: none;
+  }
+  .oj-mobile {
+    display: inline;
+  }
 }

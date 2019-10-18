@@ -1,0 +1,15 @@
+<mat-card class="input-card">
+  <h3 class="input-title">登录</h3>
+  <form class="login-form">
+    <mat-form-field class="full-width">
+      <input matInput placeholder="用户名" name="username" [(ngModel)]="username" />
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="密码" type="password" name="password" [(ngModel)]="password" />
+    </mat-form-field>
+  </form>
+  <div class="btn-container">
+    <button mat-raised-button id="login" color="primary" (click)="handleLogin()">登录</button>
+    <button mat-raised-button id="register" color="accent" (click)="redirectRegister()">注册</button>
+  </div>
+</mat-card>

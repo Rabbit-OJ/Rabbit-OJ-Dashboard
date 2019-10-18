@@ -3,4 +3,5 @@ export interface IListItem {
   name: string;
   acCount: number;
   attemptCount: number;
+  difficulty: number;
 }
