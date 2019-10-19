@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { IListItem } from "../ilist-item";
-import { Router } from "@angular/router";
 
 @Component({
   selector: "app-list",
@@ -31,10 +30,5 @@ export class ListComponent implements OnInit {
       difficulty: 3
     }
   ];
-  constructor(private router: Router) {}
   ngOnInit() {}
-
-  redirectDetail = (id: string) => {
-    this.router.navigate(["info", id]);
-  };
 }

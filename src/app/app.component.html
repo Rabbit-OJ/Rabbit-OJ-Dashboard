@@ -1,9 +1,9 @@
 <header>
   <mat-toolbar color="primary" class="nav-bar">
-    <button mat-button (click)="redirectList()" class="oj-pc">Rabbit Online Judge Dashboard</button>
-    <button mat-button (click)="redirectList()" class="oj-mobile">Rabbit OJ</button>
-    <button mat-button (click)="redirectList()">题库</button>
-    <button mat-button (click)="redirectRecord()">提交记录</button>
+    <button mat-button routerLink="/list" class="oj-pc">Rabbit Online Judge Dashboard</button>
+    <button mat-button routerLink="/list" class="oj-mobile">Rabbit OJ</button>
+    <button mat-button routerLink="/list">题库</button>
+    <button mat-button routerLink="/record">提交记录</button>
   </mat-toolbar>
 </header>
 <div class="reserve-space"></div>

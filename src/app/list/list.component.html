@@ -7,7 +7,7 @@
       <mat-chip *ngIf="item.difficulty === 3" color="warn" selected>Hard</mat-chip>
     </mat-chip-list>
     <h4 mat-line>
-      <a (click)="redirectDetail(item.id)" class="question-title">{{ item.name }}</a>
+      <a [routerLink]="'/info/' + item.id" class="question-title">{{ item.name }}</a>
     </h4>
     <p mat-line class="info-container">
       {{ item.acCount }} / {{ item.attemptCount }}, {{ ((item.acCount / item.attemptCount) * 100.0).toFixed(2) }}%

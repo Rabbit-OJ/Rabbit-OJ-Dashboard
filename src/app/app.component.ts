@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { Router } from "@angular/router";
 
 @Component({
   selector: "app-root",
@@ -8,13 +7,4 @@ import { Router } from "@angular/router";
 })
 export class AppComponent {
   title = "Rabbit-OJ-Dashboard";
-
-  constructor(private router: Router) {}
-
-  redirectList = () => {
-    this.router.navigate(["list"]);
-  };
-  redirectRecord = () => {
-    this.router.navigate(["record"]);
-  };
 }
