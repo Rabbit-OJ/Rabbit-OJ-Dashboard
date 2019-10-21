@@ -1,5 +1,10 @@
-import { Component, OnInit, Input } from "@angular/core";
-import { Router } from "@angular/router";
+import { Component, OnInit } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { UrlService } from "src/app/service/url.service";
+import { GeneralResponse } from "src/app/interface/general-response";
+import { LoginResponse } from "src/app/interface/login-response";
+import { AuthenticationService } from "src/app/service/authentication.service";
+import { PasswordService } from "src/app/service/password.service";
 
 @Component({
   selector: "app-login",
@@ -7,7 +12,7 @@ import { Router } from "@angular/router";
   styleUrls: ["./login.component.scss"]
 })
 export class LoginComponent implements OnInit {
-  constructor(private router: Router) {}
+  constructor(private http: HttpClient, private authService: AuthenticationService) {}
 
   username = "";
   password = "";
@@ -15,10 +20,15 @@ export class LoginComponent implements OnInit {
   ngOnInit() {}
 
   handleLogin = () => {
-    console.log(this.username, this.password);
-  };
-
-  redirectRegister = () => {
-    this.router.navigate(["user", "register"]);
+    this.http
+      .post<GeneralResponse<LoginResponse>>(UrlService.USER.POST_LOGIN, {
+        username: this.username,
+        password: PasswordService.MD5(this.password)
+      })
+      .subscribe(({ code, message }) => {
+        if (code === 200) {
+          this.authService.login(message.token, message);
+        }
+      });
   };
 }

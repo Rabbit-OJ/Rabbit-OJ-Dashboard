@@ -19,7 +19,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           location.reload(true);
         }
 
-        const error = err.error.message || err.statusText || "未知错误";
+        const error = err.error.message || err.statusText || "Unknown Error";
         if (err.status !== 200) {
           this.snackBar.open(error, "OK", {
             duration: 2000

@@ -16,6 +16,6 @@
   </form>
   <div class="btn-container">
     <button mat-raised-button id="register" color="primary" (click)="handleRegister()">注册</button>
-    <button mat-raised-button id="login" color="accent" (click)="redirectLogin()">登录</button>
+    <button mat-raised-button id="login" color="accent" [routerLink]="['/user', 'login']">登录</button>
   </div>
 </mat-card>

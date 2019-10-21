@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
 
-import { MiniUser } from "../interface/mini-user";
+import { MiniUser, LoginResponseUser } from "../interface/mini-user";
 
 @Injectable({
   providedIn: "root"
@@ -25,9 +25,9 @@ export class AuthenticationService {
     return this.currentUserSubject.value;
   }
 
-  public login(token: string, response: MiniUser) {
+  public login(token: string, response: LoginResponseUser) {
     localStorage.setItem("token", token);
-    this.currentUserSubject.next(response);
+    this.currentUserSubject.next({ ...response, isLogin: true });
   }
 
   public logout() {

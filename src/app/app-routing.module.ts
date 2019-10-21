@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 
 import { ListComponent } from "./list/list.component";
-import { RecordComponent } from "./record/record.component";
+import { SubmissionComponent } from "./submission/submission.component";
 import { DetailComponent } from "./detail/detail.component";
 import { LoginComponent } from "./user/login/login.component";
 import { RegisterComponent } from "./user/register/register.component";
@@ -13,12 +13,12 @@ const routes: Routes = [
     component: ListComponent
   },
   {
-    path: "list",
+    path: "list/:page",
     component: ListComponent
   },
   {
-    path: "record",
-    component: RecordComponent
+    path: "submission/:page",
+    component: SubmissionComponent
   },
   {
     path: "info/:id",

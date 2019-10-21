@@ -11,11 +11,11 @@ import { MatListModule } from "@angular/material/list";
 import { MatCardModule } from "@angular/material/card";
 import { MatInputModule } from "@angular/material/input";
 import { MatChipsModule } from "@angular/material/chips";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatFormFieldModule } from "@angular/material/form-field";
 
 import { AppComponent } from "./app.component";
 import { ListComponent } from "./list/list.component";
-import { RecordComponent } from "./record/record.component";
 import { DetailComponent } from "./detail/detail.component";
 import { CodeComponent } from "./submit/code/code.component";
 import { ResultComponent } from "./submit/result/result.component";
@@ -23,23 +23,25 @@ import { LoginComponent } from "./user/login/login.component";
 import { RegisterComponent } from "./user/register/register.component";
 
 import { httpInterceptorProviders } from "./interceptor";
+import { SubmissionComponent } from "./submission/submission.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     ListComponent,
-    RecordComponent,
     DetailComponent,
     CodeComponent,
     ResultComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    SubmissionComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    MatSnackBarModule,
     MatButtonModule,
     MatToolbarModule,
     MatListModule,

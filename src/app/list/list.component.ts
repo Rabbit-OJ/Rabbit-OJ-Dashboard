@@ -1,5 +1,10 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { IListItem } from "../ilist-item";
+import { QuestionList } from "../interface/question-list";
+import { HttpClient } from "@angular/common/http";
+import { ActivatedRoute, ParamMap } from "@angular/router";
+import { switchMap, map } from "rxjs/operators";
+import { UrlService } from "../service/url.service";
+import { GeneralResponse } from "../interface/general-response";
 
 @Component({
   selector: "app-list",
@@ -7,28 +12,21 @@ import { IListItem } from "../ilist-item";
   styleUrls: ["./list.component.scss"]
 })
 export class ListComponent implements OnInit {
-  @Input() itemList: Array<IListItem> = [
-    {
-      id: "1",
-      name: "A + B Problem",
-      acCount: 12,
-      attemptCount: 24,
-      difficulty: 1
-    },
-    {
-      id: "2",
-      name: "A Medium Problem",
-      acCount: 12,
-      attemptCount: 24,
-      difficulty: 2
-    },
-    {
-      id: "3",
-      name: "[2019 Fall] 面试时间选择",
-      acCount: 0,
-      attemptCount: 24,
-      difficulty: 3
-    }
-  ];
-  ngOnInit() {}
+  @Input() itemList: QuestionList;
+
+  constructor(private http: HttpClient, private route: ActivatedRoute) {}
+
+  ngOnInit() {
+    this.route.paramMap
+      .pipe(
+        switchMap((params: ParamMap) =>
+          this.http
+            .get<GeneralResponse<QuestionList>>(UrlService.QUESTION.GET_LIST(params.get("page")))
+            .pipe(map(item => item.message))
+        )
+      )
+      .subscribe(response => {
+        this.itemList = response;
+      });
+  }
 }

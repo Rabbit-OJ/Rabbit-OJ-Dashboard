@@ -7,10 +7,10 @@
       <mat-chip *ngIf="item.difficulty === 3" color="warn" selected>Hard</mat-chip>
     </mat-chip-list>
     <h4 mat-line>
-      <a [routerLink]="'/info/' + item.id" class="question-title">{{ item.name }}</a>
+      <a [routerLink]="'/info/' + item.tid" class="question-title">{{ item.subject }}</a>
     </h4>
     <p mat-line class="info-container">
-      {{ item.acCount }} / {{ item.attemptCount }}, {{ ((item.acCount / item.attemptCount) * 100.0).toFixed(2) }}%
+      {{ item.accept }} / {{ item.attempt }}, {{ ((item.accept / item.attempt) * 100.0).toFixed(2) }}%
     </p>
     <mat-divider></mat-divider>
   </mat-list-item>
