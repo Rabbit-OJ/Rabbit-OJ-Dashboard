@@ -22,7 +22,7 @@ import { ResultComponent } from "./submit/result/result.component";
 import { LoginComponent } from "./user/login/login.component";
 import { RegisterComponent } from "./user/register/register.component";
 
-import { httpInterceptorProviders } from "./http-interceptors";
+import { httpInterceptorProviders } from "./interceptor";
 
 @NgModule({
   declarations: [
