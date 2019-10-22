@@ -13,6 +13,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
 
 import { AppComponent } from "./app.component";
 import { ListComponent } from "./list/list.component";
@@ -49,7 +50,8 @@ import { SubmissionComponent } from "./submission/submission.component";
     MatChipsModule,
     MatCardModule,
     MatInputModule,
-    HttpClientModule
+    HttpClientModule,
+    MatProgressBarModule
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]

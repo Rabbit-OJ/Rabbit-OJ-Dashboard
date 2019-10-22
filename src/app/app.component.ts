@@ -1,4 +1,5 @@
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
+import { ProgressService } from "./service/progress.service";
 
 @Component({
   selector: "app-root",
@@ -6,5 +7,16 @@ import { Component } from "@angular/core";
   styleUrls: ["./app.component.scss"]
 })
 export class AppComponent {
-  title = "Rabbit-OJ-Dashboard";
+  title = "Rabbit OJ Dashboard";
+
+  @Input() progress: boolean = false;
+
+  constructor(public progressService: ProgressService) {}
+
+  ngOnInit() {
+    this.progressService.progress.subscribe(item => {
+      this.progress = item;
+      console.log(this.progress);
+    });
+  }
 }
