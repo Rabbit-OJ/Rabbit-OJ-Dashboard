@@ -19,6 +19,5 @@ export class ProgressService {
 
   public stopProgress() {
     this.progressSubject.next(false);
-    console.log(this.progressSubject.value);
   }
 }

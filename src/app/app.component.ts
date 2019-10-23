@@ -8,15 +8,11 @@ import { ProgressService } from "./service/progress.service";
 })
 export class AppComponent {
   title = "Rabbit OJ Dashboard";
-
-  @Input() progress: boolean = false;
+  @Input() progressShow: boolean = false;
 
   constructor(public progressService: ProgressService) {}
 
   ngOnInit() {
-    this.progressService.progress.subscribe(item => {
-      this.progress = item;
-      console.log(this.progress);
-    });
+    setTimeout(() => this.progressService.progress.subscribe(item => (this.progressShow = item)), 0);
   }
 }

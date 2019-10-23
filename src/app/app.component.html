@@ -5,7 +5,7 @@
     <button mat-button routerLink="/list/1">题库</button>
     <button mat-button routerLink="/submission/1">提交记录</button>
   </mat-toolbar>
-  <mat-progress-bar mode="indeterminate" class="progress-bar" [ngClass]="{ hidden: !progress }"></mat-progress-bar>
+  <mat-progress-bar mode="indeterminate" class="progress-bar" *ngIf="progressShow"></mat-progress-bar>
 </header>
 <div class="reserve-space"></div>
 <div class="content">
