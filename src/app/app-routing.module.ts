@@ -10,7 +10,8 @@ import { RegisterComponent } from "./user/register/register.component";
 const routes: Routes = [
   {
     path: "",
-    component: ListComponent
+    pathMatch: "full",
+    redirectTo: "/list/1"
   },
   {
     path: "list/:page",
