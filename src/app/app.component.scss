@@ -8,6 +8,15 @@
   position: fixed;
   top: 0;
   z-index: 9999;
+  display: flex;
+
+  & .nav-left-container {
+    justify-content: left;
+    flex-grow: 1;
+  }
+  & .nav-right-container {
+    justify-content: right;
+  }
 }
 .reserve-space {
   height: 64px;

@@ -1,12 +1,12 @@
 <div class="detail">
   <h1>
-    {{ title }}
+    {{ question.subject }}
   </h1>
   <h3>题目描述</h3>
-  <div [innerHTML]="description"></div>
+  <div [innerHTML]="renderedHTML"></div>
   <h3>题目统计</h3>
   <div class="statics">
-    <p>提交：{{ attemptCount }}</p>
-    <p>通过：{{ acCount }} ({{ ((acCount / attemptCount) * 100.0).toFixed(2) }}%)</p>
+    <p>提交：{{ question.attempt }}</p>
+    <p>通过：{{ question.accept }} ({{ ((question.accept / question.attempt) * 100.0).toFixed(2) }}%)</p>
   </div>
 </div>

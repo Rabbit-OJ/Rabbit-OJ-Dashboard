@@ -1,4 +1,13 @@
 import { Component, OnInit, Input } from "@angular/core";
+import { QuestionDetail } from "../interface/question-detail";
+import { HttpClient } from "@angular/common/http";
+import { UrlService } from "../service/url.service";
+import { ActivatedRoute, ParamMap } from "@angular/router";
+import { switchMap, map } from "rxjs/operators";
+import { GeneralResponse } from "../interface/general-response";
+
+import marked from "marked";
+import DOMPurify from "dompurify";
 
 @Component({
   selector: "app-detail",
@@ -6,13 +15,24 @@ import { Component, OnInit, Input } from "@angular/core";
   styleUrls: ["./detail.component.scss"]
 })
 export class DetailComponent implements OnInit {
-  @Input() id: string = "1";
-  @Input() title: string = "A + B Problem";
-  @Input() description: string = "Output A + B";
-  @Input() acCount: number = 1;
-  @Input() attemptCount: number = 6;
+  @Input() question: QuestionDetail;
+  @Input() renderedHTML: string;
 
-  constructor() {}
+  constructor(private http: HttpClient, private route: ActivatedRoute) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.route.paramMap
+      .pipe(
+        switchMap((params: ParamMap) =>
+          this.http
+            .get<GeneralResponse<QuestionDetail>>(UrlService.QUESTION.OPTIONS_ITEM(params.get("tid")))
+            .pipe(map(item => item.message))
+        )
+      )
+      .subscribe(response => {
+        this.question = response;
+        const { content } = response;
+        this.renderedHTML = DOMPurify.sanitize(marked(content));
+      });
+  }
 }

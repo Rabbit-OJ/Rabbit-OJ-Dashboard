@@ -22,7 +22,7 @@ const routes: Routes = [
     component: SubmissionComponent
   },
   {
-    path: "info/:id",
+    path: "info/:tid",
     component: DetailComponent
   },
   {

@@ -18,6 +18,7 @@ export class UrlService {
     GET_INFO: (username: string) => `${BACKEND_URL}/user/info/${username}`,
     AVATAR: (uid: string) => `${BACKEND_URL}/user/avatar/${uid}`,
     GET_MY: `${BACKEND_URL}/user/my`,
+    GET_TOKEN: `${BACKEND_URL}/user/token`,
     POST_CHANGE_AVATAR: `${BACKEND_URL}/user/my/avatar`,
     POST_LOGIN: `${BACKEND_URL}/user/login`,
     POST_REGISTER: `${BACKEND_URL}/user/register`
