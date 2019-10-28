@@ -8,6 +8,7 @@ import { GeneralResponse } from "../interface/general-response";
 
 import marked from "marked";
 import DOMPurify from "dompurify";
+import { LanguageService } from "../service/language.service";
 
 @Component({
   selector: "app-detail",
@@ -15,24 +16,41 @@ import DOMPurify from "dompurify";
   styleUrls: ["./detail.component.scss"]
 })
 export class DetailComponent implements OnInit {
-  @Input() question: QuestionDetail;
-  @Input() renderedHTML: string;
+  @Input() question: QuestionDetail = {
+    tid: "",
+    content: "",
+    subject: "",
+    attempt: 0,
+    accept: 0,
+    difficulty: 0,
+    time_limit: 0,
+    space_limit: 0,
+    created_at: ""
+  };
+  @Input() renderedHTML: string = "";
+  @Input() language: string = "";
 
-  constructor(private http: HttpClient, private route: ActivatedRoute) {}
+  constructor(private http: HttpClient, private route: ActivatedRoute, public languageService: LanguageService) {}
 
   ngOnInit() {
-    this.route.paramMap
-      .pipe(
-        switchMap((params: ParamMap) =>
-          this.http
-            .get<GeneralResponse<QuestionDetail>>(UrlService.QUESTION.OPTIONS_ITEM(params.get("tid")))
-            .pipe(map(item => item.message))
+    setTimeout(() => {
+      this.route.paramMap
+        .pipe(
+          switchMap((params: ParamMap) =>
+            this.http.get<GeneralResponse<QuestionDetail>>(UrlService.QUESTION.OPTIONS_ITEM(params.get("tid"))).pipe(
+              map(item => ({
+                ...item.message,
+                created_at: new Date(item.message.created_at as string).toLocaleString()
+              }))
+            )
+          )
         )
-      )
-      .subscribe(response => {
-        this.question = response;
-        const { content } = response;
-        this.renderedHTML = DOMPurify.sanitize(marked(content));
-      });
+        .subscribe(response => {
+          this.question = response;
+          const { content } = response;
+          this.renderedHTML = DOMPurify.sanitize(marked(content));
+        });
+    }, 0);
   }
+  handleSubmit = () => {};
 }

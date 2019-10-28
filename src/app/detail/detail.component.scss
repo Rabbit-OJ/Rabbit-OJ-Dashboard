@@ -1,7 +1,18 @@
 .detail {
   & .statics {
     & p {
-      margin: 0;
+      margin: 2px 12px;
     }
   }
+}
+.submit-container {
+  display: flex;
+  width: 100%;
+  padding: 24px;
+  flex-flow: row wrap;
+}
+.code-submit,
+.code-submit-field {
+  width: 100%;
+  min-height: 480px;
 }

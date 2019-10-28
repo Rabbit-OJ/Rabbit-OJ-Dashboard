@@ -7,5 +7,5 @@ export interface QuestionDetail {
   difficulty: number;
   time_limit: number;
   space_limit: number;
-  created_at: Date;
+  created_at: string;
 }

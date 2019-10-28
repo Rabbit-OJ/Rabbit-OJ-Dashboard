@@ -2,11 +2,44 @@
   <h1>
     {{ question.subject }}
   </h1>
-  <h3>题目描述</h3>
-  <div [innerHTML]="renderedHTML"></div>
-  <h3>题目统计</h3>
-  <div class="statics">
-    <p>提交：{{ question.attempt }}</p>
-    <p>通过：{{ question.accept }} ({{ ((question.accept / question.attempt) * 100.0).toFixed(2) }}%)</p>
-  </div>
+  <mat-tab-group [dynamicHeight]="true" mat-align-tabs="center">
+    <mat-tab label="题目描述">
+      <h3>题目描述</h3>
+      <div class="description" [innerHTML]="renderedHTML"></div>
+      <h3>题目统计</h3>
+      <div>
+        <p>提交：{{ question.attempt }}</p>
+        <p>通过：{{ question.accept }} ({{ ((question.accept / question.attempt) * 100.0).toFixed(2) }}%)</p>
+      </div>
+      <h3>题目限制</h3>
+      <p>时间：{{ question.time_limit }}ms</p>
+      <p>空间：{{ question.space_limit }}MB</p>
+      <h3>更新时间</h3>
+      <p>{{ question.created_at }}</p>
+      <h3>题目难度</h3>
+      <mat-chip-list>
+        <mat-chip *ngIf="question.difficulty === 1" color="primary" selected>Easy</mat-chip>
+        <mat-chip *ngIf="question.difficulty === 2" color="accent" selected>Medium</mat-chip>
+        <mat-chip *ngIf="question.difficulty === 3" color="warn" selected>Hard</mat-chip>
+      </mat-chip-list>
+    </mat-tab>
+
+    <mat-tab label="提交代码">
+      <div class="submit-container">
+        <mat-form-field>
+          <mat-select placeholder="Language" [(value)]="language">
+            <mat-option *ngFor="let language of languageService.data" value="language.value">{{
+              language.name
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="code-submit-field">
+          <mat-label>Codes</mat-label>
+          <textarea matInput placeholder="Past your codes here" class="code-submit"></textarea>
+        </mat-form-field>
+        <button mat-raised-button id="login" color="primary" (click)="handleSubmit()">提交测评</button>
+      </div>
+    </mat-tab>
+    <mat-tab label="提交记录"> </mat-tab>
+  </mat-tab-group>
 </div>

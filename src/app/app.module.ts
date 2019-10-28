@@ -14,6 +14,8 @@ import { MatChipsModule } from "@angular/material/chips";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { MatTabsModule } from "@angular/material/tabs";
+import { MatSelectModule } from "@angular/material/select";
 
 import { AppComponent } from "./app.component";
 import { ListComponent } from "./list/list.component";
@@ -42,6 +44,7 @@ import { SubmissionComponent } from "./submission/submission.component";
     FormsModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     MatSnackBarModule,
     MatButtonModule,
     MatToolbarModule,
@@ -50,8 +53,9 @@ import { SubmissionComponent } from "./submission/submission.component";
     MatChipsModule,
     MatCardModule,
     MatInputModule,
-    HttpClientModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatTabsModule,
+    MatSelectModule
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]

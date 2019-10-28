@@ -17,16 +17,18 @@ export class ListComponent implements OnInit {
   constructor(private http: HttpClient, private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.route.paramMap
-      .pipe(
-        switchMap((params: ParamMap) =>
-          this.http
-            .get<GeneralResponse<QuestionList>>(UrlService.QUESTION.GET_LIST(params.get("page")))
-            .pipe(map(item => item.message))
+    setTimeout(() => {
+      this.route.paramMap
+        .pipe(
+          switchMap((params: ParamMap) =>
+            this.http
+              .get<GeneralResponse<QuestionList>>(UrlService.QUESTION.GET_LIST(params.get("page")))
+              .pipe(map(item => item.message))
+          )
         )
-      )
-      .subscribe(response => {
-        this.itemList = response;
-      });
+        .subscribe(response => {
+          this.itemList = response;
+        });
+    }, 0);
   }
 }
