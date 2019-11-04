@@ -4,12 +4,18 @@
       <button mat-button routerLink="/list/1" class="oj-pc">Rabbit Online Judge Dashboard</button>
       <button mat-button routerLink="/list/1" class="oj-mobile">Rabbit OJ</button>
       <button mat-button routerLink="/list/1">题库</button>
-      <button mat-button routerLink="/submission/1" *ngIf="authService.currentUser.isLogin">提交记录</button>
     </div>
 
     <div class="nav-right-container">
       <button mat-button routerLink="/user/login" *ngIf="!authService.currentUser.isLogin">登录</button>
-      <button mat-button *ngIf="authService.currentUser.isLogin">{{ authService.currentUser.username }}</button>
+
+      <button mat-button *ngIf="authService.currentUser.isLogin" [matMenuTriggerFor]="menu">
+        {{ authService.currentUser.username }}
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item routerLink="/submission/1">提交记录</button>
+        <button mat-menu-item>注销账号</button>
+      </mat-menu>
     </div>
   </mat-toolbar>
   <mat-progress-bar mode="indeterminate" class="progress-bar" *ngIf="progressShow"></mat-progress-bar>

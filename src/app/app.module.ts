@@ -16,6 +16,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatSelectModule } from "@angular/material/select";
+import { MatMenuModule } from "@angular/material/menu";
 
 import { AppComponent } from "./app.component";
 import { ListComponent } from "./list/list.component";
@@ -55,7 +56,8 @@ import { SubmissionComponent } from "./submission/submission.component";
     MatInputModule,
     MatProgressBarModule,
     MatTabsModule,
-    MatSelectModule
+    MatSelectModule,
+    MatMenuModule
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]
