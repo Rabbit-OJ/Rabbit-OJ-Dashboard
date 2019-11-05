@@ -28,7 +28,8 @@ export class DetailComponent implements OnInit {
     created_at: ""
   };
   @Input() renderedHTML: string = "";
-  @Input() language: string = "";
+  language: string = "";
+  code: string = "";
 
   constructor(private http: HttpClient, private route: ActivatedRoute, public languageService: LanguageService) {}
 
@@ -52,5 +53,7 @@ export class DetailComponent implements OnInit {
         });
     }, 0);
   }
-  handleSubmit = () => {};
+  handleSubmit = () => {
+    console.log({ language: this.language, code: this.code });
+  };
 }
