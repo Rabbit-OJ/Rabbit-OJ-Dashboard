@@ -12,7 +12,7 @@ import { GeneralResponse } from "../interface/general-response";
   styleUrls: ["./list.component.scss"]
 })
 export class ListComponent implements OnInit {
-  @Input() itemList: QuestionList;
+  itemList: QuestionList;
 
   constructor(private http: HttpClient, private route: ActivatedRoute) {}
 

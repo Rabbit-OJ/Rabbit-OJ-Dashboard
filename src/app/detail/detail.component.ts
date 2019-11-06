@@ -16,7 +16,7 @@ import { LanguageService } from "../service/language.service";
   styleUrls: ["./detail.component.scss"]
 })
 export class DetailComponent implements OnInit {
-  @Input() question: QuestionDetail = {
+  question: QuestionDetail = {
     tid: "",
     content: "",
     subject: "",
@@ -27,7 +27,7 @@ export class DetailComponent implements OnInit {
     space_limit: 0,
     created_at: ""
   };
-  @Input() renderedHTML: string = "";
+  renderedHTML: string = "";
   language: string = "";
   code: string = "";
 

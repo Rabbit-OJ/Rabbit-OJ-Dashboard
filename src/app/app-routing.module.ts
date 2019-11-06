@@ -6,6 +6,7 @@ import { SubmissionComponent } from "./submission/submission.component";
 import { DetailComponent } from "./detail/detail.component";
 import { LoginComponent } from "./user/login/login.component";
 import { RegisterComponent } from "./user/register/register.component";
+import { SubmissionDetailComponent } from "./submission/submission-detail/submission-detail.component";
 
 const routes: Routes = [
   {
@@ -18,8 +19,12 @@ const routes: Routes = [
     component: ListComponent
   },
   {
-    path: "submission/:page",
+    path: "submission/list/:uid/:page",
     component: SubmissionComponent
+  },
+  {
+    path: "submission/detail/:sid",
+    component: SubmissionDetailComponent
   },
   {
     path: "info/:tid",

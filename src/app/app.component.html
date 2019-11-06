@@ -13,7 +13,7 @@
         {{ authService.currentUser.username }}
       </button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item routerLink="/submission/1">提交记录</button>
+        <button mat-menu-item (click)="handleSubmissionList()">提交记录</button>
         <button mat-menu-item>注销账号</button>
       </mat-menu>
     </div>

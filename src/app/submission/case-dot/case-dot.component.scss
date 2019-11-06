@@ -1,0 +1,61 @@
+.dot-ac {
+  background: rgb(30, 255, 0);
+  color: white;
+}
+.dot-tle {
+  background: rgb(0, 65, 149);
+  color: white;
+}
+.dot-re {
+  background: orange;
+  color: white;
+}
+.dot-mle {
+  background: rgb(0, 65, 149);
+  color: white;
+}
+.dot-ce {
+  background: rgb(255, 0, 242);
+  color: white;
+}
+.dot-ing {
+  background: black;
+  color: white;
+}
+.dot-wa {
+  background: red;
+  color: white;
+}
+.case-dot-container {
+  width: 108px;
+  height: 108px;
+  margin: 6px 12px;
+  cursor: pointer;
+  user-select: none;
+  align-content: baseline;
+  display: flex;
+  flex-flow: column nowrap;
+  padding: 3px;
+  border-radius: 6px;
+  box-shadow: 2px 2px 10px 3px rgba(0, 0, 0, 0.15);
+  transition: 0.3s all;
+
+  &:hover {
+    box-shadow: 2px 2px 10px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  .status {
+    margin: 18px 0 40px 0;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+  }
+  .performance-container {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+  }
+  .key {
+    font-size: 12px;
+  }
+}

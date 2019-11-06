@@ -1,0 +1,22 @@
+<div
+  class="case-dot-container"
+  [ngClass]="{
+    'dot-ac': dot.status === 'AC',
+    'dot-tle': dot.status === 'TLE',
+    'dot-re': dot.status === 'RE',
+    'dot-mle': dot.status === 'MLE',
+    'dot-ce': dot.status === 'CE',
+    'dot-wa': dot.status === 'WA',
+    'dot-ing': dot.status === 'ING'
+  }"
+>
+  <div class="key">#{{ key + 1 }}</div>
+  <div class="status">
+    {{ dot.status }}
+  </div>
+
+  <div class="performance-container">
+    <div class="performance-time" *ngIf="dot.status === 'AC'">{{ dot.time_used }}ms</div>
+    <div class="performance-space" *ngIf="dot.status === 'AC'">{{ (dot.space_used / 1024).toFixed(2) }}MB</div>
+  </div>
+</div>

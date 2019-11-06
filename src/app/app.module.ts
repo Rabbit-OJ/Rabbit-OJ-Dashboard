@@ -17,6 +17,7 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatSelectModule } from "@angular/material/select";
 import { MatMenuModule } from "@angular/material/menu";
+import { MatTableModule } from "@angular/material/table";
 
 import { AppComponent } from "./app.component";
 import { ListComponent } from "./list/list.component";
@@ -28,6 +29,8 @@ import { RegisterComponent } from "./user/register/register.component";
 
 import { httpInterceptorProviders } from "./interceptor";
 import { SubmissionComponent } from "./submission/submission.component";
+import { SubmissionDetailComponent } from './submission/submission-detail/submission-detail.component';
+import { CaseDotComponent } from './submission/case-dot/case-dot.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +41,9 @@ import { SubmissionComponent } from "./submission/submission.component";
     ResultComponent,
     LoginComponent,
     RegisterComponent,
-    SubmissionComponent
+    SubmissionComponent,
+    SubmissionDetailComponent,
+    CaseDotComponent
   ],
   imports: [
     BrowserModule,
@@ -57,7 +62,8 @@ import { SubmissionComponent } from "./submission/submission.component";
     MatProgressBarModule,
     MatTabsModule,
     MatSelectModule,
-    MatMenuModule
+    MatMenuModule,
+    MatTableModule
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]
