@@ -22,23 +22,19 @@ import { MatTableModule } from "@angular/material/table";
 import { AppComponent } from "./app.component";
 import { ListComponent } from "./list/list.component";
 import { DetailComponent } from "./detail/detail.component";
-import { CodeComponent } from "./submit/code/code.component";
-import { ResultComponent } from "./submit/result/result.component";
 import { LoginComponent } from "./user/login/login.component";
 import { RegisterComponent } from "./user/register/register.component";
 
 import { httpInterceptorProviders } from "./interceptor";
 import { SubmissionComponent } from "./submission/submission.component";
-import { SubmissionDetailComponent } from './submission/submission-detail/submission-detail.component';
-import { CaseDotComponent } from './submission/case-dot/case-dot.component';
+import { SubmissionDetailComponent } from "./submission/submission-detail/submission-detail.component";
+import { CaseDotComponent } from "./submission/case-dot/case-dot.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     ListComponent,
     DetailComponent,
-    CodeComponent,
-    ResultComponent,
     LoginComponent,
     RegisterComponent,
     SubmissionComponent,

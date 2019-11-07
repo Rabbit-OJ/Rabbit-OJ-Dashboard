@@ -26,7 +26,9 @@ export class SubmissionDetailComponent implements OnInit {
   };
 
   constructor(private http: HttpClient, private route: ActivatedRoute) {}
-
+  handleDownload = () => {
+    window.open(UrlService.SUBMISSION.GET_CODE(this.item.sid));
+  };
   ngOnInit() {
     setTimeout(() => {
       this.route.paramMap

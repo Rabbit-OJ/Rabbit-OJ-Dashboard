@@ -1,5 +1,11 @@
 .case-dot-list-container {
   display: flex;
-  height: 136px;
   flex-flow: row wrap;
+}
+.download-container {
+  display: flex;
+  justify-content: center;
+  .download-btn {
+    margin: 12px;
+  }
 }
