@@ -8,14 +8,14 @@
       <div class="description" [innerHTML]="renderedHTML"></div>
       <h3>题目统计</h3>
       <div>
-        <p>提交：{{ question.attempt }}</p>
-        <p>通过：{{ question.accept }} ({{ ((question.accept / question.attempt) * 100.0).toFixed(2) }}%)</p>
+        <div>提交：{{ question.attempt }}</div>
+        <div>通过：{{ question.accept }} ({{ ((question.accept / question.attempt) * 100.0).toFixed(2) }}%)</div>
       </div>
       <h3>题目限制</h3>
-      <p>时间：{{ question.time_limit }}ms</p>
-      <p>空间：{{ question.space_limit }}MB</p>
+      <div>时间：{{ question.time_limit }}ms</div>
+      <div>空间：{{ question.space_limit }}MB</div>
       <h3>更新时间</h3>
-      <p>{{ question.created_at }}</p>
+      <div>{{ question.created_at }}</div>
       <h3>题目难度</h3>
       <mat-chip-list>
         <mat-chip *ngIf="question.difficulty === 1" color="primary" selected>Easy</mat-chip>
@@ -40,6 +40,7 @@
         <button mat-raised-button id="login" color="primary" (click)="handleSubmit()">提交测评</button>
       </div>
     </mat-tab>
+
     <mat-tab label="提交记录"> </mat-tab>
   </mat-tab-group>
 </div>
