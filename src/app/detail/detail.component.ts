@@ -31,19 +31,29 @@ export class DetailComponent implements OnInit {
   language: string = "";
   code: string = "";
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, public languageService: LanguageService) {}
+  constructor(
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    public languageService: LanguageService
+  ) {}
 
   ngOnInit() {
     setTimeout(() => {
       this.route.paramMap
         .pipe(
           switchMap((params: ParamMap) =>
-            this.http.get<GeneralResponse<QuestionDetail>>(UrlService.QUESTION.OPTIONS_ITEM(params.get("tid"))).pipe(
-              map(item => ({
-                ...item.message,
-                created_at: new Date(item.message.created_at as string).toLocaleString()
-              }))
-            )
+            this.http
+              .get<GeneralResponse<QuestionDetail>>(
+                UrlService.QUESTION.OPTIONS_ITEM(params.get("tid"))
+              )
+              .pipe(
+                map(item => ({
+                  ...item.message,
+                  created_at: new Date(
+                    item.message.created_at as string
+                  ).toLocaleString()
+                }))
+              )
           )
         )
         .subscribe(response => {
@@ -54,6 +64,19 @@ export class DetailComponent implements OnInit {
     }, 0);
   }
   handleSubmit = () => {
-    console.log({ language: this.language, code: this.code });
+    this.http
+      .post<GeneralResponse<string>>(
+        UrlService.QUESTION.SUBMIT(this.question.tid),
+        {
+          language: this.language,
+          code: this.code
+        }
+      )
+      .subscribe(({ code, message }) => {
+        if (code === 200) {
+          console.log(message);
+          // todo: add websocket support
+        }
+      });
   };
 }

@@ -11,7 +11,8 @@ export class UrlService {
   static QUESTION = {
     GET_LIST: (page: string) => `${BACKEND_URL}/question/list/${page}`,
     OPTIONS_ITEM: (tid: string) => `${BACKEND_URL}/question/item/${tid}`,
-    POST_CREATE: `${BACKEND_URL}/question/item`
+    POST_CREATE: `${BACKEND_URL}/question/item`,
+    SUBMIT: (tid: string) => `${BACKEND_URL}/question/submit/${tid}`
   };
 
   static USER = {
@@ -25,7 +26,8 @@ export class UrlService {
   };
 
   static SUBMISSION = {
-    GET_USER_LIST: (uid: string, page: string) => `${BACKEND_URL}/submission/list/${uid}/${page}`,
+    GET_USER_LIST: (uid: string, page: string) =>
+      `${BACKEND_URL}/submission/list/${uid}/${page}`,
     GET_DETAIL: (sid: string) => `${BACKEND_URL}/submission/detail/${sid}`,
     GET_CODE: (sid: string) => `${BACKEND_URL}/submission/code/${sid}`,
     GET_LANGUAGE: `${BACKEND_URL}/submission/language`
