@@ -1,11 +1,12 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ISubmissionLite } from "../interface/submission";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
-import { switchMap, map, mergeAll } from "rxjs/operators";
+import { switchMap, map } from "rxjs/operators";
 import { GeneralResponse } from "../interface/general-response";
 import { UrlService } from "../service/url.service";
-import { AuthenticationService } from "../service/authentication.service";
 import { HttpClient } from "@angular/common/http";
+import { SubmissionResponse } from "../interface/submission-response";
+import { MatPaginator } from "@angular/material/paginator";
 
 export interface PeriodicElement {
   name: string;
@@ -22,8 +23,13 @@ export interface PeriodicElement {
 export class SubmissionComponent implements OnInit {
   displayedColumns: string[] = ["tid", "status", "performance", "created_at"];
   submissionList: Array<ISubmissionLite> = [];
+  totalCount: number = 0;
 
-  constructor(private http: HttpClient, private route: ActivatedRoute) {}
+  constructor(
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     setTimeout(() => {
@@ -31,15 +37,35 @@ export class SubmissionComponent implements OnInit {
         .pipe(
           switchMap((params: ParamMap) => {
             return this.http
-              .get<GeneralResponse<Array<ISubmissionLite>>>(
-                UrlService.SUBMISSION.GET_USER_LIST(params.get("uid"), params.get("page"))
+              .get<GeneralResponse<SubmissionResponse>>(
+                UrlService.SUBMISSION.GET_USER_LIST(
+                  params.get("uid"),
+                  params.get("page")
+                )
               )
-              .pipe(map(item => item.message.map(item => ({ ...item, created_at: new Date(item.created_at) }))));
+              .pipe(
+                map(item => ({
+                  count: item.message.count,
+                  list: item.message.list.map(item => ({
+                    ...item,
+                    created_at: new Date(item.created_at)
+                  }))
+                }))
+              );
           })
         )
         .subscribe(response => {
-          this.submissionList = response;
+          this.submissionList = response.list;
+          this.totalCount = response.count;
         });
     }, 0);
   }
+  pageChange = (paginator: MatPaginator) => {
+    this.router.navigate([
+      "submission",
+      "list",
+      this.route.snapshot.params["uid"],
+      paginator.pageIndex + 1
+    ]);
+  };
 }

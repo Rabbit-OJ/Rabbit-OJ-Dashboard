@@ -5,6 +5,7 @@ import { GeneralResponse } from "src/app/interface/general-response";
 import { LoginResponse } from "src/app/interface/login-response";
 import { AuthenticationService } from "src/app/service/authentication.service";
 import { PasswordService } from "src/app/service/password.service";
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-login",
@@ -12,7 +13,7 @@ import { PasswordService } from "src/app/service/password.service";
   styleUrls: ["./login.component.scss"]
 })
 export class LoginComponent implements OnInit {
-  constructor(private http: HttpClient, private authService: AuthenticationService) {}
+  constructor(private http: HttpClient, private authService: AuthenticationService, private router: Router) {}
 
   username = "";
   password = "";
@@ -28,6 +29,7 @@ export class LoginComponent implements OnInit {
       .subscribe(({ code, message }) => {
         if (code === 200) {
           this.authService.login(message.token, message);
+          this.router.navigate(["/list", "1"]);
         }
       });
   };

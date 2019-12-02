@@ -1,10 +1,11 @@
-import { Component, OnInit, Input } from "@angular/core";
-import { QuestionList } from "../interface/question-list";
+import { Component, OnInit } from "@angular/core";
+import { QuestionListResponse, QuestionItem } from "../interface/question-list";
 import { HttpClient } from "@angular/common/http";
-import { ActivatedRoute, ParamMap } from "@angular/router";
+import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { switchMap, map } from "rxjs/operators";
 import { UrlService } from "../service/url.service";
 import { GeneralResponse } from "../interface/general-response";
+import { MatPaginator } from "@angular/material/paginator";
 
 @Component({
   selector: "app-list",
@@ -12,9 +13,10 @@ import { GeneralResponse } from "../interface/general-response";
   styleUrls: ["./list.component.scss"]
 })
 export class ListComponent implements OnInit {
-  itemList: QuestionList;
+  itemList: Array<QuestionItem> = [];
+  totalCount: number = 0;
 
-  constructor(private http: HttpClient, private route: ActivatedRoute) {}
+  constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit() {
     setTimeout(() => {
@@ -22,13 +24,18 @@ export class ListComponent implements OnInit {
         .pipe(
           switchMap((params: ParamMap) =>
             this.http
-              .get<GeneralResponse<QuestionList>>(UrlService.QUESTION.GET_LIST(params.get("page")))
+              .get<GeneralResponse<QuestionListResponse>>(UrlService.QUESTION.GET_LIST(params.get("page")))
               .pipe(map(item => item.message))
           )
         )
         .subscribe(response => {
-          this.itemList = response;
+          this.itemList = response.list;
+          this.totalCount = response.count;
         });
     }, 0);
   }
+
+  pageChange = (paginator: MatPaginator) => {
+    this.router.navigate(["list", paginator.pageIndex + 1]);
+  };
 }

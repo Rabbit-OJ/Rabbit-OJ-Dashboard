@@ -1,8 +1,8 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { QuestionDetail } from "../interface/question-detail";
 import { HttpClient } from "@angular/common/http";
 import { UrlService } from "../service/url.service";
-import { ActivatedRoute, ParamMap } from "@angular/router";
+import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { switchMap, map } from "rxjs/operators";
 import { GeneralResponse } from "../interface/general-response";
 
@@ -34,7 +34,8 @@ export class DetailComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
-    public languageService: LanguageService
+    public languageService: LanguageService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -42,18 +43,12 @@ export class DetailComponent implements OnInit {
       this.route.paramMap
         .pipe(
           switchMap((params: ParamMap) =>
-            this.http
-              .get<GeneralResponse<QuestionDetail>>(
-                UrlService.QUESTION.OPTIONS_ITEM(params.get("tid"))
-              )
-              .pipe(
-                map(item => ({
-                  ...item.message,
-                  created_at: new Date(
-                    item.message.created_at as string
-                  ).toLocaleString()
-                }))
-              )
+            this.http.get<GeneralResponse<QuestionDetail>>(UrlService.QUESTION.OPTIONS_ITEM(params.get("tid"))).pipe(
+              map(item => ({
+                ...item.message,
+                created_at: new Date(item.message.created_at as string).toLocaleString()
+              }))
+            )
           )
         )
         .subscribe(response => {
@@ -65,17 +60,13 @@ export class DetailComponent implements OnInit {
   }
   handleSubmit = () => {
     this.http
-      .post<GeneralResponse<string>>(
-        UrlService.QUESTION.SUBMIT(this.question.tid),
-        {
-          language: this.language,
-          code: this.code
-        }
-      )
+      .post<GeneralResponse<string>>(UrlService.QUESTION.SUBMIT(this.question.tid), {
+        language: this.language,
+        code: this.code
+      })
       .subscribe(({ code, message }) => {
         if (code === 200) {
-          console.log(message);
-          // todo: add websocket support
+          this.router.navigate(["/submission", "detail", message]);
         }
       });
   };

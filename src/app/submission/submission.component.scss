@@ -4,3 +4,15 @@ table {
 .question-title-cursor {
   cursor: pointer;
 }
+.status_submission {
+  font-weight: 700;
+}
+.status_submission_ing {
+  color: black;
+}
+.status_submission_ok {
+  color: greenyellow;
+}
+.status_submission_no {
+  color: red;
+}

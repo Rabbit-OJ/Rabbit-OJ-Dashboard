@@ -14,4 +14,8 @@
     </p>
     <mat-divider></mat-divider>
   </mat-list-item>
+  <div class="pagination">
+    <mat-paginator [length]="totalCount" [pageSize]="20" [hidePageSize]="true" (page)="this.pageChange($event)">
+    </mat-paginator>
+  </div>
 </mat-list>

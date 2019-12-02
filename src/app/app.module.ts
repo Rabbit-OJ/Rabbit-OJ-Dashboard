@@ -18,6 +18,7 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatSelectModule } from "@angular/material/select";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatTableModule } from "@angular/material/table";
+import { MatPaginatorModule } from "@angular/material/paginator";
 
 import { AppComponent } from "./app.component";
 import { ListComponent } from "./list/list.component";
@@ -59,7 +60,8 @@ import { CaseDotComponent } from "./submission/case-dot/case-dot.component";
     MatTabsModule,
     MatSelectModule,
     MatMenuModule,
-    MatTableModule
+    MatTableModule,
+    MatPaginatorModule
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]

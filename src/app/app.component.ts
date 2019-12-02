@@ -23,6 +23,9 @@ export class AppComponent {
   handleSubmissionList = () => {
     this.router.navigate(["/submission", "list", this.authService.currentUser.uid, "1"]);
   };
+  handleLogout = ()=>{
+    this.authService.logout();
+  }
 
   ngOnInit() {
     setTimeout(() => {

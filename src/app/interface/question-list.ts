@@ -10,4 +10,7 @@ export interface QuestionItem {
   created_at: Date;
 }
 
-export type QuestionList = Array<QuestionItem>;
+export type QuestionListResponse = {
+  list: Array<QuestionItem>;
+  count: number;
+};

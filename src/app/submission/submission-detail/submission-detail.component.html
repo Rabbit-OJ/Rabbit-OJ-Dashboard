@@ -3,7 +3,17 @@
   <mat-tab-group [dynamicHeight]="true" mat-align-tabs="center">
     <mat-tab label="测评信息">
       <h3>基本信息</h3>
-      <p>状态：{{ item.status }}</p>
+      <p>
+        状态：<span
+          class="status_submission"
+          [ngClass]="{
+            status_submission_ing: item.status === 'ING',
+            status_submission_ok: item.status === 'AC',
+            status_submission_no: item.status === 'NO'
+          }"
+          >{{ item.status }}</span
+        >
+      </p>
       <p>语言：{{ item.language }}</p>
       <p>空间使用：{{ (item.space_used / 1024).toFixed(2) }}MB</p>
       <p>时间使用：{{ item.time_used }}ms</p>
