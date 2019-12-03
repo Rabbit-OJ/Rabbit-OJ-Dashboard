@@ -30,6 +30,7 @@ import { httpInterceptorProviders } from "./interceptor";
 import { SubmissionComponent } from "./submission/submission.component";
 import { SubmissionDetailComponent } from "./submission/submission-detail/submission-detail.component";
 import { CaseDotComponent } from "./submission/case-dot/case-dot.component";
+import { SubmissionListComponent } from './submission/submission-list/submission-list.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { CaseDotComponent } from "./submission/case-dot/case-dot.component";
     RegisterComponent,
     SubmissionComponent,
     SubmissionDetailComponent,
-    CaseDotComponent
+    CaseDotComponent,
+    SubmissionListComponent
   ],
   imports: [
     BrowserModule,

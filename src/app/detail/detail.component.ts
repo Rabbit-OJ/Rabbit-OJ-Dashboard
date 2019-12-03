@@ -9,6 +9,11 @@ import { GeneralResponse } from "../interface/general-response";
 import marked from "marked";
 import DOMPurify from "dompurify";
 import { LanguageService } from "../service/language.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { ISubmissionLite } from "../interface/submission";
+import { AuthenticationService } from "../service/authentication.service";
+import { MatPaginator } from "@angular/material/paginator";
+import { SubmissionResponse } from '../interface/submission-response';
 
 @Component({
   selector: "app-detail",
@@ -30,12 +35,17 @@ export class DetailComponent implements OnInit {
   renderedHTML: string = "";
   language: string = "";
   code: string = "";
+  submissionList: Array<ISubmissionLite> = [];
+  totalCount: number = 0;
+  currentPage: number = 0;
 
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
     public languageService: LanguageService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private authService: AuthenticationService
   ) {}
 
   ngOnInit() {
@@ -55,10 +65,34 @@ export class DetailComponent implements OnInit {
           this.question = response;
           const { content } = response;
           this.renderedHTML = DOMPurify.sanitize(marked(content));
+
+          this.authService.currentUserObservable.subscribe(({ isLogin }) => {
+            if (!isLogin) return;
+            this.handleUpdateRecord("1");
+          });
         });
     }, 0);
   }
+  handleUpdateRecord = (page: string) => {
+    this.http
+      .get<GeneralResponse<SubmissionResponse>>(UrlService.QUESTION.RECORD(this.question.tid, page))
+      .subscribe(({ code, message }) => {
+        if (code === 200) {
+          this.totalCount = message.count;
+          this.submissionList = message.list;
+        }
+      });
+  };
+
   handleSubmit = () => {
+    if (this.language === "") {
+      this.snackBar.open("Select a language first!", "OK", {
+        duration: 2000
+      });
+
+      return;
+    }
+
     this.http
       .post<GeneralResponse<string>>(UrlService.QUESTION.SUBMIT(this.question.tid), {
         language: this.language,
@@ -69,5 +103,9 @@ export class DetailComponent implements OnInit {
           this.router.navigate(["/submission", "detail", message]);
         }
       });
+  };
+
+  pageChange = (pagination: MatPaginator) => {
+    this.handleUpdateRecord((pagination.pageIndex + 1).toString());
   };
 }

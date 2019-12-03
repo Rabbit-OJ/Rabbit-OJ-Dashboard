@@ -3,6 +3,7 @@
   <mat-tab-group [dynamicHeight]="true" mat-align-tabs="center">
     <mat-tab label="测评信息">
       <h3>基本信息</h3>
+      <p>题目：<a [routerLink]="'/info/' + item.tid" class="question-title">{{ item.question_title }}</a></p>
       <p>
         状态：<span
           class="status_submission"

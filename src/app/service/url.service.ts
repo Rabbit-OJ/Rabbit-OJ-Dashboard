@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 
 const BACKEND_URL = `http://localhost:8888`;
+const BACKEND_SOCKET_URL = `http://localhost:8888`.replace(/^http/, "ws")
 
 @Injectable({
   providedIn: "root"
@@ -12,7 +13,8 @@ export class UrlService {
     GET_LIST: (page: string) => `${BACKEND_URL}/question/list/${page}`,
     OPTIONS_ITEM: (tid: string) => `${BACKEND_URL}/question/item/${tid}`,
     POST_CREATE: `${BACKEND_URL}/question/item`,
-    SUBMIT: (tid: string) => `${BACKEND_URL}/question/submit/${tid}`
+    SUBMIT: (tid: string) => `${BACKEND_URL}/question/submit/${tid}`,
+    RECORD: (tid: string, page: string) => `${BACKEND_URL}/question/record/${tid}/${page}`
   };
 
   static USER = {
@@ -30,6 +32,7 @@ export class UrlService {
       `${BACKEND_URL}/submission/list/${uid}/${page}`,
     GET_DETAIL: (sid: string) => `${BACKEND_URL}/submission/detail/${sid}`,
     GET_CODE: (sid: string) => `${BACKEND_URL}/submission/code/${sid}`,
-    GET_LANGUAGE: `${BACKEND_URL}/submission/language`
+    GET_LANGUAGE: `${BACKEND_URL}/submission/language`,
+    SOCKET : (sid: string) => `${BACKEND_SOCKET_URL}/ws/${sid}`
   };
 }

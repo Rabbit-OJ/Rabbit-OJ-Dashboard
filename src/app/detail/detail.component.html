@@ -41,6 +41,12 @@
       </div>
     </mat-tab>
 
-    <mat-tab label="提交记录"> </mat-tab>
+    <mat-tab label="提交记录">
+      <app-submission-list
+        [totalCount]="totalCount"
+        [submissionList]="submissionList"
+        (pageChange)="this.pageChange($event)"
+      ></app-submission-list>
+    </mat-tab>
   </mat-tab-group>
 </div>
