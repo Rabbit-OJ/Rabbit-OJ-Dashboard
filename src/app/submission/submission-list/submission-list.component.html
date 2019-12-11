@@ -23,7 +23,7 @@
       <th mat-header-cell *matHeaderCellDef>性能</th>
       <td mat-cell *matCellDef="let item">
         {{ item.language }}, {{ item.time_used }}ms,
-        {{ (item.space_used / 1024).toFixed(2) }}MB
+        {{ item.space_used.toFixed(2) }}MB
       </td>
     </ng-container>
 
