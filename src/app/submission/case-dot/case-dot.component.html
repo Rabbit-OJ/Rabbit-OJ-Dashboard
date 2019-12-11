@@ -17,6 +17,8 @@
 
   <div class="performance-container">
     <div class="performance-time" *ngIf="dot.time_used">{{ dot.time_used }}ms</div>
-    <div class="performance-space" *ngIf="dot.status === 'AC' || dot.status === 'WA'">{{ dot.space_used.toFixed(2) }}MB</div>
+    <div class="performance-space" *ngIf="dot.status === 'AC' || dot.status === 'WA'">
+      {{ (dot.space_used / 1024.0).toFixed(2) }}MB
+    </div>
   </div>
 </div>
