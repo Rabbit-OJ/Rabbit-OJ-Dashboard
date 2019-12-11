@@ -16,7 +16,7 @@
         status_submission_ing: item.status === 'ING',
         status_submission_ok: item.status === 'AC',
         status_submission_no: item.status === 'NO'
-      }">{{ item.status }}</td>
+      }">{{ item.status === 'NO' ? 'Unaccepted' : item.status }}</td>
     </ng-container>
 
     <ng-container matColumnDef="performance">
