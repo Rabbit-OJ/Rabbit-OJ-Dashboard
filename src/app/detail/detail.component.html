@@ -13,7 +13,7 @@
       </div>
       <h3>题目限制</h3>
       <div>时间：{{ question.time_limit }}ms</div>
-      <div>空间：{{ (question.space_limit / 1024.0).toFixed(2) }}MB</div>
+      <div>空间：{{ question.space_limit.toFixed(2) }}MB</div>
       <h3>更新时间</h3>
       <div>{{ question.created_at }}</div>
       <h3>题目难度</h3>
