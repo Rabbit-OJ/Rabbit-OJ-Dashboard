@@ -6,6 +6,7 @@ import { GeneralResponse } from "src/app/interface/general-response";
 import { UrlService } from "src/app/service/url.service";
 import { HttpClient } from "@angular/common/http";
 import { WebSocketSubject } from "rxjs/webSocket";
+import { MemoryService } from "src/app/service/memory.service";
 
 @Component({
   selector: "app-submission-detail",
@@ -21,7 +22,7 @@ export class SubmissionDetailComponent implements OnInit {
     status: "AC",
     language: "php",
     time_used: 0,
-    space_used: 0,
+    space_used: "0",
     created_at: new Date(),
     judge: []
   };
@@ -36,8 +37,14 @@ export class SubmissionDetailComponent implements OnInit {
         .pipe(
           switchMap((params: ParamMap) =>
             this.http
-              .get<GeneralResponse<ISubmission>>(UrlService.SUBMISSION.GET_DETAIL(params.get("sid")))
-              .pipe(map(item => ({ ...item.message, created_at: new Date(item.message.created_at) })))
+              .get<GeneralResponse<ISubmission<number>>>(UrlService.SUBMISSION.GET_DETAIL(params.get("sid")))
+              .pipe(
+                map(item => ({
+                  ...item.message,
+                  created_at: new Date(item.message.created_at),
+                  space_used: MemoryService.displayMemory(item.message.space_used)
+                }))
+              )
           )
         )
         .subscribe(response => {
@@ -47,10 +54,16 @@ export class SubmissionDetailComponent implements OnInit {
             socket$.subscribe(({ ok }) => {
               if (ok) {
                 this.http
-                  .get<GeneralResponse<ISubmission>>(
+                  .get<GeneralResponse<ISubmission<number>>>(
                     UrlService.SUBMISSION.GET_DETAIL(this.route.snapshot.params["sid"])
                   )
-                  .pipe(map(item => ({ ...item.message, created_at: new Date(item.message.created_at) })))
+                  .pipe(
+                    map(item => ({
+                      ...item.message,
+                      created_at: new Date(item.message.created_at),
+                      space_used: MemoryService.displayMemory(item.message.space_used)
+                    }))
+                  )
                   .subscribe(response => (this.item = response));
               }
             });

@@ -25,7 +25,7 @@
   <ng-container matColumnDef="performance">
     <th mat-header-cell *matHeaderCellDef>性能</th>
     <td mat-cell *matCellDef="let item">
-      {{ item.language }}, {{ item.time_used }}ms, {{ (item.space_used / 1024.0).toFixed(2) }}MB
+      {{ item.language }}, {{ item.time_used }}ms, {{ renderMemoryUsed(item.space_used) }}
     </td>
   </ng-container>
 
