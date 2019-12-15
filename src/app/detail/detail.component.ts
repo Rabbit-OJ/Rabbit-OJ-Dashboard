@@ -13,7 +13,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { ISubmissionLite } from "../interface/submission";
 import { AuthenticationService } from "../service/authentication.service";
 import { MatPaginator } from "@angular/material/paginator";
-import { SubmissionResponse } from '../interface/submission-response';
+import { SubmissionResponse } from "../interface/submission-response";
 
 @Component({
   selector: "app-detail",
@@ -79,7 +79,10 @@ export class DetailComponent implements OnInit {
       .subscribe(({ code, message }) => {
         if (code === 200) {
           this.totalCount = message.count;
-          this.submissionList = message.list;
+          this.submissionList = message.list.map(item => ({
+            ...item,
+            created_at: new Date(item.created_at)
+          }));
         }
       });
   };
