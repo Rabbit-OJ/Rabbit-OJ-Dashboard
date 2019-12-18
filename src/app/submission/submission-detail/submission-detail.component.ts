@@ -29,7 +29,22 @@ export class SubmissionDetailComponent implements OnInit {
 
   constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {}
   handleDownload = () => {
-    window.open(UrlService.SUBMISSION.GET_CODE(this.item.sid));
+    const token = localStorage.getItem("token");
+    const tempForm = document.createElement("form");
+    tempForm.action = UrlService.SUBMISSION.GET_CODE(this.item.sid);
+    tempForm.target = "_blank";
+    tempForm.method = "POST";
+    tempForm.style.display = "none";
+
+    const tokenElement = document.createElement("textarea");
+    tokenElement.name = "token";
+    tokenElement.value = token!;
+    tempForm.appendChild(tokenElement);
+
+    document.body.appendChild(tempForm);
+    tempForm.submit();
+    tempForm.remove();
+    // window.open(UrlService.SUBMISSION.GET_CODE(this.item.sid));
   };
   ngOnInit() {
     setTimeout(() => {
