@@ -16,7 +16,7 @@
   </div>
 
   <div class="performance-container" *ngIf="dot.status !== 'ING'">
-    <div class="performance-time" *ngIf="dot.time_used">{{ dot.time_used }}ms</div>
+    <div class="performance-time" *ngIf="dot.time_used || dot.status === 'AC'">{{ dot.time_used }}ms</div>
     <div class="performance-space" *ngIf="dot.status !== 'CE' && dot.status !== 'RE'">
       {{ renderMemoryUsed() }}
     </div>

@@ -20,7 +20,7 @@
       <h3>题目统计</h3>
       <div>
         <div>提交：{{ question.attempt }}</div>
-        <div>通过：{{ question.accept }} ({{ ((question.accept / (question.attempt === 0 ? 1 : 0)) * 100.0).toFixed(2) }}%)</div>
+        <div>通过：{{ question.accept }} ({{ ((question.accept / (question.attempt || 1)) * 100.0).toFixed(2) }}%)</div>
       </div>
       <h3>题目限制</h3>
       <div>时间：{{ question.time_limit }}ms</div>

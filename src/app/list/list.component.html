@@ -10,7 +10,7 @@
       <a [routerLink]="'/info/' + item.tid" class="question-title">{{ item.subject }}</a>
     </h4>
     <p mat-line class="info-container">
-      {{ item.accept }} / {{ item.attempt }}, {{ ((item.accept / (item.attempt === 0 ? 1 : 0)) * 100.0).toFixed(2) }}%
+      {{ item.accept }} / {{ item.attempt }}, {{ ((item.accept / (item.attempt || 1)) * 100.0).toFixed(2) }}%
     </p>
     <mat-divider></mat-divider>
   </mat-list-item>
