@@ -15,7 +15,6 @@
 .code-submit-field {
   width: 100%;
   min-height: 480px;
-  white-space: pre-line;
 }
 .sample {
   display: flex;
@@ -28,5 +27,6 @@
     border-radius: 3px;
     padding: 6px;
     background: #ddf3ff;
+    white-space: pre-line;
   }
 }
