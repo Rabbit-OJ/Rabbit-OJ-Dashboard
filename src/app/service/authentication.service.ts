@@ -32,6 +32,10 @@ export class AuthenticationService {
 
   public checkTokenValid() {
     const token = localStorage.getItem("token") || "";
+    if (token === "") {
+      return;
+    }
+    
     this.http
       .get<GeneralResponse<LoginResponse>>(UrlService.USER.GET_TOKEN, {
         headers: {
