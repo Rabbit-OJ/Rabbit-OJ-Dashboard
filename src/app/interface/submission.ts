@@ -1,4 +1,4 @@
-export type JudgeStatus = "ING" | "AC" | "WA" | "CE" | "RE" | "TLE" | "MLE";
+export type JudgeStatus = "ING" | "AC" | "WA" | "CE" | "RE" | "TLE" | "MLE" | "NO";
 
 export interface ISubmissionLite<T = string> {
   sid: string;

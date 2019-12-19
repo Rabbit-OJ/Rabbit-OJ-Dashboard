@@ -31,7 +31,7 @@ export class UrlService {
     GET_USER_LIST: (uid: string, page: string) =>
       `${BACKEND_URL}/submission/list/${uid}/${page}`,
     GET_DETAIL: (sid: string) => `${BACKEND_URL}/submission/detail/${sid}`,
-    GET_CODE: (sid: string) => `${BACKEND_URL}/submission/code/${sid}`,
+    POST_CODE: (sid: string) => `${BACKEND_URL}/submission/code/${sid}`,
     GET_LANGUAGE: `${BACKEND_URL}/submission/language`,
     SOCKET : (sid: string) => `${BACKEND_SOCKET_URL}/ws/${sid}`
   };

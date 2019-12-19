@@ -5,7 +5,18 @@
   <mat-tab-group [dynamicHeight]="true" mat-align-tabs="center">
     <mat-tab label="题目描述">
       <h3>题目描述</h3>
-      <div class="description" [innerHTML]="renderedHTML"></div>
+      <div class="description" id="description">
+        <ng-katex-html [html]="renderedHTML"></ng-katex-html>
+      </div>
+      <h3>测试样例</h3>
+      <div class="sample" *ngFor="let _sample of question.sample">
+        <div class="in">
+          {{_sample.in}}
+        </div>
+        <div class="out">
+          {{_sample.out}}
+        </div>
+      </div>
       <h3>题目统计</h3>
       <div>
         <div>提交：{{ question.attempt }}</div>

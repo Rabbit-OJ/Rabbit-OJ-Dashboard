@@ -31,6 +31,11 @@
       <div class="download-container">
         <button mat-raised-button class="download-btn" color="primary" (click)="handleDownload()">代码下载</button>
       </div>
+      <div class="code-container">
+        <mat-form-field appearance="outline" class="code-download-field">
+          <textarea placeholder="Code" matInput readonly class="code-download" [value]="code"></textarea>
+        </mat-form-field>
+      </div>
     </mat-tab>
   </mat-tab-group>
 </div>

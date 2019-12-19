@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppRoutingModule } from "./app-routing.module";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
+import { KatexModule } from "ng-katex";
 
 import { MatButtonModule } from "@angular/material/button";
 import { MatToolbarModule } from "@angular/material/toolbar";
@@ -30,7 +31,7 @@ import { httpInterceptorProviders } from "./interceptor";
 import { SubmissionComponent } from "./submission/submission.component";
 import { SubmissionDetailComponent } from "./submission/submission-detail/submission-detail.component";
 import { CaseDotComponent } from "./submission/case-dot/case-dot.component";
-import { SubmissionListComponent } from './submission/submission-list/submission-list.component';
+import { SubmissionListComponent } from "./submission/submission-list/submission-list.component";
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { SubmissionListComponent } from './submission/submission-list/submission
     MatSelectModule,
     MatMenuModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    KatexModule
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]

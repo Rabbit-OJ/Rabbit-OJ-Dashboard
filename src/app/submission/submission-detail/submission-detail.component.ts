@@ -4,7 +4,7 @@ import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { switchMap, map } from "rxjs/operators";
 import { GeneralResponse } from "src/app/interface/general-response";
 import { UrlService } from "src/app/service/url.service";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { WebSocketSubject } from "rxjs/webSocket";
 import { MemoryService } from "src/app/service/memory.service";
 
@@ -26,12 +26,13 @@ export class SubmissionDetailComponent implements OnInit {
     created_at: new Date(),
     judge: []
   };
+  code: string = "";
 
   constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {}
   handleDownload = () => {
     const token = localStorage.getItem("token");
     const tempForm = document.createElement("form");
-    tempForm.action = UrlService.SUBMISSION.GET_CODE(this.item.sid);
+    tempForm.action = UrlService.SUBMISSION.POST_CODE(this.item.sid);
     tempForm.target = "_blank";
     tempForm.method = "POST";
     tempForm.style.display = "none";
@@ -83,6 +84,26 @@ export class SubmissionDetailComponent implements OnInit {
               }
             });
           }
+        });
+
+      this.route.paramMap
+        .pipe(
+          switchMap((params: ParamMap) =>
+            this.http.post(
+              UrlService.SUBMISSION.POST_CODE(params.get("sid")),
+              `token=${localStorage.getItem("token")}`,
+              {
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded"
+                },
+                responseType: "text"
+              }
+            )
+          )
+        )
+        .subscribe(response => {
+          this.code = response;
+          console.log(this.code);
         });
     }, 0);
   }

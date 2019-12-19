@@ -16,3 +16,16 @@
   width: 100%;
   min-height: 480px;
 }
+.sample {
+  display: flex;
+  flex-flow: row;
+  & .in,
+  & .out {
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin: 0 12px 0 0;
+    border-radius: 3px;
+    padding: 6px;
+    background: #ddf3ff;
+  }
+}

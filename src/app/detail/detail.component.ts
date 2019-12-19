@@ -8,6 +8,7 @@ import { GeneralResponse } from "../interface/general-response";
 
 import marked from "marked";
 import DOMPurify from "dompurify";
+
 import { LanguageService } from "../service/language.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ISubmissionLite } from "../interface/submission";
@@ -30,9 +31,11 @@ export class DetailComponent implements OnInit {
     difficulty: 0,
     time_limit: 0,
     space_limit: 0,
-    created_at: ""
+    created_at: "",
+    sample: [],
+    hide: false
   };
-  renderedHTML: string = "";
+  renderedHTML: string = "<p></p>";
   language: string = "";
   code: string = "";
   submissionList: Array<ISubmissionLite> = [];
@@ -64,7 +67,9 @@ export class DetailComponent implements OnInit {
         .subscribe(response => {
           this.question = response;
           const { content } = response;
-          this.renderedHTML = DOMPurify.sanitize(marked(content));
+
+          const markdownRendered = marked(content);
+          this.renderedHTML = DOMPurify.sanitize(markdownRendered);
 
           this.authService.currentUserObservable.subscribe(({ isLogin }) => {
             if (!isLogin) return;

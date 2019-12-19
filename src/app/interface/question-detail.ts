@@ -1,3 +1,5 @@
+import { ISample } from "./sample";
+
 export interface QuestionDetail {
   tid: string;
   content: string;
@@ -8,4 +10,6 @@ export interface QuestionDetail {
   time_limit: number;
   space_limit: number;
   created_at: string;
+  hide: boolean;
+  sample: Array<ISample>;
 }
