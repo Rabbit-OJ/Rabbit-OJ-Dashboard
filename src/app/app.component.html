@@ -4,6 +4,7 @@
       <button mat-button routerLink="/list/1" class="oj-pc">Rabbit Online Judge Dashboard</button>
       <button mat-button routerLink="/list/1" class="oj-mobile">Rabbit OJ</button>
       <button mat-button routerLink="/list/1">题库</button>
+      <button mat-button routerLink="/contest/list/1">比赛</button>
     </div>
 
     <div class="nav-right-container">
@@ -13,6 +14,7 @@
         {{ authService.currentUser.username }}
       </button>
       <mat-menu #menu="matMenu">
+        <button *ngIf="this.authService.currentUser.isAdmin" mat-menu-item (click)="handleSubmissionList()">管理面板</button>
         <button mat-menu-item (click)="handleSubmissionList()">提交记录</button>
         <button mat-menu-item (click)="handleLogout()">注销账号</button>
       </mat-menu>

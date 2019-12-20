@@ -32,6 +32,8 @@ import { SubmissionComponent } from "./submission/submission.component";
 import { SubmissionDetailComponent } from "./submission/submission-detail/submission-detail.component";
 import { CaseDotComponent } from "./submission/case-dot/case-dot.component";
 import { SubmissionListComponent } from "./submission/submission-list/submission-list.component";
+import { ContestListComponent } from './contest/contest-list/contest-list.component';
+import { ContestDashboardComponent } from './contest/contest-dashboard/contest-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,9 @@ import { SubmissionListComponent } from "./submission/submission-list/submission
     SubmissionComponent,
     SubmissionDetailComponent,
     CaseDotComponent,
-    SubmissionListComponent
+    SubmissionListComponent,
+    ContestListComponent,
+    ContestDashboardComponent
   ],
   imports: [
     BrowserModule,

@@ -7,6 +7,8 @@ import { DetailComponent } from "./detail/detail.component";
 import { LoginComponent } from "./user/login/login.component";
 import { RegisterComponent } from "./user/register/register.component";
 import { SubmissionDetailComponent } from "./submission/submission-detail/submission-detail.component";
+import { ContestListComponent } from "./contest/contest-list/contest-list.component";
+import { ContestDashboardComponent } from "./contest/contest-dashboard/contest-dashboard.component";
 
 const routes: Routes = [
   {
@@ -37,6 +39,14 @@ const routes: Routes = [
   {
     path: "user/register",
     component: RegisterComponent
+  },
+  {
+    path: "contest/list/:page",
+    component: ContestListComponent
+  },
+  {
+    path: "contest/dashboard/:cid",
+    component: ContestDashboardComponent
   }
 ];
 

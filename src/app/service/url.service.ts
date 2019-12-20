@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 
-const BACKEND_URL = `https://oj.6rabbit.com/api`;
+// const BACKEND_URL = `https://oj.6rabbit.com/api`;
+const BACKEND_URL = `http://localhost:8888`;
 const BACKEND_SOCKET_URL = BACKEND_URL.replace(/^http/, "ws")
 
 @Injectable({

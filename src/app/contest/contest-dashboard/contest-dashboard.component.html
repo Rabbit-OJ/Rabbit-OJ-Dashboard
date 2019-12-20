@@ -1,0 +1,23 @@
+<div class="contest">
+  <h1>
+    {{ contest.name }}
+  </h1>
+  <mat-tab-group [dynamicHeight]="true" mat-align-tabs="center">
+    <mat-tab label="排行榜"> </mat-tab>
+    <mat-tab label="题目"> </mat-tab>
+    <mat-tab label="信息">
+      <div class="clarify-container" *ngIf="clarifyList.length">
+        <h3>Clarify</h3>
+      </div>
+      <h3>我的信息</h3>
+      <div>得分：{{ myInfo.score }}</div>
+      <div>用时：{{ myInfo.completeTime }}</div>
+      <div>排名：{{ myInfo.rank }}</div>
+      <h3>比赛信息</h3>
+      <div>开始时间：{{ contest.startTime }}</div>
+      <div>封榜时间：{{ contest.blockTime }}</div>
+      <div>结束时间：{{ contest.endTime }}</div>
+      <div>罚时时间：{{ (contest.penalty / 60).toFixed(2) }}分钟</div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
