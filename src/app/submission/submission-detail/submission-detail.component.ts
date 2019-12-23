@@ -1,10 +1,10 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ISubmission } from "src/app/interface/submission";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { switchMap, map } from "rxjs/operators";
 import { GeneralResponse } from "src/app/interface/general-response";
 import { UrlService } from "src/app/service/url.service";
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { WebSocketSubject } from "rxjs/webSocket";
 import { MemoryService } from "src/app/service/memory.service";
 
@@ -103,7 +103,6 @@ export class SubmissionDetailComponent implements OnInit {
         )
         .subscribe(response => {
           this.code = response;
-          console.log(this.code);
         });
     }, 0);
   }

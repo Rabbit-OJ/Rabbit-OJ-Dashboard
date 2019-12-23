@@ -1,0 +1,10 @@
+.btn-container {
+  display: flex;
+
+  & button {
+    margin: 0 12px 0 0;
+  }
+}
+table {
+  width: 100%;
+}
