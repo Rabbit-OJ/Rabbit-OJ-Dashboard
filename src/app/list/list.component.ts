@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { QuestionListResponse, QuestionItem } from "../interface/question-list";
+import { QuestionItem, GeneralListResponse } from "../interface/question-list";
 import { HttpClient } from "@angular/common/http";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { switchMap, map } from "rxjs/operators";
@@ -24,7 +24,7 @@ export class ListComponent implements OnInit {
         .pipe(
           switchMap((params: ParamMap) =>
             this.http
-              .get<GeneralResponse<QuestionListResponse>>(UrlService.QUESTION.GET_LIST(params.get("page")))
+              .get<GeneralResponse<GeneralListResponse<QuestionItem>>>(UrlService.QUESTION.GET_LIST(params.get("page")))
               .pipe(map(item => item.message))
           )
         )

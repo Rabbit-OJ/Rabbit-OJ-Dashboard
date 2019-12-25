@@ -7,26 +7,36 @@
       <table mat-table [dataSource]="scoreBoardList">
         <ng-container matColumnDef="rank">
           <th mat-header-cell *matHeaderCellDef>排名</th>
-          <td mat-cell *matCellDef="let item" [routerLink]="['/submission', 'detail', item.sid]">
-            <p class="question-title-cursor">{{ item.question_title }}</p>
+          <td mat-cell *matCellDef="let item">
+            <p class="question-title-cursor">{{ item.rank }}</p>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="username">
           <th mat-header-cell *matHeaderCellDef>用户名</th>
           <td mat-cell *matCellDef="let item">
-            {{ item.status === "NO" ? "Unaccepted" : item.status }}
+            {{ item.username }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="score">
           <th mat-header-cell *matHeaderCellDef>分数</th>
-          <td mat-cell *matCellDef="let item">{{ item.language }}, {{ item.time_used }}ms</td>
+          <td mat-cell *matCellDef="let item">{{ item.score }} <br />{{ (item.total_time / 60.0).toFixed(2) }}分钟</td>
         </ng-container>
 
-        <ng-container *ngFor="let col of scoreBoardExtraColumns" [matColumnDef]="col">
+        <ng-container *ngFor="let col of scoreBoardExtraColumns; let i = index" [matColumnDef]="col">
           <th mat-header-cell *matHeaderCellDef>{{ col }}</th>
-          <td mat-cell *matCellDef="let item">ms</td>
+          <td
+            mat-cell
+            *matCellDef="let item"
+            [ngClass]="{
+              'ac-block': item.progress[i].status === 1,
+              'wa-block': item.progress[i].status === 0 && item.progress[i].bug !== 0
+            }"
+          >
+            <div *ngIf="item.progress[i].status === 1">{{ (item.progress[i].total_time / 60.0).toFixed(2) }}分钟</div>
+            <div *ngIf="item.progress[i].bug !== 0">{{ item.progress[i].bug }}Bugs</div>
+          </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="scoreBoardDisplayedColumns"></tr>
@@ -58,14 +68,14 @@
       <div class="my-info-container" *ngIf="contest.status > 0">
         <h3>我的信息</h3>
         <div>得分：{{ myInfo.score }}</div>
-        <div>用时：{{ myInfo.completeTime }}</div>
+        <div>用时：{{ (myInfo.total_time / 60.0).toFixed(2) }}分钟</div>
         <div>排名：{{ myInfo.rank }}</div>
       </div>
       <div class="contest-info-container">
         <h3>比赛信息</h3>
-        <div>开始时间：{{ contest.startTime }}</div>
-        <div>封榜时间：{{ contest.blockTime }}</div>
-        <div>结束时间：{{ contest.endTime }}</div>
+        <div>开始时间：{{ contest.start_time }}</div>
+        <div>封榜时间：{{ contest.block_time }}</div>
+        <div>结束时间：{{ contest.end_time }}</div>
         <div>罚时时间：{{ (contest.penalty / 60).toFixed(2) }}分钟</div>
       </div>
     </mat-tab>

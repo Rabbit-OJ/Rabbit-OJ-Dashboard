@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 
 // const BACKEND_URL = `https://oj.6rabbit.com/api`;
 const BACKEND_URL = `http://localhost:8888`;
-const BACKEND_SOCKET_URL = BACKEND_URL.replace(/^http/, "ws")
+const BACKEND_SOCKET_URL = BACKEND_URL.replace(/^http/, "ws");
 
 @Injectable({
   providedIn: "root"
@@ -29,11 +29,19 @@ export class UrlService {
   };
 
   static SUBMISSION = {
-    GET_USER_LIST: (uid: string, page: string) =>
-      `${BACKEND_URL}/submission/list/${uid}/${page}`,
+    GET_USER_LIST: (uid: string, page: string) => `${BACKEND_URL}/submission/list/${uid}/${page}`,
     GET_DETAIL: (sid: string) => `${BACKEND_URL}/submission/detail/${sid}`,
     POST_CODE: (sid: string) => `${BACKEND_URL}/submission/code/${sid}`,
     GET_LANGUAGE: `${BACKEND_URL}/submission/language`,
-    SOCKET : (sid: string) => `${BACKEND_SOCKET_URL}/ws/${sid}`
+    SOCKET: (sid: string) => `${BACKEND_SOCKET_URL}/ws/${sid}`
+  };
+
+  static CONTEST = {
+    GET_LIST: (page: string) => `${BACKEND_URL}/contest/list/${page}`,
+    GET_MY_INFO: (cid: string) => `${BACKEND_URL}/contest/my/info/${cid}`,
+    GET_SCORE_BOARD: (cid: string, page: string) => `${BACKEND_URL}/contest/scoreboard/${cid}/${page}`,
+    GET_INFO: (cid: string) => `${BACKEND_URL}/contest/info/${cid}`,
+    GET_QUESTIONS: (cid: string) => `${BACKEND_URL}/contest/question/${cid}`,
+    POST_REGISTER: (cid: string, operation: "cancel" | "reg") => `${BACKEND_URL}/contest/register/${cid}/${operation}`
   };
 }
