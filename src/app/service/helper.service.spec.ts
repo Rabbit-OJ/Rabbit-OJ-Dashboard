@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MemoryService } from './memory.service';
+import { HelperService } from './helper.service';
 
-describe('MemoryService', () => {
+describe('HelperService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: MemoryService = TestBed.get(MemoryService);
+    const service: HelperService = TestBed.get(HelperService);
     expect(service).toBeTruthy();
   });
 });

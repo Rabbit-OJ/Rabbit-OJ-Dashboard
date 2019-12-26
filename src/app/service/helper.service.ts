@@ -1,0 +1,31 @@
+import { Injectable } from "@angular/core";
+
+@Injectable({
+  providedIn: "root"
+})
+export class HelperService {
+  static displayMemory = (input: number): string => {
+    if (input <= 1024) {
+      return `${input.toFixed(2)}KB`;
+    } else {
+      return `${(input / 1024.0).toFixed(2)}MB`;
+    }
+  };
+  static displayRelativeTime = (input: number): string => {
+    const addZero = (input: number): string => {
+      if (input === 0) {
+        return "00";
+      } else if (input < 10) {
+        return "0" + input.toString();
+      } else {
+        return input.toString();
+      }
+    };
+
+    const second = input % 60;
+    const minute = ((input % 3600) / 60) | 0;
+    const hour = (input / 3600) | 0;
+    return `${addZero(hour)}:${addZero(minute)}:${addZero(second)}`;
+  };
+  constructor() {}
+}

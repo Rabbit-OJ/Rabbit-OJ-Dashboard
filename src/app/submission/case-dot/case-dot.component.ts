@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { IJudgeResult } from "src/app/interface/submission";
-import { MemoryService } from "src/app/service/memory.service";
+import { HelperService } from 'src/app/service/helper.service';
 
 @Component({
   selector: "app-case-dot",
@@ -11,7 +11,7 @@ export class CaseDotComponent implements OnInit {
   @Input() dot: IJudgeResult;
   @Input() key: number;
 
-  renderMemoryUsed = () => MemoryService.displayMemory(this.dot.space_used);
+  renderMemoryUsed = () => HelperService.displayMemory(this.dot.space_used);
   constructor() {}
   ngOnInit() {}
 }

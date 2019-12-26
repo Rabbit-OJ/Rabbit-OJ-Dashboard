@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { ISubmissionLite } from "src/app/interface/submission";
 import { MatPaginator } from "@angular/material/paginator";
-import { MemoryService } from "src/app/service/memory.service";
+import { HelperService } from 'src/app/service/helper.service';
 
 @Component({
   selector: "app-submission-list",
@@ -20,5 +20,5 @@ export class SubmissionListComponent implements OnInit {
   handlePageChange = (paginator: MatPaginator) => {
     this.pageChange.emit(paginator);
   };
-  renderMemoryUsed = (input: number) => MemoryService.displayMemory(input);
+  renderMemoryUsed = (input: number) => HelperService.displayMemory(input);
 }

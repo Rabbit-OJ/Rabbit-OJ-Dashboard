@@ -1,5 +1,5 @@
-export interface ContestClarify {
-    cid: string;
-    createTime: Date;
-    message: string;
+export interface ContestClarify<T = Date> {
+  cid: string;
+  created_at: T;
+  message: string;
 }

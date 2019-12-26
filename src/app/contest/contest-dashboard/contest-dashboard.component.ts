@@ -4,12 +4,13 @@ import { ContestClarify } from "src/app/interface/contest-clarify";
 import { ContestMyInfo } from "src/app/interface/contest-my-info";
 import { MatPaginator } from "@angular/material/paginator";
 import { HttpClient } from "@angular/common/http";
-import { ActivatedRoute, Router, ParamMap } from "@angular/router";
+import { ActivatedRoute, ParamMap } from "@angular/router";
 import { switchMap, map } from "rxjs/operators";
 import { GeneralResponse } from "src/app/interface/general-response";
 import { UrlService } from "src/app/service/url.service";
 import { ScoreBoard } from "src/app/interface/score-board";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { HelperService } from "src/app/service/helper.service";
 
 @Component({
   selector: "app-contest-dashboard",
@@ -18,7 +19,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 })
 export class ContestDashboardComponent implements OnInit {
   contest: Contest<string> = {
-    name: "Contest Name",
+    name: "Loading...",
     start_time: new Date().toLocaleString(),
     block_time: new Date().toLocaleString(),
     end_time: new Date().toLocaleString(),
@@ -30,22 +31,19 @@ export class ContestDashboardComponent implements OnInit {
     uid: "1"
   };
   scoreBoardList: Array<ScoreBoard> = [];
-  scoreBoardDisplayedColumns: string[] = ["rank", "username", "score"];
+  scoreBoardDisplayedColumns: string[] = ["username", "score"];
   scoreBoardExtraColumns: string[] = [];
   scoreBoardCount: number = 0;
-  clarifyList: Array<ContestClarify> = [];
+  clarifyList: Array<ContestClarify<string>> = [];
   myInfo: ContestMyInfo = {
     score: 0,
     rank: 0,
     total_time: 0
   };
   scoreBoardPage: number = 1;
-  constructor(
-    private http: HttpClient,
-    private route: ActivatedRoute,
-    private snackBar: MatSnackBar
-  ) {}
+  constructor(private http: HttpClient, private route: ActivatedRoute, private snackBar: MatSnackBar) {}
 
+  renderTime = (input: number): string => HelperService.displayRelativeTime(input);
   ngOnInit() {
     setTimeout(() => {
       this.route.paramMap
@@ -67,6 +65,7 @@ export class ContestDashboardComponent implements OnInit {
           if (this.contest.status > 0) {
             this.fetchMyInfo();
             this.fetchScoreBoard();
+            this.fetchClarifyList();
           }
 
           this.renderScoreBoardQuestions(response.count);
@@ -82,6 +81,19 @@ export class ContestDashboardComponent implements OnInit {
         this.myInfo = response;
       });
   };
+  fetchClarifyList = () => {
+    this.http
+      .get<GeneralResponse<Array<ContestClarify<Date>>>>(
+        UrlService.CONTEST.GET_CLARIFY(this.route.snapshot.paramMap.get("cid"))
+      )
+      .pipe(map(item => item.message))
+      .subscribe(response => {
+        this.clarifyList = response.map(item => ({
+          ...item,
+          created_at: new Date(item.created_at).toLocaleString()
+        }));
+      });
+  };
   fetchScoreBoard = () => {
     this.http
       .get<GeneralResponse<Array<ScoreBoard>>>(
@@ -93,11 +105,11 @@ export class ContestDashboardComponent implements OnInit {
       });
   };
   renderScoreBoardQuestions = (count: number) => {
-    const basicArr = ["rank", "username", "score"];
+    const basicArr = ["username", "score"];
     const extraArr = [];
     for (let i = 1; i <= count; i++) {
-      basicArr.push(`#${i}`);
-      extraArr.push(`#${i}`);
+      basicArr.push(`T${i}`);
+      extraArr.push(`T${i}`);
     }
     this.scoreBoardDisplayedColumns = basicArr;
     this.scoreBoardExtraColumns = extraArr;

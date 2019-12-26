@@ -20,6 +20,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatTableModule } from "@angular/material/table";
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatExpansionModule } from "@angular/material/expansion";
 
 import { AppComponent } from "./app.component";
 import { ListComponent } from "./list/list.component";
@@ -69,7 +70,8 @@ import { ContestDashboardComponent } from './contest/contest-dashboard/contest-d
     MatMenuModule,
     MatTableModule,
     MatPaginatorModule,
-    KatexModule
+    KatexModule,
+    MatExpansionModule
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]

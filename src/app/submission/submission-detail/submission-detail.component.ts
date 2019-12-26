@@ -6,7 +6,7 @@ import { GeneralResponse } from "src/app/interface/general-response";
 import { UrlService } from "src/app/service/url.service";
 import { HttpClient } from "@angular/common/http";
 import { WebSocketSubject } from "rxjs/webSocket";
-import { MemoryService } from "src/app/service/memory.service";
+import { HelperService } from 'src/app/service/helper.service';
 
 @Component({
   selector: "app-submission-detail",
@@ -58,7 +58,7 @@ export class SubmissionDetailComponent implements OnInit {
                 map(item => ({
                   ...item.message,
                   created_at: new Date(item.message.created_at),
-                  space_used: MemoryService.displayMemory(item.message.space_used)
+                  space_used: HelperService.displayMemory(item.message.space_used)
                 }))
               )
           )
@@ -77,7 +77,7 @@ export class SubmissionDetailComponent implements OnInit {
                     map(item => ({
                       ...item.message,
                       created_at: new Date(item.message.created_at),
-                      space_used: MemoryService.displayMemory(item.message.space_used)
+                      space_used: HelperService.displayMemory(item.message.space_used)
                     }))
                   )
                   .subscribe(response => (this.item = response));
