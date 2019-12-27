@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import { ISubmissionLite } from "src/app/interface/submission";
+import { SubmissionLite } from "src/app/interface/submission";
 import { MatPaginator } from "@angular/material/paginator";
 import { HelperService } from 'src/app/service/helper.service';
 
@@ -10,7 +10,7 @@ import { HelperService } from 'src/app/service/helper.service';
 })
 export class SubmissionListComponent implements OnInit {
   displayedColumns: string[] = ["tid", "status", "performance", "created_at"];
-  @Input() submissionList: Array<ISubmissionLite> = [];
+  @Input() submissionList: Array<SubmissionLite> = [];
   @Input() totalCount: number = 0;
   @Output() pageChange = new EventEmitter<MatPaginator>();
 

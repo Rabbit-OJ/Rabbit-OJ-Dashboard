@@ -1,0 +1,21 @@
+.detail {
+  & .statics {
+    & p {
+      margin: 2px 12px;
+    }
+  }
+}
+.sample {
+  display: flex;
+  flex-flow: row;
+  & .in,
+  & .out {
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin: 0 12px 0 0;
+    border-radius: 6px;
+    padding: 12px;
+    background: #ddf3ff;
+    white-space: pre-line;
+  }
+}

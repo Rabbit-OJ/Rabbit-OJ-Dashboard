@@ -3,13 +3,18 @@
     {{ contest.name }}
   </h1>
   <mat-tab-group [dynamicHeight]="true" mat-align-tabs="center">
-    <mat-tab label="排行榜" *ngIf="contest.status > 0">
+    <mat-tab label="SCOREBOARD" *ngIf="contest.status > 0">
       <table mat-table [dataSource]="scoreBoardList">
         <ng-container matColumnDef="username">
           <th mat-header-cell *matHeaderCellDef>用户名</th>
           <td mat-cell *matCellDef="let item">
             <p class="rank-container username-item">#{{ item.rank }}</p>
-            <p class="username-item">{{ item.username }}</p>
+            <p class="username-item">
+              <span *ngIf="item.rank === 1">🥇</span>
+              <span *ngIf="item.rank === 2">🥈</span>
+              <span *ngIf="item.rank === 3">🥉</span>
+              {{ item.username }}
+            </p>
           </td>
         </ng-container>
 
@@ -47,31 +52,33 @@
         </mat-paginator>
       </div>
     </mat-tab>
-    <mat-tab label="题目" *ngIf="contest.status > 0">
+
+    <mat-tab label="QUESTIONS" *ngIf="contest.status > 0">
       <div class="questions-container">
         <mat-accordion>
-          <mat-expansion-panel>
+          <mat-expansion-panel *ngFor="let item of contestQuestions; let i = index">
             <mat-expansion-panel-header>
-              <mat-panel-title>
-                T1
-              </mat-panel-title>
-              <mat-panel-description>
-                Not Accepted
-              </mat-panel-description>
+              <mat-panel-title> [T{{ (i + 1).toString() }}] {{ item.subject }} </mat-panel-title>
+              <mat-panel-description> {{ item.score }}分 </mat-panel-description>
             </mat-expansion-panel-header>
-            hzytql
+            {{ item.content }}
           </mat-expansion-panel>
         </mat-accordion>
       </div>
     </mat-tab>
-    <mat-tab label="信息">
-      <div class="clarify-container" *ngIf="clarifyList.length">
-        <h3>Clarify</h3>
+
+    <mat-tab label="SUBMISSIONS"> </mat-tab>
+
+    <mat-tab label="CLARIFY" *ngIf="clarifyList.length">
+      <div class="questions-container">
         <mat-card *ngFor="let item of clarifyList">
           <mat-card-title>{{ item.message }}</mat-card-title>
           <mat-card-content>{{ item.created_at }}</mat-card-content>
         </mat-card>
       </div>
+    </mat-tab>
+
+    <mat-tab label="INFO">
       <div class="operation-container" *ngIf="contest.status === 0">
         <h3>比赛操作</h3>
         <div class="btn-container">

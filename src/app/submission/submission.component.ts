@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { ISubmissionLite } from "../interface/submission";
+import { SubmissionLite } from "../interface/submission";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { switchMap, map } from "rxjs/operators";
 import { GeneralResponse } from "../interface/general-response";
@@ -22,7 +22,7 @@ export interface PeriodicElement {
 })
 export class SubmissionComponent implements OnInit {
   displayedColumns: string[] = ["tid", "status", "performance", "created_at"];
-  submissionList: Array<ISubmissionLite> = [];
+  submissionList: Array<SubmissionLite> = [];
   totalCount: number = 0;
 
   constructor(

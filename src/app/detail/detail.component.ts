@@ -6,12 +6,8 @@ import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { switchMap, map } from "rxjs/operators";
 import { GeneralResponse } from "../interface/general-response";
 
-import marked from "marked";
-import DOMPurify from "dompurify";
-
-import { LanguageService } from "../service/language.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { ISubmissionLite } from "../interface/submission";
+import { SubmissionLite } from "../interface/submission";
 import { AuthenticationService } from "../service/authentication.service";
 import { MatPaginator } from "@angular/material/paginator";
 import { SubmissionResponse } from "../interface/submission-response";
@@ -24,7 +20,7 @@ import { SubmissionResponse } from "../interface/submission-response";
 export class DetailComponent implements OnInit {
   question: QuestionDetail = {
     tid: "",
-    content: "",
+    content: "<p></p>",
     subject: "",
     attempt: 0,
     accept: 0,
@@ -35,17 +31,13 @@ export class DetailComponent implements OnInit {
     sample: [],
     hide: false
   };
-  renderedHTML: string = "<p></p>";
-  language: string = "";
-  code: string = "";
-  submissionList: Array<ISubmissionLite> = [];
+  submissionList: Array<SubmissionLite> = [];
   totalCount: number = 0;
   currentPage: number = 0;
 
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
-    public languageService: LanguageService,
     private router: Router,
     private snackBar: MatSnackBar,
     private authService: AuthenticationService
@@ -66,10 +58,6 @@ export class DetailComponent implements OnInit {
         )
         .subscribe(response => {
           this.question = response;
-          const { content } = response;
-
-          const markdownRendered = marked(content);
-          this.renderedHTML = DOMPurify.sanitize(markdownRendered);
 
           this.authService.currentUserObservable.subscribe(({ isLogin }) => {
             if (!isLogin) return;
@@ -78,6 +66,7 @@ export class DetailComponent implements OnInit {
         });
     }, 0);
   }
+  
   handleUpdateRecord = (page: string) => {
     this.http
       .get<GeneralResponse<SubmissionResponse>>(UrlService.QUESTION.RECORD(this.question.tid, page))
@@ -92,8 +81,8 @@ export class DetailComponent implements OnInit {
       });
   };
 
-  handleSubmit = () => {
-    if (this.language === "") {
+  handleSubmit = ({ language, code }: { language: string; code: string }) => {
+    if (language === "") {
       this.snackBar.open("Select a language first!", "OK", {
         duration: 2000
       });
@@ -103,8 +92,8 @@ export class DetailComponent implements OnInit {
 
     this.http
       .post<GeneralResponse<string>>(UrlService.QUESTION.SUBMIT(this.question.tid), {
-        language: this.language,
-        code: this.code
+        language: language,
+        code: code
       })
       .subscribe(({ code, message }) => {
         if (code === 200) {

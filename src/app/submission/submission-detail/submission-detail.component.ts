@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { ISubmission } from "src/app/interface/submission";
+import { Submission } from "src/app/interface/submission";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { switchMap, map } from "rxjs/operators";
 import { GeneralResponse } from "src/app/interface/general-response";
@@ -14,7 +14,7 @@ import { HelperService } from 'src/app/service/helper.service';
   styleUrls: ["./submission-detail.component.scss"]
 })
 export class SubmissionDetailComponent implements OnInit {
-  item: ISubmission = {
+  item: Submission = {
     sid: "",
     uid: "",
     tid: "",
@@ -53,7 +53,7 @@ export class SubmissionDetailComponent implements OnInit {
         .pipe(
           switchMap((params: ParamMap) =>
             this.http
-              .get<GeneralResponse<ISubmission<number>>>(UrlService.SUBMISSION.GET_DETAIL(params.get("sid")))
+              .get<GeneralResponse<Submission<number>>>(UrlService.SUBMISSION.GET_DETAIL(params.get("sid")))
               .pipe(
                 map(item => ({
                   ...item.message,
@@ -70,7 +70,7 @@ export class SubmissionDetailComponent implements OnInit {
             socket$.subscribe(({ ok }) => {
               if (ok) {
                 this.http
-                  .get<GeneralResponse<ISubmission<number>>>(
+                  .get<GeneralResponse<Submission<number>>>(
                     UrlService.SUBMISSION.GET_DETAIL(this.route.snapshot.params["sid"])
                   )
                   .pipe(

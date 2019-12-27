@@ -11,6 +11,8 @@ import { UrlService } from "src/app/service/url.service";
 import { ScoreBoard } from "src/app/interface/score-board";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { HelperService } from "src/app/service/helper.service";
+import { GeneralListResponse } from "src/app/interface/question-list";
+import { ContestQuestion } from "src/app/interface/contest-question";
 
 @Component({
   selector: "app-contest-dashboard",
@@ -38,9 +40,11 @@ export class ContestDashboardComponent implements OnInit {
   myInfo: ContestMyInfo = {
     score: 0,
     rank: 0,
-    total_time: 0
+    total_time: 0,
+    progress: []
   };
   scoreBoardPage: number = 1;
+  contestQuestions: Array<ContestQuestion> = [];
   constructor(private http: HttpClient, private route: ActivatedRoute, private snackBar: MatSnackBar) {}
 
   renderTime = (input: number): string => HelperService.displayRelativeTime(input);
@@ -66,6 +70,7 @@ export class ContestDashboardComponent implements OnInit {
             this.fetchMyInfo();
             this.fetchScoreBoard();
             this.fetchClarifyList();
+            this.fetchQuestions();
           }
 
           this.renderScoreBoardQuestions(response.count);
@@ -96,12 +101,26 @@ export class ContestDashboardComponent implements OnInit {
   };
   fetchScoreBoard = () => {
     this.http
-      .get<GeneralResponse<Array<ScoreBoard>>>(
+      .get<GeneralResponse<GeneralListResponse<ScoreBoard>>>(
         UrlService.CONTEST.GET_SCORE_BOARD(this.route.snapshot.paramMap.get("cid"), this.scoreBoardPage.toString())
       )
       .pipe(map(item => item.message))
       .subscribe(response => {
-        this.scoreBoardList = response;
+        this.scoreBoardList = response.list;
+        this.contest = {
+          ...this.contest,
+          participants: response.count
+        };
+      });
+  };
+  fetchQuestions = () => {
+    this.http
+      .get<GeneralResponse<Array<ContestQuestion>>>(
+        UrlService.CONTEST.GET_QUESTIONS(this.route.snapshot.paramMap.get("cid"))
+      )
+      .pipe(map(item => item.message))
+      .subscribe(response => {
+        this.contestQuestions = response;
       });
   };
   renderScoreBoardQuestions = (count: number) => {

@@ -1,6 +1,6 @@
 export type JudgeStatus = "ING" | "AC" | "WA" | "CE" | "RE" | "TLE" | "MLE" | "NO";
 
-export interface ISubmissionLite<T = string> {
+export interface SubmissionLite<T = string> {
   sid: string;
   uid: string;
   tid: string;
@@ -12,7 +12,7 @@ export interface ISubmissionLite<T = string> {
   created_at: Date;
 }
 
-export interface ISubmission<T = string> extends ISubmissionLite<T> {
+export interface Submission<T = string> extends SubmissionLite<T> {
   sid: string;
   uid: string;
   tid: string;
@@ -22,10 +22,10 @@ export interface ISubmission<T = string> extends ISubmissionLite<T> {
   time_used: number;
   space_used: T;
   created_at: Date;
-  judge: Array<IJudgeResult>;
+  judge: Array<JudgeResult>;
 }
 
-export interface IJudgeResult {
+export interface JudgeResult {
   status: JudgeStatus;
   time_used: number;
   space_used: number;

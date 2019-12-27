@@ -1,0 +1,14 @@
+<div class="submit-container">
+    <mat-form-field>
+      <mat-select placeholder="Language" [(ngModel)]="language">
+        <mat-option *ngFor="let language of languageService.data" [value]="language.value">{{
+          language.name
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="code-submit-field">
+      <mat-label>Codes</mat-label>
+      <textarea matInput placeholder="Paste your codes here" class="code-submit" [(ngModel)]="code"></textarea>
+    </mat-form-field>
+    <button mat-raised-button id="login" color="primary" (click)="handleSubmit()">提交测评</button>
+  </div>

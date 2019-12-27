@@ -21,7 +21,6 @@
     "@angular/platform-browser": "~8.2.14",
     "@angular/platform-browser-dynamic": "~8.2.14",
     "@angular/router": "~8.2.14",
-    "dompurify": "^2.0.7",
     "hammerjs": "^2.0.8",
     "marked": "^0.8.0",
     "ng-katex": "^1.3.1",

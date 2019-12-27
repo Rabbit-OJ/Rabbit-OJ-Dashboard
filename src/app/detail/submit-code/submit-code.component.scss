@@ -1,0 +1,11 @@
+.submit-container {
+    display: flex;
+    width: 100%;
+    padding: 24px;
+    flex-flow: row wrap;
+  }
+  .code-submit,
+  .code-submit-field {
+    width: 100%;
+    min-height: 480px;
+  }

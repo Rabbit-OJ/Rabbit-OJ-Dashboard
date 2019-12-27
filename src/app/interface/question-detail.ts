@@ -1,4 +1,4 @@
-import { ISample } from "./sample";
+import { Sample } from "./sample";
 
 export interface QuestionDetail {
   tid: string;
@@ -11,5 +11,5 @@ export interface QuestionDetail {
   space_limit: number;
   created_at: string;
   hide: boolean;
-  sample: Array<ISample>;
+  sample: Array<Sample>;
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { IJudgeResult } from "src/app/interface/submission";
+import { JudgeResult } from "src/app/interface/submission";
 import { HelperService } from 'src/app/service/helper.service';
 
 @Component({
@@ -8,7 +8,7 @@ import { HelperService } from 'src/app/service/helper.service';
   styleUrls: ["./case-dot.component.scss"]
 })
 export class CaseDotComponent implements OnInit {
-  @Input() dot: IJudgeResult;
+  @Input() dot: JudgeResult;
   @Input() key: number;
 
   renderMemoryUsed = () => HelperService.displayMemory(this.dot.space_used);

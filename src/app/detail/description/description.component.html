@@ -1,0 +1,27 @@
+<h3>题目描述</h3>
+<div class="description" id="description">
+  <ng-katex-html [html]="renderQuestionContent()"></ng-katex-html>
+</div>
+<h3>测试样例</h3>
+<div class="sample" *ngFor="let _sample of question.sample">
+  <div class="in">{{ _sample.in }}</div>
+  <div class="out">{{ _sample.out }}</div>
+</div>
+<div *ngIf="!isContest">
+<h3>题目统计</h3>
+  <div>提交：{{ question.attempt }}</div>
+  <div>通过：{{ question.accept }} ({{ ((question.accept / (question.attempt || 1)) * 100.0).toFixed(2) }}%)</div>
+</div>
+<h3>题目限制</h3>
+<div>时间：{{ question.time_limit }}ms</div>
+<div>空间：{{ question.space_limit.toFixed(2) }}MB</div>
+<h3>更新时间</h3>
+<div>{{ question.created_at }}</div>
+<div class="difficulty-container" *ngIf="!isContest">
+  <h3>题目难度</h3>
+  <mat-chip-list>
+    <mat-chip *ngIf="question.difficulty === 1" color="primary" selected>Easy</mat-chip>
+    <mat-chip *ngIf="question.difficulty === 2" color="accent" selected>Medium</mat-chip>
+    <mat-chip *ngIf="question.difficulty === 3" color="warn" selected>Hard</mat-chip>
+  </mat-chip-list>
+</div>

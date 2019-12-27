@@ -1,4 +1,4 @@
-export interface ISample {
+export interface Sample {
   in: string;
   out: string;
 }

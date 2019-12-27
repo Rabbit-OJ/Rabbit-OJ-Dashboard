@@ -1,6 +1,6 @@
-import { ISubmissionLite } from './submission';
+import { SubmissionLite } from './submission';
 
 export interface SubmissionResponse {
-    list: Array<ISubmissionLite>;
+    list: Array<SubmissionLite>;
     count: number;
 }
