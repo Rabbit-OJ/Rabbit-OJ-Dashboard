@@ -59,15 +59,56 @@
           <mat-expansion-panel *ngFor="let item of contestQuestions; let i = index">
             <mat-expansion-panel-header>
               <mat-panel-title> [T{{ (i + 1).toString() }}] {{ item.subject }} </mat-panel-title>
-              <mat-panel-description> {{ item.score }}分 </mat-panel-description>
+              <mat-panel-description>
+                🌟 {{ item.score }}
+                <span *ngIf="myInfo && myInfo.progress[i] && myInfo.progress[i].bug > 0" class="question-subtitle-tip"
+                  >🐛 {{ myInfo.progress[i].bug }}</span
+                >
+                <span
+                  *ngIf="myInfo && myInfo.progress[i] && myInfo.progress[i].status === 1"
+                  class="question-subtitle-tip"
+                  >✅ {{ renderTime(myInfo.progress[i].total_time) }}</span
+                >
+              </mat-panel-description>
             </mat-expansion-panel-header>
-            {{ item.content }}
+            <ng-template matExpansionPanelContent>
+              <app-description [isContest]="true" [question]="item"></app-description>
+            </ng-template>
           </mat-expansion-panel>
         </mat-accordion>
       </div>
     </mat-tab>
 
-    <mat-tab label="SUBMISSIONS"> </mat-tab>
+    <mat-tab label="SUBMISSIONS">
+      <div class="questions-container">
+        <mat-accordion>
+          <mat-expansion-panel *ngFor="let item of submissionList" (opened)="handleOpenSubmissionPanel(item.sid)">
+            <mat-expansion-panel-header>
+              <mat-panel-title *ngIf="questionMap.get(item.tid)">
+                [T{{ questionMap.get(item.tid).id + 1 }}] {{ questionMap.get(item.tid).subject }}</mat-panel-title
+              >
+              <mat-panel-description>
+                <span *ngIf="item.status === 1" class="question-subtitle-tip"
+                  >✅ {{ renderTime(item.total_time) }}</span
+                >
+                <span *ngIf="item.status === -1" class="question-subtitle-tip"
+                  >🐛 {{ renderTime(item.total_time) }}</span
+                >
+                <span *ngIf="item.status === 0" class="question-subtitle-tip"
+                  >⌛️ {{ renderTime(item.total_time) }}</span
+                >
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+              <app-case-dot
+                *ngIf="this.submissionInfo.has(item.sid)"
+                [dotList]="this.submissionInfo.get(item.sid).judge"
+              ></app-case-dot>
+            </ng-template>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </mat-tab>
 
     <mat-tab label="CLARIFY" *ngIf="clarifyList.length">
       <div class="questions-container">

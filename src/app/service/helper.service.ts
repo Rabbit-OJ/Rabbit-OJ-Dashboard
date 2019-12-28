@@ -4,7 +4,11 @@ import { Injectable } from "@angular/core";
   providedIn: "root"
 })
 export class HelperService {
-  static displayMemory = (input: number): string => {
+  static displayMemory = (input: number | string): string => {
+    if (typeof input === 'string') {
+      return input;
+    }
+    
     if (input <= 1024) {
       return `${input.toFixed(2)}KB`;
     } else {

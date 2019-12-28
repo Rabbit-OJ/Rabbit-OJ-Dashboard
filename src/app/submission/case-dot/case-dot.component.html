@@ -1,5 +1,7 @@
-<div
+<div class="case-dot-list-container">
+  <div
   class="case-dot-container"
+  *ngFor="let dot of dotList; index as key"
   [ngClass]="{
     'dot-ac': dot.status === 'AC',
     'dot-tle': dot.status === 'TLE',
@@ -18,7 +20,8 @@
   <div class="performance-container" *ngIf="dot.status !== 'ING'">
     <div class="performance-time" *ngIf="dot.time_used || dot.status === 'AC'">{{ dot.time_used }}ms</div>
     <div class="performance-space" *ngIf="dot.status !== 'CE' && dot.status !== 'RE'">
-      {{ renderMemoryUsed() }}
+      {{ renderMemoryUsed(dot) }}
     </div>
   </div>
+</div>
 </div>

@@ -40,6 +40,7 @@ export class UrlService {
     GET_LIST: (page: string) => `${BACKEND_URL}/contest/list/${page}`,
     GET_MY_INFO: (cid: string) => `${BACKEND_URL}/contest/my/info/${cid}`,
     GET_CLARIFY: (cid: string) => `${BACKEND_URL}/contest/clarify/${cid}`,
+    GET_SUBMISSION_LIST: (cid: string) => `${BACKEND_URL}/contest/submission/list/${cid}`,
     GET_SCORE_BOARD: (cid: string, page: string) => `${BACKEND_URL}/contest/scoreboard/${cid}/${page}`,
     GET_INFO: (cid: string) => `${BACKEND_URL}/contest/info/${cid}`,
     GET_QUESTIONS: (cid: string) => `${BACKEND_URL}/contest/question/${cid}`,

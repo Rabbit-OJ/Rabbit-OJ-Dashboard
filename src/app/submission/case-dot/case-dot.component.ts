@@ -8,10 +8,9 @@ import { HelperService } from 'src/app/service/helper.service';
   styleUrls: ["./case-dot.component.scss"]
 })
 export class CaseDotComponent implements OnInit {
-  @Input() dot: JudgeResult;
-  @Input() key: number;
+  @Input() dotList: Array<JudgeResult>;
 
-  renderMemoryUsed = () => HelperService.displayMemory(this.dot.space_used);
+  renderMemoryUsed = (dot : JudgeResult) => HelperService.displayMemory(dot.space_used);
   constructor() {}
   ngOnInit() {}
 }

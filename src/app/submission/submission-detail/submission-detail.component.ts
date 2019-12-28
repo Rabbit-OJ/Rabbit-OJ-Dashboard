@@ -22,7 +22,7 @@ export class SubmissionDetailComponent implements OnInit {
     status: "AC",
     language: "php",
     time_used: 0,
-    space_used: "0",
+    space_used: 0,
     created_at: new Date(),
     judge: []
   };
@@ -45,7 +45,6 @@ export class SubmissionDetailComponent implements OnInit {
     document.body.appendChild(tempForm);
     tempForm.submit();
     tempForm.remove();
-    // window.open(UrlService.SUBMISSION.GET_CODE(this.item.sid));
   };
   ngOnInit() {
     setTimeout(() => {
@@ -53,7 +52,7 @@ export class SubmissionDetailComponent implements OnInit {
         .pipe(
           switchMap((params: ParamMap) =>
             this.http
-              .get<GeneralResponse<Submission<number>>>(UrlService.SUBMISSION.GET_DETAIL(params.get("sid")))
+              .get<GeneralResponse<Submission>>(UrlService.SUBMISSION.GET_DETAIL(params.get("sid")))
               .pipe(
                 map(item => ({
                   ...item.message,
@@ -70,7 +69,7 @@ export class SubmissionDetailComponent implements OnInit {
             socket$.subscribe(({ ok }) => {
               if (ok) {
                 this.http
-                  .get<GeneralResponse<Submission<number>>>(
+                  .get<GeneralResponse<Submission>>(
                     UrlService.SUBMISSION.GET_DETAIL(this.route.snapshot.params["sid"])
                   )
                   .pipe(

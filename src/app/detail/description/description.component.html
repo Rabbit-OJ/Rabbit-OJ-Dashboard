@@ -8,15 +8,17 @@
   <div class="out">{{ _sample.out }}</div>
 </div>
 <div *ngIf="!isContest">
-<h3>题目统计</h3>
+  <h3>题目统计</h3>
   <div>提交：{{ question.attempt }}</div>
   <div>通过：{{ question.accept }} ({{ ((question.accept / (question.attempt || 1)) * 100.0).toFixed(2) }}%)</div>
 </div>
 <h3>题目限制</h3>
 <div>时间：{{ question.time_limit }}ms</div>
 <div>空间：{{ question.space_limit.toFixed(2) }}MB</div>
-<h3>更新时间</h3>
-<div>{{ question.created_at }}</div>
+<div class="created-at-container" *ngIf="!isContest">
+  <h3>更新时间</h3>
+  <div>{{ question.created_at }}</div>
+</div>
 <div class="difficulty-container" *ngIf="!isContest">
   <h3>题目难度</h3>
   <mat-chip-list>

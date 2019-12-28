@@ -12,7 +12,9 @@ import { ScoreBoard } from "src/app/interface/score-board";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { HelperService } from "src/app/service/helper.service";
 import { GeneralListResponse } from "src/app/interface/question-list";
-import { ContestQuestion } from "src/app/interface/contest-question";
+import { ContestQuestion, ContestQuestionItem } from "src/app/interface/contest-question";
+import { ContestSubmission, Submission } from "src/app/interface/submission";
+import { WebSocketSubject } from "rxjs/webSocket";
 
 @Component({
   selector: "app-contest-dashboard",
@@ -45,6 +47,9 @@ export class ContestDashboardComponent implements OnInit {
   };
   scoreBoardPage: number = 1;
   contestQuestions: Array<ContestQuestion> = [];
+  submissionList: Array<ContestSubmission> = [];
+  questionMap: Map<string, ContestQuestionItem> = new Map<string, ContestQuestionItem>();
+  submissionInfo: Map<string, Submission> = new Map<string, Submission>();
   constructor(private http: HttpClient, private route: ActivatedRoute, private snackBar: MatSnackBar) {}
 
   renderTime = (input: number): string => HelperService.displayRelativeTime(input);
@@ -71,6 +76,7 @@ export class ContestDashboardComponent implements OnInit {
             this.fetchScoreBoard();
             this.fetchClarifyList();
             this.fetchQuestions();
+            this.fetchSubmissionList();
           }
 
           this.renderScoreBoardQuestions(response.count);
@@ -78,6 +84,16 @@ export class ContestDashboardComponent implements OnInit {
         });
     }, 0);
   }
+  fetchSubmissionList = () => {
+    this.http
+      .get<GeneralResponse<Array<ContestSubmission>>>(
+        UrlService.CONTEST.GET_SUBMISSION_LIST(this.route.snapshot.paramMap.get("cid"))
+      )
+      .pipe(map(item => item.message))
+      .subscribe(response => {
+        this.submissionList = response;
+      });
+  };
   fetchMyInfo = () => {
     this.http
       .get<GeneralResponse<ContestMyInfo>>(UrlService.CONTEST.GET_MY_INFO(this.route.snapshot.paramMap.get("cid")))
@@ -121,6 +137,11 @@ export class ContestDashboardComponent implements OnInit {
       .pipe(map(item => item.message))
       .subscribe(response => {
         this.contestQuestions = response;
+        this.questionMap.clear();
+
+        this.contestQuestions.forEach(item => {
+          this.questionMap.set(item.tid, { id: item.id, subject: item.subject });
+        });
       });
   };
   renderScoreBoardQuestions = (count: number) => {
@@ -154,5 +175,31 @@ export class ContestDashboardComponent implements OnInit {
   handlePageChange = (paginator: MatPaginator) => {
     this.scoreBoardPage = paginator.pageIndex + 1;
     this.fetchScoreBoard();
+  };
+  handleOpenSubmissionPanel = (sid: string) => {
+    if (!this.submissionInfo.has(sid) || this.submissionInfo.get(sid).status === "ING") {
+      this.route.paramMap
+        .pipe(
+          switchMap((params: ParamMap) =>
+            this.http
+              .get<GeneralResponse<Submission>>(UrlService.SUBMISSION.GET_DETAIL(sid))
+              .pipe(map(item => item.message))
+          )
+        )
+        .subscribe(response => {
+          this.submissionInfo.set(sid, response);
+          if (response.status === "ING") {
+            const socket$ = new WebSocketSubject<{ ok: number }>(UrlService.SUBMISSION.SOCKET(response.sid));
+            socket$.subscribe(({ ok }) => {
+              if (ok) {
+                this.http
+                  .get<GeneralResponse<Submission>>(UrlService.SUBMISSION.GET_DETAIL(sid))
+                  .pipe(map(item => item.message))
+                  .subscribe(response => this.submissionInfo.set(sid, response));
+              }
+            });
+          }
+        });
+    }
   };
 }

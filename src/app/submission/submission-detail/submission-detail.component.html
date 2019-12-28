@@ -22,9 +22,7 @@
       <p>时间使用：{{ item.time_used }}ms</p>
       <p>提交时间：{{ item.created_at.toLocaleString() }}</p>
       <h3>测试点信息</h3>
-      <div class="case-dot-list-container">
-        <app-case-dot *ngFor="let caseDot of item.judge; index as i" [key]="i" [dot]="caseDot"></app-case-dot>
-      </div>
+        <app-case-dot [dotList]="item.judge"></app-case-dot>
     </mat-tab>
 
     <mat-tab label="代码下载">

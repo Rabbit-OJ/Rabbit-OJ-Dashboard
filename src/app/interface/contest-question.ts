@@ -16,3 +16,8 @@ export interface ContestQuestion {
   attempt: number;
   accept: number;
 }
+
+export interface ContestQuestionItem {
+  subject: string;
+  id: string;
+}
