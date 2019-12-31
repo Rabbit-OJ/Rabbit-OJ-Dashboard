@@ -2,13 +2,19 @@
   <h1>
     {{ question.subject }}
   </h1>
-  <mat-tab-group [dynamicHeight]="true" mat-align-tabs="center">
+  <mat-tab-group
+    [dynamicHeight]="true"
+    mat-align-tabs="center"
+    (selectedTabChange)="this.handleSelectedTabChange($event)"
+  >
     <mat-tab label="题目描述">
       <app-description [question]="question" [isContest]="false"></app-description>
     </mat-tab>
 
     <mat-tab label="提交代码">
-      <app-submit-code (submit)="this.handleSubmit($event)"></app-submit-code>
+      <div class="submit-container">
+        <app-submit-code (submit)="this.handleSubmit($event)"></app-submit-code>
+      </div>
     </mat-tab>
 
     <mat-tab label="提交记录">

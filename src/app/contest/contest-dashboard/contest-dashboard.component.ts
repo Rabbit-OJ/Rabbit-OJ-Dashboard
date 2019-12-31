@@ -202,4 +202,24 @@ export class ContestDashboardComponent implements OnInit {
         });
     }
   };
+  handleSubmit = (tid: string) => ({ language, code }: { language: string; code: string }) => {
+    if (language === "") {
+      this.snackBar.open("Select a language first!", "OK", {
+        duration: 2000
+      });
+
+      return;
+    }
+
+    this.http
+      .post<GeneralResponse<string>>(UrlService.QUESTION.SUBMIT(tid), {
+        language: language,
+        code: code
+      })
+      .subscribe(({ code, message }) => {
+        if (code === 200) {
+          console.log(message);
+        }
+      });
+  };
 }

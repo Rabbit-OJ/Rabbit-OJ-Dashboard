@@ -11,6 +11,7 @@ import { SubmissionLite } from "../interface/submission";
 import { AuthenticationService } from "../service/authentication.service";
 import { MatPaginator } from "@angular/material/paginator";
 import { SubmissionResponse } from "../interface/submission-response";
+import { MatTabChangeEvent } from "@angular/material/tabs";
 
 @Component({
   selector: "app-detail",
@@ -34,6 +35,7 @@ export class DetailComponent implements OnInit {
   submissionList: Array<SubmissionLite> = [];
   totalCount: number = 0;
   currentPage: number = 0;
+  firstVisitSubmission: boolean = true;
 
   constructor(
     private http: HttpClient,
@@ -58,15 +60,10 @@ export class DetailComponent implements OnInit {
         )
         .subscribe(response => {
           this.question = response;
-
-          this.authService.currentUserObservable.subscribe(({ isLogin }) => {
-            if (!isLogin) return;
-            this.handleUpdateRecord("1");
-          });
         });
     }, 0);
   }
-  
+
   handleUpdateRecord = (page: string) => {
     this.http
       .get<GeneralResponse<SubmissionResponse>>(UrlService.QUESTION.RECORD(this.question.tid, page))
@@ -104,5 +101,13 @@ export class DetailComponent implements OnInit {
 
   pageChange = (pagination: MatPaginator) => {
     this.handleUpdateRecord((pagination.pageIndex + 1).toString());
+  };
+  handleSelectedTabChange = (e: MatTabChangeEvent) => {
+    if (e.index === 2 && this.firstVisitSubmission) {
+      this.firstVisitSubmission = false;
+      if (this.authService.currentUser.isLogin) {
+        this.handleUpdateRecord("1");
+      }
+    }
   };
 }
