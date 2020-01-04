@@ -14,8 +14,8 @@ export class UrlService {
     GET_LIST: (page: string) => `${BACKEND_URL}/question/list/${page}`,
     OPTIONS_ITEM: (tid: string) => `${BACKEND_URL}/question/item/${tid}`,
     POST_CREATE: `${BACKEND_URL}/question/item`,
-    SUBMIT: (tid: string) => `${BACKEND_URL}/question/submit/${tid}`,
-    RECORD: (tid: string, page: string) => `${BACKEND_URL}/question/record/${tid}/${page}`
+    POST_SUBMIT: (tid: string) => `${BACKEND_URL}/question/submit/${tid}`,
+    GET_RECORD: (tid: string, page: string) => `${BACKEND_URL}/question/record/${tid}/${page}`
   };
 
   static USER = {
@@ -39,6 +39,7 @@ export class UrlService {
   static CONTEST = {
     GET_LIST: (page: string) => `${BACKEND_URL}/contest/list/${page}`,
     GET_MY_INFO: (cid: string) => `${BACKEND_URL}/contest/my/info/${cid}`,
+    POST_SUBMIT: (cid: string, id: string) => `${BACKEND_URL}/contest/submit/${cid}/${id}`,
     GET_CLARIFY: (cid: string) => `${BACKEND_URL}/contest/clarify/${cid}`,
     GET_SUBMISSION_LIST: (cid: string) => `${BACKEND_URL}/contest/submission/list/${cid}`,
     GET_SCORE_BOARD: (cid: string, page: string) => `${BACKEND_URL}/contest/scoreboard/${cid}/${page}`,

@@ -180,7 +180,7 @@ export class ContestDashboardComponent implements OnInit {
     if (!this.submissionInfo.has(sid) || this.submissionInfo.get(sid).status === "ING") {
       this.route.paramMap
         .pipe(
-          switchMap((params: ParamMap) =>
+          switchMap(() =>
             this.http
               .get<GeneralResponse<Submission>>(UrlService.SUBMISSION.GET_DETAIL(sid))
               .pipe(map(item => item.message))
@@ -212,7 +212,7 @@ export class ContestDashboardComponent implements OnInit {
     }
 
     this.http
-      .post<GeneralResponse<string>>(UrlService.QUESTION.SUBMIT(tid), {
+      .post<GeneralResponse<string>>(UrlService.CONTEST.POST_SUBMIT(this.contest.cid, tid), {
         language: language,
         code: code
       })

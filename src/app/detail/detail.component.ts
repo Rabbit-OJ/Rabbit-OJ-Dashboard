@@ -66,7 +66,7 @@ export class DetailComponent implements OnInit {
 
   handleUpdateRecord = (page: string) => {
     this.http
-      .get<GeneralResponse<SubmissionResponse>>(UrlService.QUESTION.RECORD(this.question.tid, page))
+      .get<GeneralResponse<SubmissionResponse>>(UrlService.QUESTION.GET_RECORD(this.question.tid, page))
       .subscribe(({ code, message }) => {
         if (code === 200) {
           this.totalCount = message.count;
@@ -88,7 +88,7 @@ export class DetailComponent implements OnInit {
     }
 
     this.http
-      .post<GeneralResponse<string>>(UrlService.QUESTION.SUBMIT(this.question.tid), {
+      .post<GeneralResponse<string>>(UrlService.QUESTION.POST_SUBMIT(this.question.tid), {
         language: language,
         code: code
       })
