@@ -1,7 +1,7 @@
 import { Sample } from "./sample";
 
 export interface QuestionDetail {
-  tid: string;
+  tid: number;
   content: string;
   subject: string;
   attempt: number;

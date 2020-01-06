@@ -1,11 +1,11 @@
 import { Sample } from "./sample";
 
 export interface ContestQuestion {
-  cid: string;
-  tid: string;
-  id: string;
+  cid: number;
+  tid: number;
+  id: number;
   score: number;
-  uid: string;
+  uid: number;
   subject: string;
   difficulty: 0 | 1 | 2;
   time_limit: number;
@@ -19,5 +19,5 @@ export interface ContestQuestion {
 
 export interface ContestQuestionItem {
   subject: string;
-  id: string;
+  id: number;
 }

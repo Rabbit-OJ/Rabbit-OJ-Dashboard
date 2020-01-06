@@ -1,5 +1,5 @@
 export interface ScoreBoard {
-    uid: string;
+    uid: number;
     username: string;
     score: number;
     total_time: number;

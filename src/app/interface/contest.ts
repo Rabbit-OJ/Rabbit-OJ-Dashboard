@@ -1,7 +1,7 @@
 export interface Contest<T = Date> {
-    cid: string;
+    cid: number;
     name: string;
-    uid: string;
+    uid: number;
     start_time: T;
     block_time: T;
     end_time: T;

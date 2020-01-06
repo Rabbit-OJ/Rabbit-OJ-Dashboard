@@ -1,9 +1,9 @@
 export type JudgeStatus = "ING" | "AC" | "WA" | "CE" | "RE" | "TLE" | "MLE" | "NO";
 
 export interface SubmissionLite {
-  sid: string;
-  uid: string;
-  tid: string;
+  sid: number;
+  uid: number;
+  tid: number;
   question_title: string;
   status: JudgeStatus;
   language: string;
@@ -13,18 +13,18 @@ export interface SubmissionLite {
 }
 
 export interface ContestSubmission<T = string> {
-  sid: string;
-  uid: string;
-  tid: string;
+  sid: number;
+  uid: number;
+  tid: number;
   status: number;
   created_at: T;
   total_time: number;
 }
 
 export interface Submission extends SubmissionLite {
-  sid: string;
-  uid: string;
-  tid: string;
+  sid: number;
+  uid: number;
+  tid: number;
   question_title: string;
   status: JudgeStatus;
   language: string;

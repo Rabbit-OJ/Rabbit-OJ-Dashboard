@@ -1,6 +1,6 @@
 export interface QuestionItem {
-  tid: string;
-  uid: string;
+  tid: number;
+  uid: number;
   subject: string;
   attempt: number;
   accept: number;

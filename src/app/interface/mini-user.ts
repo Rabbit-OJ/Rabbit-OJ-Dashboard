@@ -1,5 +1,5 @@
 export interface LoginResponseUser {
-  uid: string;
+  uid: number;
   username: string;
   isAdmin: boolean;
 }

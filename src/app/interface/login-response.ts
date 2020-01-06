@@ -1,6 +1,6 @@
 export interface LoginResponse {
   token: string;
-  uid: string;
+  uid: number;
   username: string;
   isAdmin: boolean;
 }
