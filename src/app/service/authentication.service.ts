@@ -16,7 +16,7 @@ export class AuthenticationService {
   private NOT_LOGIN_OBJ = {
     isLogin: false,
     username: "",
-    uid: "",
+    uid: 0,
     isAdmin: false
   };
   public currentUserObservable: Observable<MiniUser>;

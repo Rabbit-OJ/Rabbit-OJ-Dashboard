@@ -6,7 +6,7 @@ import { GeneralResponse } from "src/app/interface/general-response";
 import { UrlService } from "src/app/service/url.service";
 import { HttpClient } from "@angular/common/http";
 import { WebSocketSubject } from "rxjs/webSocket";
-import { HelperService } from 'src/app/service/helper.service';
+import { HelperService } from "src/app/service/helper.service";
 
 @Component({
   selector: "app-submission-detail",
@@ -15,9 +15,9 @@ import { HelperService } from 'src/app/service/helper.service';
 })
 export class SubmissionDetailComponent implements OnInit {
   item: Submission = {
-    sid: "",
-    uid: "",
-    tid: "",
+    sid: 0,
+    uid: 0,
+    tid: 0,
     question_title: "",
     status: "AC",
     language: "php",
@@ -32,7 +32,7 @@ export class SubmissionDetailComponent implements OnInit {
   handleDownload = () => {
     const token = localStorage.getItem("token");
     const tempForm = document.createElement("form");
-    tempForm.action = UrlService.SUBMISSION.POST_CODE(this.item.sid);
+    tempForm.action = UrlService.SUBMISSION.POST_CODE(this.item.sid.toString());
     tempForm.target = "_blank";
     tempForm.method = "POST";
     tempForm.style.display = "none";
@@ -51,27 +51,25 @@ export class SubmissionDetailComponent implements OnInit {
       this.route.paramMap
         .pipe(
           switchMap((params: ParamMap) =>
-            this.http
-              .get<GeneralResponse<Submission>>(UrlService.SUBMISSION.GET_DETAIL(params.get("sid")))
-              .pipe(
-                map(item => ({
-                  ...item.message,
-                  created_at: new Date(item.message.created_at),
-                  space_used: HelperService.displayMemory(item.message.space_used)
-                }))
-              )
+            this.http.get<GeneralResponse<Submission>>(UrlService.SUBMISSION.GET_DETAIL(params.get("sid"))).pipe(
+              map(item => ({
+                ...item.message,
+                created_at: new Date(item.message.created_at),
+                space_used: HelperService.displayMemory(item.message.space_used)
+              }))
+            )
           )
         )
         .subscribe(response => {
           this.item = response;
           if (this.item.status === "ING") {
-            const socket$ = new WebSocketSubject<{ ok: number }>(UrlService.SUBMISSION.SOCKET(this.item.sid));
+            const socket$ = new WebSocketSubject<{ ok: number }>(
+              UrlService.SUBMISSION.SOCKET(this.item.sid.toString())
+            );
             socket$.subscribe(({ ok }) => {
               if (ok) {
                 this.http
-                  .get<GeneralResponse<Submission>>(
-                    UrlService.SUBMISSION.GET_DETAIL(this.route.snapshot.params["sid"])
-                  )
+                  .get<GeneralResponse<Submission>>(UrlService.SUBMISSION.GET_DETAIL(this.route.snapshot.params["sid"]))
                   .pipe(
                     map(item => ({
                       ...item.message,

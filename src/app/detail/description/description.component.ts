@@ -11,7 +11,7 @@ import marked from "marked";
 })
 export class DescriptionComponent implements OnInit {
   @Input() question: QuestionDetail | ContestQuestion = {
-    tid: "",
+    tid: 0,
     content: "<p></p>",
     subject: "",
     attempt: 0,

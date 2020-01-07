@@ -20,7 +20,7 @@ import { MatTabChangeEvent } from "@angular/material/tabs";
 })
 export class DetailComponent implements OnInit {
   question: QuestionDetail = {
-    tid: "",
+    tid: 0,
     content: "<p></p>",
     subject: "",
     attempt: 0,
@@ -66,7 +66,7 @@ export class DetailComponent implements OnInit {
 
   handleUpdateRecord = (page: string) => {
     this.http
-      .get<GeneralResponse<SubmissionResponse>>(UrlService.QUESTION.GET_RECORD(this.question.tid, page))
+      .get<GeneralResponse<SubmissionResponse>>(UrlService.QUESTION.GET_RECORD(this.question.tid.toString(), page))
       .subscribe(({ code, message }) => {
         if (code === 200) {
           this.totalCount = message.count;
@@ -88,7 +88,7 @@ export class DetailComponent implements OnInit {
     }
 
     this.http
-      .post<GeneralResponse<string>>(UrlService.QUESTION.POST_SUBMIT(this.question.tid), {
+      .post<GeneralResponse<string>>(UrlService.QUESTION.POST_SUBMIT(this.question.tid.toString()), {
         language: language,
         code: code
       })

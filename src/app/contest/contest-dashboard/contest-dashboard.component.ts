@@ -31,8 +31,8 @@ export class ContestDashboardComponent implements OnInit {
     participants: 0,
     penalty: 300,
     count: 5,
-    cid: "1",
-    uid: "1"
+    cid: 0,
+    uid: 0
   };
   scoreBoardList: Array<ScoreBoard> = [];
   scoreBoardDisplayedColumns: string[] = ["username", "score"];
@@ -48,7 +48,7 @@ export class ContestDashboardComponent implements OnInit {
   scoreBoardPage: number = 1;
   contestQuestions: Array<ContestQuestion> = [];
   submissionList: Array<ContestSubmission> = [];
-  questionMap: Map<string, ContestQuestionItem> = new Map<string, ContestQuestionItem>();
+  questionMap: Map<number, ContestQuestionItem> = new Map<number, ContestQuestionItem>();
   submissionInfo: Map<string, Submission> = new Map<string, Submission>();
   constructor(private http: HttpClient, private route: ActivatedRoute, private snackBar: MatSnackBar) {}
 
@@ -189,7 +189,7 @@ export class ContestDashboardComponent implements OnInit {
         .subscribe(response => {
           this.submissionInfo.set(sid, response);
           if (response.status === "ING") {
-            const socket$ = new WebSocketSubject<{ ok: number }>(UrlService.SUBMISSION.SOCKET(response.sid));
+            const socket$ = new WebSocketSubject<{ ok: number }>(UrlService.SUBMISSION.SOCKET(response.sid.toString()));
             socket$.subscribe(({ ok }) => {
               if (ok) {
                 this.http
@@ -212,7 +212,7 @@ export class ContestDashboardComponent implements OnInit {
     }
 
     this.http
-      .post<GeneralResponse<string>>(UrlService.CONTEST.POST_SUBMIT(this.contest.cid, tid), {
+      .post<GeneralResponse<string>>(UrlService.CONTEST.POST_SUBMIT(this.contest.cid.toString(), tid), {
         language: language,
         code: code
       })
