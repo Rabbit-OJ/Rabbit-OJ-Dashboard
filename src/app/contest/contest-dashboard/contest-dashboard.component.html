@@ -5,6 +5,15 @@
     <span *ngIf="myInfo.rank === 3">🥉</span>
     {{ contest.name }}
   </h1>
+  <div class="status-container socket-ok" *ngIf="contest.status === 1 && socketStatus">
+    WebSocket配信中, 比赛剩余 {{ remainTime }}
+  </div>
+  <div class="status-container socket-fail" *ngIf="contest.status === 1 && !socketStatus">
+    WebSocket配信失败, 比赛剩余 {{ remainTime }}
+  </div>
+  <div class="status-container contest-ok" *ngIf="contest.status === 3">
+    比赛结束，正在统计排行榜
+  </div>
   <mat-tab-group
     [dynamicHeight]="true"
     mat-align-tabs="center"

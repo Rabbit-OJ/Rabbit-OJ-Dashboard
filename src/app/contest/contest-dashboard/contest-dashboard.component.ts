@@ -60,6 +60,9 @@ export class ContestDashboardComponent implements OnInit {
   submissionList: Array<ContestSubmission> = [];
   questionMap: Map<number, ContestQuestionItem> = new Map<number, ContestQuestionItem>();
   submissionInfo: Map<string, Submission> = new Map<string, Submission>();
+  socketStatus: boolean = true;
+  remainTime: string = "";
+  timeOut?: any = undefined;
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
@@ -68,6 +71,11 @@ export class ContestDashboardComponent implements OnInit {
   ) {}
 
   renderTime = (input: number): string => HelperService.displayRelativeTime(input);
+  renderRemainTime = () => {
+    const now = new Date();
+    const endContest = new Date(this.contest.end_time);
+    this.remainTime = HelperService.displayRelativeTime(((endContest.getTime() - now.getTime()) / 1000) | 0);
+  };
   ngOnInit() {
     setTimeout(() => {
       this.route.paramMap
@@ -86,6 +94,10 @@ export class ContestDashboardComponent implements OnInit {
             block_time: new Date(response.block_time).toLocaleString()
           };
 
+          if (this.timeOut) {
+            clearInterval(this.timeOut);
+          }
+          this.timeOut = setInterval(() => this.renderRemainTime(), 500);
           if (this.contest.status > 0) {
             this.fetchMyInfo();
             this.fetchScoreBoard();
