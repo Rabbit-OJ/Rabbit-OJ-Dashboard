@@ -1,13 +1,26 @@
 <div class="contest">
   <h1>
+    <span *ngIf="myInfo.rank === 1">🥇</span>
+    <span *ngIf="myInfo.rank === 2">🥈</span>
+    <span *ngIf="myInfo.rank === 3">🥉</span>
     {{ contest.name }}
   </h1>
-  <mat-tab-group [dynamicHeight]="true" mat-align-tabs="center">
+  <mat-tab-group
+    [dynamicHeight]="true"
+    mat-align-tabs="center"
+    (selectedTabChange)="this.handleSelectedTabChange($event)"
+  >
     <mat-tab label="SCOREBOARD" *ngIf="contest.status > 0">
       <table mat-table [dataSource]="scoreBoardList">
         <ng-container matColumnDef="username">
           <th mat-header-cell *matHeaderCellDef>用户名</th>
-          <td mat-cell *matCellDef="let item">
+          <td
+            mat-cell
+            *matCellDef="let item"
+            [ngClass]="{
+              'myself-block': item.uid === authService.currentUser.uid
+            }"
+          >
             <p class="rank-container username-item">#{{ item.rank }}</p>
             <p class="username-item">
               <span *ngIf="item.rank === 1">🥇</span>
@@ -20,7 +33,15 @@
 
         <ng-container matColumnDef="score">
           <th mat-header-cell *matHeaderCellDef>分数</th>
-          <td mat-cell *matCellDef="let item">{{ item.score }} <br />{{ renderTime(item.total_time) }}</td>
+          <td
+            mat-cell
+            *matCellDef="let item"
+            [ngClass]="{
+              'myself-block': item.uid === authService.currentUser.uid
+            }"
+          >
+            {{ item.score }} <br />{{ renderTime(item.total_time) }}
+          </td>
         </ng-container>
 
         <ng-container *ngFor="let col of scoreBoardExtraColumns; let i = index" [matColumnDef]="col">
@@ -52,6 +73,11 @@
         >
         </mat-paginator>
       </div>
+      <div class="refresh-time-container">
+        <button mat-button color="primary" (click)="fetchScoreBoard(true)">
+          排行榜更新于: {{ refreshTime.scoreBoard.toLocaleString() }}
+        </button>
+      </div>
     </mat-tab>
 
     <mat-tab label="QUESTIONS" *ngIf="contest.status > 0">
@@ -79,6 +105,11 @@
             </ng-template>
           </mat-expansion-panel>
         </mat-accordion>
+        <div class="refresh-time-container">
+          <button mat-button color="primary" (click)="fetchQuestions(true)">
+            题目更新于: {{ refreshTime.question.toLocaleString() }}
+          </button>
+        </div>
       </div>
     </mat-tab>
 
@@ -111,26 +142,61 @@
           </mat-expansion-panel>
         </mat-accordion>
       </div>
+      <div class="refresh-time-container">
+        <button mat-button color="primary" (click)="fetchSubmissionList(true)">
+          提交列表更新于: {{ refreshTime.submission.toLocaleString() }}
+        </button>
+      </div>
     </mat-tab>
 
-    <mat-tab label="CLARIFICATIONS" *ngIf="clarifyList.length">
+    <mat-tab *ngIf="clarifyList.length">
+      <ng-template mat-tab-label>
+        <span
+          *ngIf="clarifyRead !== clarifyList.length"
+          [matBadge]="clarifyList.length - clarifyRead"
+          matBadgeOverlap="false"
+          >CLARIFICATION</span
+        >
+        <span *ngIf="clarifyRead === clarifyList.length">CLARIFICATION</span>
+      </ng-template>
       <div class="questions-container">
         <mat-card *ngFor="let item of clarifyList">
           <mat-card-title>{{ item.message }}</mat-card-title>
           <mat-card-content>{{ item.created_at }}</mat-card-content>
         </mat-card>
       </div>
+      <div class="refresh-time-container">
+        <button mat-button color="primary" (click)="fetchClarifyList(true)">
+          比赛公告更新于: {{ refreshTime.clarify.toLocaleString() }}
+        </button>
+      </div>
     </mat-tab>
 
     <mat-tab label="INFORMATION">
-      <div class="operation-container" *ngIf="contest.status === 0">
+      <div class="operation-container" *ngIf="contest.status === 0 || !myInfo.registered">
         <h3>比赛操作</h3>
         <div class="btn-container">
-          <button mat-raised-button id="register" color="primary" (click)="handleRegister('reg')">报名比赛</button>
-          <button mat-raised-button id="unregister" color="accent" (click)="handleRegister('cancel')">退出比赛</button>
+          <button
+            mat-raised-button
+            id="register"
+            color="primary"
+            (click)="handleRegister('reg')"
+            *ngIf="!myInfo.registered"
+          >
+            报名比赛
+          </button>
+          <button
+            mat-raised-button
+            id="unregister"
+            color="accent"
+            (click)="handleRegister('cancel')"
+            *ngIf="contest.status === 0 && myInfo.registered"
+          >
+            退出比赛
+          </button>
         </div>
       </div>
-      <div class="my-info-container" *ngIf="contest.status > 0">
+      <div class="my-info-container" *ngIf="myInfo.registered">
         <h3>我的信息</h3>
         <div>得分：{{ myInfo.score }}</div>
         <div>用时：{{ renderTime(myInfo.total_time) }}</div>
@@ -142,6 +208,11 @@
         <div>封榜时间：{{ contest.block_time }}</div>
         <div>结束时间：{{ contest.end_time }}</div>
         <div>罚时时间：{{ renderTime(contest.penalty) }}</div>
+      </div>
+      <div class="refresh-time-container" *ngIf="myInfo.registered">
+        <button mat-button color="primary" (click)="fetchMyInfo(true)">
+          比赛信息更新于: {{ refreshTime.info.toLocaleString() }}
+        </button>
       </div>
     </mat-tab>
   </mat-tab-group>

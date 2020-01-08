@@ -14,7 +14,8 @@ import { HelperService } from "src/app/service/helper.service";
 import { GeneralListResponse } from "src/app/interface/question-list";
 import { ContestQuestion, ContestQuestionItem } from "src/app/interface/contest-question";
 import { ContestSubmission, Submission } from "src/app/interface/submission";
-import { WebSocketSubject } from "rxjs/webSocket";
+import { MatTabChangeEvent } from "@angular/material/tabs";
+import { AuthenticationService } from "src/app/service/authentication.service";
 
 @Component({
   selector: "app-contest-dashboard",
@@ -38,19 +39,33 @@ export class ContestDashboardComponent implements OnInit {
   scoreBoardDisplayedColumns: string[] = ["username", "score"];
   scoreBoardExtraColumns: string[] = [];
   scoreBoardCount: number = 0;
+  refreshTime = {
+    scoreBoard: new Date(),
+    question: new Date(),
+    submission: new Date(),
+    clarify: new Date(),
+    info: new Date()
+  };
   clarifyList: Array<ContestClarify<string>> = [];
+  clarifyRead: number = 0;
   myInfo: ContestMyInfo = {
     score: 0,
     rank: 0,
     total_time: 0,
-    progress: []
+    progress: [],
+    registered: false
   };
   scoreBoardPage: number = 1;
   contestQuestions: Array<ContestQuestion> = [];
   submissionList: Array<ContestSubmission> = [];
   questionMap: Map<number, ContestQuestionItem> = new Map<number, ContestQuestionItem>();
   submissionInfo: Map<string, Submission> = new Map<string, Submission>();
-  constructor(private http: HttpClient, private route: ActivatedRoute, private snackBar: MatSnackBar) {}
+  constructor(
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    private snackBar: MatSnackBar,
+    public authService: AuthenticationService
+  ) {}
 
   renderTime = (input: number): string => HelperService.displayRelativeTime(input);
   ngOnInit() {
@@ -84,7 +99,7 @@ export class ContestDashboardComponent implements OnInit {
         });
     }, 0);
   }
-  fetchSubmissionList = () => {
+  fetchSubmissionList = (notice: boolean = false) => {
     this.http
       .get<GeneralResponse<Array<ContestSubmission>>>(
         UrlService.CONTEST.GET_SUBMISSION_LIST(this.route.snapshot.paramMap.get("cid"))
@@ -92,17 +107,31 @@ export class ContestDashboardComponent implements OnInit {
       .pipe(map(item => item.message))
       .subscribe(response => {
         this.submissionList = response;
+
+        this.refreshTime.submission = new Date();
+        if (notice) {
+          this.snackBar.open("提交列表已更新！", "OK", {
+            duration: 2000
+          });
+        }
       });
   };
-  fetchMyInfo = () => {
+  fetchMyInfo = (notice: boolean = false) => {
     this.http
       .get<GeneralResponse<ContestMyInfo>>(UrlService.CONTEST.GET_MY_INFO(this.route.snapshot.paramMap.get("cid")))
       .pipe(map(item => item.message))
       .subscribe(response => {
         this.myInfo = response;
+
+        this.refreshTime.info = new Date();
+        if (notice) {
+          this.snackBar.open("比赛信息已更新！", "OK", {
+            duration: 2000
+          });
+        }
       });
   };
-  fetchClarifyList = () => {
+  fetchClarifyList = (notice: boolean = false) => {
     this.http
       .get<GeneralResponse<Array<ContestClarify<Date>>>>(
         UrlService.CONTEST.GET_CLARIFY(this.route.snapshot.paramMap.get("cid"))
@@ -113,9 +142,16 @@ export class ContestDashboardComponent implements OnInit {
           ...item,
           created_at: new Date(item.created_at).toLocaleString()
         }));
+
+        this.refreshTime.clarify = new Date();
+        if (notice) {
+          this.snackBar.open("比赛公告已更新！", "OK", {
+            duration: 2000
+          });
+        }
       });
   };
-  fetchScoreBoard = () => {
+  fetchScoreBoard = (notice: boolean = false) => {
     this.http
       .get<GeneralResponse<GeneralListResponse<ScoreBoard>>>(
         UrlService.CONTEST.GET_SCORE_BOARD(this.route.snapshot.paramMap.get("cid"), this.scoreBoardPage.toString())
@@ -127,9 +163,15 @@ export class ContestDashboardComponent implements OnInit {
           ...this.contest,
           participants: response.count
         };
+        this.refreshTime.scoreBoard = new Date();
+        if (notice) {
+          this.snackBar.open("排行榜已更新！", "OK", {
+            duration: 2000
+          });
+        }
       });
   };
-  fetchQuestions = () => {
+  fetchQuestions = (notice: boolean = false) => {
     this.http
       .get<GeneralResponse<Array<ContestQuestion>>>(
         UrlService.CONTEST.GET_QUESTIONS(this.route.snapshot.paramMap.get("cid"))
@@ -142,6 +184,13 @@ export class ContestDashboardComponent implements OnInit {
         this.contestQuestions.forEach(item => {
           this.questionMap.set(item.tid, { id: item.id, subject: item.subject });
         });
+
+        this.refreshTime.question = new Date();
+        if (notice) {
+          this.snackBar.open("题目已更新！", "OK", {
+            duration: 2000
+          });
+        }
       });
   };
   renderScoreBoardQuestions = (count: number) => {
@@ -170,6 +219,8 @@ export class ContestDashboardComponent implements OnInit {
             duration: 2000
           });
         }
+
+        this.fetchMyInfo();
       });
   };
   handlePageChange = (paginator: MatPaginator) => {
@@ -188,17 +239,6 @@ export class ContestDashboardComponent implements OnInit {
         )
         .subscribe(response => {
           this.submissionInfo.set(sid, response);
-          if (response.status === "ING") {
-            const socket$ = new WebSocketSubject<{ ok: number }>(UrlService.SUBMISSION.SOCKET(response.sid.toString()));
-            socket$.subscribe(({ ok }) => {
-              if (ok) {
-                this.http
-                  .get<GeneralResponse<Submission>>(UrlService.SUBMISSION.GET_DETAIL(sid))
-                  .pipe(map(item => item.message))
-                  .subscribe(response => this.submissionInfo.set(sid, response));
-              }
-            });
-          }
         });
     }
   };
@@ -221,5 +261,10 @@ export class ContestDashboardComponent implements OnInit {
           console.log(message);
         }
       });
+  };
+  handleSelectedTabChange = (e: MatTabChangeEvent) => {
+    if (e.index === 3) {
+      this.clarifyRead = this.clarifyList.length;
+    }
   };
 }

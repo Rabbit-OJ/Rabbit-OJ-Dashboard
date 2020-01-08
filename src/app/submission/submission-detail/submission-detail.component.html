@@ -1,6 +1,10 @@
 <div class="submission-detail-container">
   <h1>测评详情 - {{ item.question_title }}</h1>
-  <mat-tab-group [dynamicHeight]="true" mat-align-tabs="center">
+  <mat-tab-group
+    [dynamicHeight]="true"
+    mat-align-tabs="center"
+    (selectedTabChange)="this.handleSelectedTabChange($event)"
+  >
     <mat-tab label="测评信息">
       <h3>基本信息</h3>
       <p>
@@ -22,7 +26,7 @@
       <p>时间使用：{{ item.time_used }}ms</p>
       <p>提交时间：{{ item.created_at.toLocaleString() }}</p>
       <h3>测试点信息</h3>
-        <app-case-dot [dotList]="item.judge"></app-case-dot>
+      <app-case-dot [dotList]="item.judge"></app-case-dot>
     </mat-tab>
 
     <mat-tab label="代码下载">

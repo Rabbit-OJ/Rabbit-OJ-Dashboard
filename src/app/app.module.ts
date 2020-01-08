@@ -21,6 +21,7 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatTableModule } from "@angular/material/table";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatExpansionModule } from "@angular/material/expansion";
+import { MatBadgeModule } from "@angular/material/badge";
 
 import { AppComponent } from "./app.component";
 import { ListComponent } from "./list/list.component";
@@ -75,7 +76,8 @@ import { SubmitCodeComponent } from './detail/submit-code/submit-code.component'
     MatTableModule,
     MatPaginatorModule,
     KatexModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatBadgeModule
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]

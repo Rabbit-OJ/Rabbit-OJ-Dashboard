@@ -1,13 +1,13 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { QuestionDetail } from 'src/app/interface/question-detail';
-import { ContestQuestion } from 'src/app/interface/contest-question';
+import { Component, OnInit, Input } from "@angular/core";
+import { QuestionDetail } from "src/app/interface/question-detail";
+import { ContestQuestion } from "src/app/interface/contest-question";
 
 import marked from "marked";
 
 @Component({
-  selector: 'app-description',
-  templateUrl: './description.component.html',
-  styleUrls: ['./description.component.scss']
+  selector: "app-description",
+  templateUrl: "./description.component.html",
+  styleUrls: ["./description.component.scss"]
 })
 export class DescriptionComponent implements OnInit {
   @Input() question: QuestionDetail | ContestQuestion = {
@@ -24,10 +24,9 @@ export class DescriptionComponent implements OnInit {
     hide: false
   };
   @Input() isContest: boolean = false;
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   renderQuestionContent = () => {
     const { content } = this.question;
@@ -37,5 +36,4 @@ export class DescriptionComponent implements OnInit {
       return "";
     }
   };
-
 }

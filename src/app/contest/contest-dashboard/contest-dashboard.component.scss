@@ -11,6 +11,9 @@ table {
 .ac-block {
   background-color: #beffadc8;
 }
+.myself-block {
+  background-color: #c0fff6c8;
+}
 .wa-block {
   background-color: #ffa8a8c8;
 }
@@ -30,4 +33,9 @@ table {
 }
 .time-container {
   text-align: center;
+}
+.refresh-time-container {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
 }

@@ -7,6 +7,8 @@ import { UrlService } from "src/app/service/url.service";
 import { HttpClient } from "@angular/common/http";
 import { WebSocketSubject } from "rxjs/webSocket";
 import { HelperService } from "src/app/service/helper.service";
+import { MatTabChangeEvent } from "@angular/material/tabs";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-submission-detail",
@@ -28,7 +30,7 @@ export class SubmissionDetailComponent implements OnInit {
   };
   code: string = "";
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {}
+  constructor(private http: HttpClient, private route: ActivatedRoute, private snackBar: MatSnackBar) {}
   handleDownload = () => {
     const token = localStorage.getItem("token");
     const tempForm = document.createElement("form");
@@ -66,23 +68,34 @@ export class SubmissionDetailComponent implements OnInit {
             const socket$ = new WebSocketSubject<{ ok: number }>(
               UrlService.SUBMISSION.SOCKET(this.item.sid.toString())
             );
-            socket$.subscribe(({ ok }) => {
-              if (ok) {
-                this.http
-                  .get<GeneralResponse<Submission>>(UrlService.SUBMISSION.GET_DETAIL(this.route.snapshot.params["sid"]))
-                  .pipe(
-                    map(item => ({
-                      ...item.message,
-                      created_at: new Date(item.message.created_at),
-                      space_used: HelperService.displayMemory(item.message.space_used)
-                    }))
-                  )
-                  .subscribe(response => (this.item = response));
+            socket$.subscribe(
+              ({ ok }) => {
+                if (ok) {
+                  this.http
+                    .get<GeneralResponse<Submission>>(
+                      UrlService.SUBMISSION.GET_DETAIL(this.route.snapshot.params["sid"])
+                    )
+                    .pipe(
+                      map(item => ({
+                        ...item.message,
+                        created_at: new Date(item.message.created_at),
+                        space_used: HelperService.displayMemory(item.message.space_used)
+                      }))
+                    )
+                    .subscribe(response => (this.item = response));
+                }
+              },
+              err => {
+                console.error(err);
+                this.snackBar.open("WebSocket已断开，可能无法实时更新评测结果！", "OK");
               }
-            });
+            );
           }
         });
-
+    }, 0);
+  }
+  handleSelectedTabChange = (e: MatTabChangeEvent) => {
+    if (e.index === 1 && this.code === "") {
       this.route.paramMap
         .pipe(
           switchMap((params: ParamMap) =>
@@ -101,6 +114,6 @@ export class SubmissionDetailComponent implements OnInit {
         .subscribe(response => {
           this.code = response;
         });
-    }, 0);
-  }
+    }
+  };
 }
