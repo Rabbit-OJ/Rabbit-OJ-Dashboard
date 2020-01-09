@@ -42,9 +42,11 @@ export class UrlService {
     POST_SUBMIT: (cid: string, id: string) => `${BACKEND_URL}/contest/submit/${cid}/${id}`,
     GET_CLARIFY: (cid: string) => `${BACKEND_URL}/contest/clarify/${cid}`,
     GET_SUBMISSION_LIST: (cid: string) => `${BACKEND_URL}/contest/submission/list/${cid}`,
+    GET_SUBMISSION_ONE: (cid: string, sid: string) => `${BACKEND_URL}/contest/submission/one/${cid}/${sid}`,
     GET_SCORE_BOARD: (cid: string, page: string) => `${BACKEND_URL}/contest/scoreboard/${cid}/${page}`,
     GET_INFO: (cid: string) => `${BACKEND_URL}/contest/info/${cid}`,
     GET_QUESTIONS: (cid: string) => `${BACKEND_URL}/contest/question/${cid}`,
-    POST_REGISTER: (cid: string, operation: "cancel" | "reg") => `${BACKEND_URL}/contest/register/${cid}/${operation}`
+    POST_REGISTER: (cid: string, operation: "cancel" | "reg") => `${BACKEND_URL}/contest/register/${cid}/${operation}`,
+    SOCKET: (cid: string, uid: string) => `${BACKEND_SOCKET_URL}/contest/ws/${cid}/${uid}`
   };
 }

@@ -1,4 +1,5 @@
 export type JudgeStatus = "ING" | "AC" | "WA" | "CE" | "RE" | "TLE" | "MLE" | "NO";
+export type ResponseDate = string | Date;
 
 export interface SubmissionLite {
   sid: number;
@@ -38,4 +39,14 @@ export interface JudgeResult {
   status: JudgeStatus;
   time_used: number;
   space_used: number;
+}
+
+export interface ContestSubmission<T = string> {
+  sid: number;
+  cid: number;
+  uid: number;
+  tid: number;
+  status: number;
+  total_time: number;
+  created_at: T;
 }

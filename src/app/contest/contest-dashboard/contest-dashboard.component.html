@@ -6,10 +6,10 @@
     {{ contest.name }}
   </h1>
   <div class="status-container socket-ok" *ngIf="contest.status === 1 && socketStatus">
-    WebSocket配信中, 比赛剩余 {{ remainTime }}
+    WebSocket配信中, 比赛剩余 {{ remainTime }}{{ renderBlockedScoreboard() }}
   </div>
   <div class="status-container socket-fail" *ngIf="contest.status === 1 && !socketStatus">
-    WebSocket配信失败, 比赛剩余 {{ remainTime }}
+    WebSocket配信失败, 比赛剩余 {{ remainTime }}{{ renderBlockedScoreboard() }}
   </div>
   <div class="status-container contest-ok" *ngIf="contest.status === 3">
     比赛结束，正在统计排行榜
@@ -20,7 +20,7 @@
     (selectedTabChange)="this.handleSelectedTabChange($event)"
   >
     <mat-tab label="SCOREBOARD" *ngIf="contest.status > 0">
-      <table mat-table [dataSource]="scoreBoardList">
+      <table mat-table [dataSource]="scoreBoardList" *ngIf="!this.scoreBoardBlocked">
         <ng-container matColumnDef="username">
           <th mat-header-cell *matHeaderCellDef>用户名</th>
           <td
@@ -73,7 +73,7 @@
         <tr mat-row *matRowDef="let row; columns: scoreBoardDisplayedColumns"></tr>
       </table>
 
-      <div class="pagination">
+      <div class="pagination" *ngIf="!this.scoreBoardBlocked">
         <mat-paginator
           [length]="scoreBoardCount"
           [pageSize]="20"
@@ -81,6 +81,10 @@
           (page)="this.handlePageChange($event)"
         >
         </mat-paginator>
+      </div>
+
+      <div class="score-board-blocked-notice" *ngIf="this.scoreBoardBlocked">
+        已封榜
       </div>
       <div class="refresh-time-container">
         <button mat-button color="primary" (click)="fetchScoreBoard(true)">
@@ -176,7 +180,7 @@
       </div>
       <div class="refresh-time-container">
         <button mat-button color="primary" (click)="fetchClarifyList(true)">
-          比赛公告更新于: {{ refreshTime.clarify.toLocaleString() }}
+          比赛信息板更新于: {{ refreshTime.clarify.toLocaleString() }}
         </button>
       </div>
     </mat-tab>

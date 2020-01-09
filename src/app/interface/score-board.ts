@@ -1,3 +1,5 @@
+import { GeneralListResponse } from './question-list';
+
 export interface ScoreBoard {
     uid: number;
     username: string;
@@ -11,4 +13,8 @@ export interface ScoreBoardProgress {
     status: 0 | -1| 1;
     bug: number;
     total_time: number;
+}
+
+export interface ScoreBoardResponse extends GeneralListResponse<ScoreBoard> {
+    blocked: boolean;
 }

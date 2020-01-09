@@ -65,35 +65,34 @@ export class SubmissionDetailComponent implements OnInit {
         .subscribe(response => {
           this.item = response;
           if (this.item.status === "ING") {
-            const socket$ = new WebSocketSubject<{ ok: number }>(
-              UrlService.SUBMISSION.SOCKET(this.item.sid.toString())
-            );
-            socket$.subscribe(
-              ({ ok }) => {
-                if (ok) {
-                  this.http
-                    .get<GeneralResponse<Submission>>(
-                      UrlService.SUBMISSION.GET_DETAIL(this.route.snapshot.params["sid"])
-                    )
-                    .pipe(
-                      map(item => ({
-                        ...item.message,
-                        created_at: new Date(item.message.created_at),
-                        space_used: HelperService.displayMemory(item.message.space_used)
-                      }))
-                    )
-                    .subscribe(response => (this.item = response));
-                }
-              },
-              err => {
-                console.error(err);
-                this.snackBar.open("WebSocket已断开，可能无法实时更新评测结果！", "OK");
-              }
-            );
+            this.socketSubscribe();
           }
         });
     }, 0);
   }
+  socketSubscribe = () => {
+    const socket$ = new WebSocketSubject<{ ok: number }>(UrlService.SUBMISSION.SOCKET(this.item.sid.toString()));
+    socket$.subscribe(
+      ({ ok }) => {
+        if (ok) {
+          this.http
+            .get<GeneralResponse<Submission>>(UrlService.SUBMISSION.GET_DETAIL(this.route.snapshot.params["sid"]))
+            .pipe(
+              map(item => ({
+                ...item.message,
+                created_at: new Date(item.message.created_at),
+                space_used: HelperService.displayMemory(item.message.space_used)
+              }))
+            )
+            .subscribe(response => (this.item = response));
+        }
+      },
+      err => {
+        console.error(err);
+        this.snackBar.open("WebSocket已断开，可能无法实时更新评测结果！", "OK");
+      }
+    );
+  };
   handleSelectedTabChange = (e: MatTabChangeEvent) => {
     if (e.index === 1 && this.code === "") {
       this.route.paramMap

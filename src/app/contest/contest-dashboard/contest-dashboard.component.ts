@@ -8,14 +8,15 @@ import { ActivatedRoute, ParamMap } from "@angular/router";
 import { switchMap, map } from "rxjs/operators";
 import { GeneralResponse } from "src/app/interface/general-response";
 import { UrlService } from "src/app/service/url.service";
-import { ScoreBoard } from "src/app/interface/score-board";
+import { ScoreBoard, ScoreBoardResponse } from "src/app/interface/score-board";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { HelperService } from "src/app/service/helper.service";
-import { GeneralListResponse } from "src/app/interface/question-list";
 import { ContestQuestion, ContestQuestionItem } from "src/app/interface/contest-question";
 import { ContestSubmission, Submission } from "src/app/interface/submission";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { AuthenticationService } from "src/app/service/authentication.service";
+import { WebSocketSubject } from "rxjs/webSocket";
+import { WebsocketMessage } from "src/app/interface/websocket";
 
 @Component({
   selector: "app-contest-dashboard",
@@ -39,6 +40,7 @@ export class ContestDashboardComponent implements OnInit {
   scoreBoardDisplayedColumns: string[] = ["username", "score"];
   scoreBoardExtraColumns: string[] = [];
   scoreBoardCount: number = 0;
+  scoreBoardBlocked: boolean = false;
   refreshTime = {
     scoreBoard: new Date(),
     question: new Date(),
@@ -106,6 +108,10 @@ export class ContestDashboardComponent implements OnInit {
             this.fetchSubmissionList();
           }
 
+          if (this.contest.status === 1) {
+            this.connectContestSocket();
+          }
+
           this.renderScoreBoardQuestions(response.count);
           this.scoreBoardCount = response.participants;
         });
@@ -157,7 +163,7 @@ export class ContestDashboardComponent implements OnInit {
 
         this.refreshTime.clarify = new Date();
         if (notice) {
-          this.snackBar.open("比赛公告已更新！", "OK", {
+          this.snackBar.open("比赛信息板已更新！", "OK", {
             duration: 2000
           });
         }
@@ -165,12 +171,13 @@ export class ContestDashboardComponent implements OnInit {
   };
   fetchScoreBoard = (notice: boolean = false) => {
     this.http
-      .get<GeneralResponse<GeneralListResponse<ScoreBoard>>>(
+      .get<GeneralResponse<ScoreBoardResponse>>(
         UrlService.CONTEST.GET_SCORE_BOARD(this.route.snapshot.paramMap.get("cid"), this.scoreBoardPage.toString())
       )
       .pipe(map(item => item.message))
       .subscribe(response => {
         this.scoreBoardList = response.list;
+        this.scoreBoardBlocked = response.blocked;
         this.contest = {
           ...this.contest,
           participants: response.count
@@ -264,13 +271,25 @@ export class ContestDashboardComponent implements OnInit {
     }
 
     this.http
-      .post<GeneralResponse<string>>(UrlService.CONTEST.POST_SUBMIT(this.contest.cid.toString(), tid), {
+      .post<GeneralResponse<number>>(UrlService.CONTEST.POST_SUBMIT(this.contest.cid.toString(), tid), {
         language: language,
         code: code
       })
       .subscribe(({ code, message }) => {
         if (code === 200) {
-          console.log(message);
+          this.socketContestSubmissionInfo(message);
+          this.submissionList.unshift({
+            sid: message,
+            cid: this.contest.cid,
+            uid: this.authService.currentUser.uid,
+            tid: Number.parseInt(tid),
+            status: 0,
+            total_time: ((new Date().getTime() - new Date(this.contest.start_time).getTime()) / 1000) | 0,
+            created_at: new Date().toLocaleString()
+          });
+          this.snackBar.open("代码提交成功！", "OK", {
+            duration: 2000
+          });
         }
       });
   };
@@ -278,5 +297,68 @@ export class ContestDashboardComponent implements OnInit {
     if (e.index === 3) {
       this.clarifyRead = this.clarifyList.length;
     }
+  };
+  renderBlockedScoreboard = () => {
+    if (this.scoreBoardBlocked) {
+      return ", 已封榜";
+    } else {
+      return "";
+    }
+  };
+  connectContestSocket = () => {
+    const socket$ = new WebSocketSubject<WebsocketMessage>(
+      UrlService.CONTEST.SOCKET(this.contest.cid.toString(), this.authService.currentUser.uid.toString())
+    );
+
+    this.socketStatus = true;
+    socket$.subscribe(
+      ({ type, message }) => {
+        if (type === "clarify") {
+          this.snackBar.open(message, "OK", {
+            duration: 2000
+          });
+          this.clarifyList.push({
+            cid: this.contest.cid,
+            created_at: new Date().toLocaleString(),
+            message: message
+          });
+        }
+      },
+      err => {
+        console.error(err);
+        this.snackBar.open("WebSocket配信中断，10秒后将会自动重连！", "OK", {
+          duration: 2000
+        });
+        this.socketStatus = false;
+        setTimeout(() => this.connectContestSocket(), 10000);
+      }
+    );
+  };
+  socketContestSubmissionInfo = (sid: number) => {
+    const socket$ = new WebSocketSubject<{ ok: number }>(UrlService.SUBMISSION.SOCKET(sid.toString()));
+    socket$.subscribe(
+      ({ ok }) => {
+        if (ok) {
+          this.http
+            .get<GeneralResponse<ContestSubmission>>(
+              UrlService.CONTEST.GET_SUBMISSION_ONE(this.contest.cid.toString(), sid.toString())
+            )
+            .pipe(map(item => item.message))
+            .subscribe(response => {
+              this.fetchMyInfo();
+
+              this.submissionList.forEach(item => {
+                if (item.sid === sid) {
+                  item.status = response.status;
+                }
+              });
+            });
+        }
+      },
+      err => {
+        console.error(err);
+        this.snackBar.open("WebSocket已断开，可能无法实时更新评测结果！", "OK");
+      }
+    );
   };
 }
