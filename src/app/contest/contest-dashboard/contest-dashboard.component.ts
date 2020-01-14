@@ -356,7 +356,7 @@ export class ContestDashboardComponent implements OnInit {
   };
   socketContestSubmissionInfo = (sid: number) => {
     const socket$ = new WebSocketSubject<{ ok: number }>(UrlService.SUBMISSION.SOCKET(sid.toString()));
-    socket$.subscribe(
+    socket$.pipe(takeUntil(this.unsubscribe$)).subscribe(
       ({ ok }) => {
         if (ok) {
           this.http
@@ -364,9 +364,9 @@ export class ContestDashboardComponent implements OnInit {
               UrlService.CONTEST.GET_SUBMISSION_ONE(this.contest.cid.toString(), sid.toString())
             )
             .pipe(map(item => item.message))
+            
             .subscribe(response => {
               this.fetchMyInfo();
-
               this.submissionList.forEach(item => {
                 if (item.sid === sid) {
                   item.status = response.status;

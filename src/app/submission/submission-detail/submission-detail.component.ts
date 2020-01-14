@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Submission } from "src/app/interface/submission";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
-import { switchMap, map } from "rxjs/operators";
+import { switchMap, map, takeUntil } from "rxjs/operators";
 import { GeneralResponse } from "src/app/interface/general-response";
 import { UrlService } from "src/app/service/url.service";
 import { HttpClient } from "@angular/common/http";
@@ -9,6 +9,7 @@ import { WebSocketSubject } from "rxjs/webSocket";
 import { HelperService } from "src/app/service/helper.service";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { Subject } from 'rxjs';
 
 @Component({
   selector: "app-submission-detail",
@@ -29,6 +30,7 @@ export class SubmissionDetailComponent implements OnInit {
     judge: []
   };
   code: string = "";
+  private unsubscribe$: Subject<void>;
 
   constructor(private http: HttpClient, private route: ActivatedRoute, private snackBar: MatSnackBar) {}
   handleDownload = () => {
@@ -48,7 +50,12 @@ export class SubmissionDetailComponent implements OnInit {
     tempForm.submit();
     tempForm.remove();
   };
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
   ngOnInit() {
+    this.unsubscribe$ = new Subject<void>();
     setTimeout(() => {
       this.route.paramMap
         .pipe(
@@ -72,7 +79,7 @@ export class SubmissionDetailComponent implements OnInit {
   }
   socketSubscribe = () => {
     const socket$ = new WebSocketSubject<{ ok: number }>(UrlService.SUBMISSION.SOCKET(this.item.sid.toString()));
-    socket$.subscribe(
+    socket$.pipe(takeUntil(this.unsubscribe$)).subscribe(
       ({ ok }) => {
         if (ok) {
           this.http
