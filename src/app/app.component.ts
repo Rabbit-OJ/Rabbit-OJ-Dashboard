@@ -10,7 +10,7 @@ import { Router } from "@angular/router";
   styleUrls: ["./app.component.scss"]
 })
 export class AppComponent {
-  title = "Rabbit OJ Dashboard";
+  title = "Rabbit Online Judge Dashboard";
   progressShow: boolean = false;
 
   constructor(
