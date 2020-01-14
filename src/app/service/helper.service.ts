@@ -19,7 +19,7 @@ export class HelperService {
     const addZero = (input: number): string => {
       if (input === 0) {
         return "00";
-      } else if (input < 10) {
+      } else if (input > 0 && input < 10) {
         return "0" + input.toString();
       } else {
         return input.toString();

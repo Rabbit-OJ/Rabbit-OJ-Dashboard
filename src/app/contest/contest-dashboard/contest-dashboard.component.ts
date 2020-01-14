@@ -5,7 +5,7 @@ import { ContestMyInfo } from "src/app/interface/contest-my-info";
 import { MatPaginator } from "@angular/material/paginator";
 import { HttpClient } from "@angular/common/http";
 import { ActivatedRoute, ParamMap } from "@angular/router";
-import { switchMap, map } from "rxjs/operators";
+import { switchMap, map, takeUntil } from "rxjs/operators";
 import { GeneralResponse } from "src/app/interface/general-response";
 import { UrlService } from "src/app/service/url.service";
 import { ScoreBoard, ScoreBoardResponse } from "src/app/interface/score-board";
@@ -17,6 +17,7 @@ import { MatTabChangeEvent } from "@angular/material/tabs";
 import { AuthenticationService } from "src/app/service/authentication.service";
 import { WebSocketSubject } from "rxjs/webSocket";
 import { WebsocketMessage } from "src/app/interface/websocket";
+import { interval, Subject, timer } from "rxjs";
 
 @Component({
   selector: "app-contest-dashboard",
@@ -64,7 +65,8 @@ export class ContestDashboardComponent implements OnInit {
   submissionInfo: Map<string, Submission> = new Map<string, Submission>();
   socketStatus: boolean = true;
   remainTime: string = "";
-  timeOut?: any = undefined;
+  private unsubscribe$: Subject<void>;
+
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
@@ -78,7 +80,12 @@ export class ContestDashboardComponent implements OnInit {
     const endContest = new Date(this.contest.end_time);
     this.remainTime = HelperService.displayRelativeTime(((endContest.getTime() - now.getTime()) / 1000) | 0);
   };
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
   ngOnInit() {
+    this.unsubscribe$ = new Subject<void>();
     setTimeout(() => {
       this.route.paramMap
         .pipe(
@@ -96,10 +103,10 @@ export class ContestDashboardComponent implements OnInit {
             block_time: new Date(response.block_time).toLocaleString()
           };
 
-          if (this.timeOut) {
-            clearInterval(this.timeOut);
-          }
-          this.timeOut = setInterval(() => this.renderRemainTime(), 500);
+          interval(500)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe(() => this.renderRemainTime());
+
           if (this.contest.status > 0) {
             this.fetchMyInfo();
             this.fetchScoreBoard();
@@ -110,6 +117,7 @@ export class ContestDashboardComponent implements OnInit {
 
           if (this.contest.status === 1) {
             this.connectContestSocket();
+            this.scheduledFetchScoreboard();
           }
 
           this.renderScoreBoardQuestions(response.count);
@@ -117,6 +125,15 @@ export class ContestDashboardComponent implements OnInit {
         });
     }, 0);
   }
+  scheduledFetchScoreboard = () => {
+    interval(5 * 60 * 1000)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(() => {
+        if (this.socketStatus) {
+          this.fetchScoreBoard();
+        }
+      });
+  };
   fetchSubmissionList = (notice: boolean = false) => {
     this.http
       .get<GeneralResponse<Array<ContestSubmission>>>(
@@ -311,7 +328,7 @@ export class ContestDashboardComponent implements OnInit {
     );
 
     this.socketStatus = true;
-    socket$.subscribe(
+    socket$.pipe(takeUntil(this.unsubscribe$)).subscribe(
       ({ type, message }) => {
         if (type === "clarify") {
           this.snackBar.open(message, "OK", {
@@ -330,7 +347,10 @@ export class ContestDashboardComponent implements OnInit {
           duration: 2000
         });
         this.socketStatus = false;
-        setTimeout(() => this.connectContestSocket(), 10000);
+
+        timer(10000)
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(() => this.connectContestSocket());
       }
     );
   };
