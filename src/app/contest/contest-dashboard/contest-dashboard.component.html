@@ -19,7 +19,7 @@
     mat-align-tabs="center"
     (selectedTabChange)="this.handleSelectedTabChange($event)"
   >
-    <mat-tab label="SCOREBOARD" *ngIf="contest.status > 0">
+    <mat-tab label="SCOREBOARD" *ngIf="contest.status === 2 || (contest.status > 0 && myInfo.registered)">
       <table mat-table [dataSource]="scoreBoardList" *ngIf="!this.scoreBoardBlocked">
         <ng-container matColumnDef="username">
           <th mat-header-cell *matHeaderCellDef>用户名</th>
@@ -93,7 +93,7 @@
       </div>
     </mat-tab>
 
-    <mat-tab label="QUESTIONS" *ngIf="contest.status > 0">
+    <mat-tab label="QUESTIONS" *ngIf="contest.status === 2 || (contest.status > 0 && myInfo.registered)">
       <div class="questions-container">
         <mat-accordion>
           <mat-expansion-panel *ngFor="let item of contestQuestions; let i = index">
@@ -128,7 +128,7 @@
       </div>
     </mat-tab>
 
-    <mat-tab label="SUBMISSIONS">
+    <mat-tab label="SUBMISSIONS" *ngIf="contest.status === 2 || (contest.status > 0 && myInfo.registered)">
       <div class="questions-container">
         <mat-accordion>
           <mat-expansion-panel *ngFor="let item of submissionList" (opened)="handleOpenSubmissionPanel(item.sid)">
@@ -164,7 +164,7 @@
       </div>
     </mat-tab>
 
-    <mat-tab *ngIf="clarifyList.length">
+    <mat-tab *ngIf="clarifyList.length && (contest.status === 2 || (contest.status > 0 && myInfo.registered))">
       <ng-template mat-tab-label>
         <span
           *ngIf="clarifyRead !== clarifyList.length"

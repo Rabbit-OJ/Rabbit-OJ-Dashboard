@@ -25,6 +25,7 @@ import { interval, Subject, timer } from "rxjs";
   styleUrls: ["./contest-dashboard.component.scss"]
 })
 export class ContestDashboardComponent implements OnInit {
+  submittingSet: Set<string> = new Set<string>();
   contest: Contest<string> = {
     name: "Loading...",
     start_time: new Date().toLocaleString(),
@@ -141,7 +142,7 @@ export class ContestDashboardComponent implements OnInit {
       )
       .pipe(map(item => item.message))
       .subscribe(response => {
-        this.submissionList = response;
+        this.submissionList = response || [];
 
         this.refreshTime.submission = new Date();
         if (notice) {
@@ -287,28 +288,53 @@ export class ContestDashboardComponent implements OnInit {
       return;
     }
 
+    if (this.submittingSet.has(tid)) {
+      this.snackBar.open("上一个提交正在进行中，请勿重复提交", "OK", {
+        duration: 2000
+      });
+
+      return;
+    }
+    this.submittingSet.add(tid);
+
     this.http
       .post<GeneralResponse<number>>(UrlService.CONTEST.POST_SUBMIT(this.contest.cid.toString(), tid), {
         language: language,
         code: code
       })
-      .subscribe(({ code, message }) => {
-        if (code === 200) {
-          this.socketContestSubmissionInfo(message);
-          this.submissionList.unshift({
-            sid: message,
-            cid: this.contest.cid,
-            uid: this.authService.currentUser.uid,
-            tid: Number.parseInt(tid),
-            status: 0,
-            total_time: ((new Date().getTime() - new Date(this.contest.start_time).getTime()) / 1000) | 0,
-            created_at: new Date().toLocaleString()
-          });
-          this.snackBar.open("代码提交成功！", "OK", {
+      .subscribe(
+        ({ code, message }) => {
+          if (code === 200) {
+            this.socketContestSubmissionInfo(message);
+            this.submissionList.unshift({
+              sid: message,
+              cid: this.contest.cid,
+              uid: this.authService.currentUser.uid,
+              tid: Number.parseInt(tid),
+              status: 0,
+              total_time: ((new Date().getTime() - new Date(this.contest.start_time).getTime()) / 1000) | 0,
+              created_at: new Date().toLocaleString()
+            });
+            this.snackBar.open(`#${message} 代码提交成功！`, "OK", {
+              duration: 2000
+            });
+          } else {
+            this.snackBar.open(`代码提交失败！`, "OK", {
+              duration: 2000
+            });
+          }
+
+          this.submittingSet.delete(tid);
+        },
+        err => {
+          console.error(err);
+          this.snackBar.open(`代码提交失败！`, "OK", {
             duration: 2000
           });
+
+          this.submittingSet.delete(tid);
         }
-      });
+      );
   };
   handleSelectedTabChange = (e: MatTabChangeEvent) => {
     if (e.index === 3) {
@@ -364,7 +390,6 @@ export class ContestDashboardComponent implements OnInit {
               UrlService.CONTEST.GET_SUBMISSION_ONE(this.contest.cid.toString(), sid.toString())
             )
             .pipe(map(item => item.message))
-            
             .subscribe(response => {
               this.fetchMyInfo();
               this.submissionList.forEach(item => {
@@ -372,12 +397,18 @@ export class ContestDashboardComponent implements OnInit {
                   item.status = response.status;
                 }
               });
+
+              this.snackBar.open(`#${response.sid} 测评结果： ${response.status === 1 ? "正确" : "错误"}`, "OK", {
+                duration: 2000
+              });
             });
         }
       },
       err => {
         console.error(err);
-        this.snackBar.open("WebSocket已断开，可能无法实时更新评测结果！", "OK");
+        this.snackBar.open("WebSocket已断开，可能无法实时更新评测结果！", "OK", {
+          duration: 2000
+        });
       }
     );
   };
