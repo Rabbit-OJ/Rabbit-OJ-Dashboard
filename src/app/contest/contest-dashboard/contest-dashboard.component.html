@@ -115,7 +115,10 @@
               <app-description [isContest]="true" [question]="item"></app-description>
               <div class="code-submission-container" *ngIf="contest.status === 1">
                 <h3>提交代码</h3>
-                <app-submit-code (submit)="this.handleSubmit(item.tid)($event)"></app-submit-code>
+                <app-submit-code
+                  (submit)="this.handleSubmit(item.tid)($event)"
+                  [submitting]="this.submittingSet.has(item.tid)"
+                ></app-submit-code>
               </div>
             </ng-template>
           </mat-expansion-panel>

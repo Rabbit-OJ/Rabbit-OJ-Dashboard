@@ -42,7 +42,7 @@ export class DetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar,
-    private authService: AuthenticationService
+    public authService: AuthenticationService
   ) {}
 
   ngOnInit() {
@@ -78,6 +78,7 @@ export class DetailComponent implements OnInit {
       });
   };
 
+  codeSubmitting: boolean = false;
   handleSubmit = ({ language, code }: { language: string; code: string }) => {
     if (language === "") {
       this.snackBar.open("Select a language first!", "OK", {
@@ -87,16 +88,24 @@ export class DetailComponent implements OnInit {
       return;
     }
 
+    this.codeSubmitting = true;
     this.http
       .post<GeneralResponse<string>>(UrlService.QUESTION.POST_SUBMIT(this.question.tid.toString()), {
         language: language,
         code: code
       })
-      .subscribe(({ code, message }) => {
-        if (code === 200) {
-          this.router.navigate(["/submission", "detail", message]);
+      .subscribe(
+        ({ code, message }) => {
+          if (code === 200) {
+            this.router.navigate(["/submission", "detail", message]);
+          }
+          this.codeSubmitting = false;
+        },
+        err => {
+          console.error(err);
+          this.codeSubmitting = false;
         }
-      });
+      );
   };
 
   pageChange = (pagination: MatPaginator) => {

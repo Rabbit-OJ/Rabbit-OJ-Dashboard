@@ -14,7 +14,6 @@
         {{ authService.currentUser.username }}
       </button>
       <mat-menu #menu="matMenu">
-        <button *ngIf="this.authService.currentUser.isAdmin" mat-menu-item (click)="handleSubmissionList()">管理面板</button>
         <button mat-menu-item (click)="handleSubmissionList()">提交记录</button>
         <button mat-menu-item (click)="handleLogout()">注销账号</button>
       </mat-menu>

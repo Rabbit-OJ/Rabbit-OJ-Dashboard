@@ -11,9 +11,9 @@
       <app-description [question]="question" [isContest]="false"></app-description>
     </mat-tab>
 
-    <mat-tab label="提交代码">
+    <mat-tab label="提交代码" *ngIf="authService.currentUser.isLogin">
       <div class="submit-container">
-        <app-submit-code (submit)="this.handleSubmit($event)"></app-submit-code>
+        <app-submit-code (submit)="this.handleSubmit($event)" [submitting]="codeSubmitting"></app-submit-code>
       </div>
     </mat-tab>
 
