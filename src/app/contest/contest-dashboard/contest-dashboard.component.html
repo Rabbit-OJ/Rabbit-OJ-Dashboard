@@ -118,6 +118,7 @@
                 <app-submit-code
                   (submit)="this.handleSubmit(item.tid)($event)"
                   [submitting]="this.submittingSet.has(item.tid)"
+                  [tid]="item.tid"
                 ></app-submit-code>
               </div>
             </ng-template>
