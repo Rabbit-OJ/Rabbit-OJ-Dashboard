@@ -168,7 +168,7 @@
       </div>
     </mat-tab>
 
-    <mat-tab *ngIf="clarifyList.length && (contest.status === 2 || (contest.status > 0 && myInfo.registered))">
+    <mat-tab *ngIf="contest.status === 2 || (contest.status > 0 && myInfo.registered)">
       <ng-template mat-tab-label>
         <span
           *ngIf="clarifyRead !== clarifyList.length"
@@ -219,7 +219,7 @@
         <h3>我的信息</h3>
         <div>得分：{{ myInfo.score }}</div>
         <div>用时：{{ renderTime(myInfo.total_time) }}</div>
-        <div>排名：{{ myInfo.rank }}</div>
+        <div *ngIf="myInfo.rank !== 0">排名：{{ myInfo.rank }}</div>
       </div>
       <div class="contest-info-container">
         <h3>比赛信息</h3>
