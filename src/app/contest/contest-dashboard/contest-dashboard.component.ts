@@ -38,6 +38,10 @@ export class ContestDashboardComponent implements OnInit {
     cid: 0,
     uid: 0
   };
+  clarification_send = {
+    submitting: false,
+    input: ""
+  };
   scoreBoardList: Array<ScoreBoard> = [];
   scoreBoardDisplayedColumns: string[] = ["username", "score"];
   scoreBoardExtraColumns: string[] = [];
@@ -68,12 +72,7 @@ export class ContestDashboardComponent implements OnInit {
   remainTime: string = "";
   private unsubscribe$: Subject<void>;
 
-  constructor(
-    private http: HttpClient,
-    private route: ActivatedRoute,
-    private snackBar: MatSnackBar,
-    public authService: AuthenticationService
-  ) {}
+  constructor(private http: HttpClient, private route: ActivatedRoute, private snackBar: MatSnackBar, public authService: AuthenticationService) {}
 
   renderTime = (input: number): string => HelperService.displayRelativeTime(input);
   renderRemainTime = () => {
@@ -91,9 +90,7 @@ export class ContestDashboardComponent implements OnInit {
       this.route.paramMap
         .pipe(
           switchMap((params: ParamMap) =>
-            this.http
-              .get<GeneralResponse<Contest>>(UrlService.CONTEST.GET_INFO(params.get("cid")))
-              .pipe(map(item => item.message))
+            this.http.get<GeneralResponse<Contest>>(UrlService.CONTEST.GET_INFO(params.get("cid"))).pipe(map(item => item.message))
           )
         )
         .subscribe(response => {
@@ -137,9 +134,7 @@ export class ContestDashboardComponent implements OnInit {
   };
   fetchSubmissionList = (notice: boolean = false) => {
     this.http
-      .get<GeneralResponse<Array<ContestSubmission>>>(
-        UrlService.CONTEST.GET_SUBMISSION_LIST(this.route.snapshot.paramMap.get("cid"))
-      )
+      .get<GeneralResponse<Array<ContestSubmission>>>(UrlService.CONTEST.GET_SUBMISSION_LIST(this.route.snapshot.paramMap.get("cid")))
       .pipe(map(item => item.message))
       .subscribe(response => {
         this.submissionList = response || [];
@@ -169,9 +164,7 @@ export class ContestDashboardComponent implements OnInit {
   };
   fetchClarifyList = (notice: boolean = false) => {
     this.http
-      .get<GeneralResponse<Array<ContestClarify<Date>>>>(
-        UrlService.CONTEST.GET_CLARIFY(this.route.snapshot.paramMap.get("cid"))
-      )
+      .get<GeneralResponse<Array<ContestClarify<Date>>>>(UrlService.CONTEST.GET_CLARIFY(this.route.snapshot.paramMap.get("cid")))
       .pipe(map(item => item.message))
       .subscribe(response => {
         this.clarifyList = response.map(item => ({
@@ -189,9 +182,7 @@ export class ContestDashboardComponent implements OnInit {
   };
   fetchScoreBoard = (notice: boolean = false) => {
     this.http
-      .get<GeneralResponse<ScoreBoardResponse>>(
-        UrlService.CONTEST.GET_SCORE_BOARD(this.route.snapshot.paramMap.get("cid"), this.scoreBoardPage.toString())
-      )
+      .get<GeneralResponse<ScoreBoardResponse>>(UrlService.CONTEST.GET_SCORE_BOARD(this.route.snapshot.paramMap.get("cid"), this.scoreBoardPage.toString()))
       .pipe(map(item => item.message))
       .subscribe(response => {
         this.scoreBoardList = response.list;
@@ -210,9 +201,7 @@ export class ContestDashboardComponent implements OnInit {
   };
   fetchQuestions = (notice: boolean = false) => {
     this.http
-      .get<GeneralResponse<Array<ContestQuestion>>>(
-        UrlService.CONTEST.GET_QUESTIONS(this.route.snapshot.paramMap.get("cid"))
-      )
+      .get<GeneralResponse<Array<ContestQuestion>>>(UrlService.CONTEST.GET_QUESTIONS(this.route.snapshot.paramMap.get("cid")))
       .pipe(map(item => item.message))
       .subscribe(response => {
         this.contestQuestions = response;
@@ -241,24 +230,19 @@ export class ContestDashboardComponent implements OnInit {
     this.scoreBoardExtraColumns = extraArr;
   };
   handleRegister = (status: "reg" | "cancel") => {
-    this.http
-      .post<GeneralResponse<string>>(
-        UrlService.CONTEST.POST_REGISTER(this.route.snapshot.paramMap.get("cid"), status),
-        {}
-      )
-      .subscribe(response => {
-        if (response.code === 200) {
-          this.snackBar.open("操作成功！", "OK", {
-            duration: 2000
-          });
-        } else {
-          this.snackBar.open(response.message, "OK", {
-            duration: 2000
-          });
-        }
+    this.http.post<GeneralResponse<string>>(UrlService.CONTEST.POST_REGISTER(this.route.snapshot.paramMap.get("cid"), status), {}).subscribe(response => {
+      if (response.code === 200) {
+        this.snackBar.open("操作成功！", "OK", {
+          duration: 2000
+        });
+      } else {
+        this.snackBar.open(response.message, "OK", {
+          duration: 2000
+        });
+      }
 
-        this.fetchMyInfo();
-      });
+      this.fetchMyInfo();
+    });
   };
   handlePageChange = (paginator: MatPaginator) => {
     this.scoreBoardPage = paginator.pageIndex + 1;
@@ -267,13 +251,7 @@ export class ContestDashboardComponent implements OnInit {
   handleOpenSubmissionPanel = (sid: string) => {
     if (!this.submissionInfo.has(sid) || this.submissionInfo.get(sid).status === "ING") {
       this.route.paramMap
-        .pipe(
-          switchMap(() =>
-            this.http
-              .get<GeneralResponse<Submission>>(UrlService.SUBMISSION.GET_DETAIL(sid))
-              .pipe(map(item => item.message))
-          )
-        )
+        .pipe(switchMap(() => this.http.get<GeneralResponse<Submission>>(UrlService.SUBMISSION.GET_DETAIL(sid)).pipe(map(item => item.message))))
         .subscribe(response => {
           this.submissionInfo.set(sid, response);
         });
@@ -349,9 +327,7 @@ export class ContestDashboardComponent implements OnInit {
     }
   };
   connectContestSocket = () => {
-    const socket$ = new WebSocketSubject<WebsocketMessage>(
-      UrlService.CONTEST.SOCKET(this.contest.cid.toString(), this.authService.currentUser.uid.toString())
-    );
+    const socket$ = new WebSocketSubject<WebsocketMessage>(UrlService.CONTEST.SOCKET(this.contest.cid.toString(), this.authService.currentUser.uid.toString()));
 
     this.socketStatus = true;
     socket$.pipe(takeUntil(this.unsubscribe$)).subscribe(
@@ -386,9 +362,7 @@ export class ContestDashboardComponent implements OnInit {
       ({ ok }) => {
         if (ok) {
           this.http
-            .get<GeneralResponse<ContestSubmission>>(
-              UrlService.CONTEST.GET_SUBMISSION_ONE(this.contest.cid.toString(), sid.toString())
-            )
+            .get<GeneralResponse<ContestSubmission>>(UrlService.CONTEST.GET_SUBMISSION_ONE(this.contest.cid.toString(), sid.toString()))
             .pipe(map(item => item.message))
             .subscribe(response => {
               this.fetchMyInfo();
@@ -411,5 +385,36 @@ export class ContestDashboardComponent implements OnInit {
         });
       }
     );
+  };
+  handleSubmitClarification = () => {
+    if (this.clarification_send.input === "") {
+      this.snackBar.open("Input something first!", "OK", {
+        duration: 2000
+      });
+
+      return;
+    }
+
+    this.clarification_send.submitting = true;
+    this.http
+      .post<GeneralResponse<string>>(UrlService.CONTEST.POST_CLARIFY_ADD, {
+        cid: this.contest.cid,
+        message: this.clarification_send.input
+      })
+      .subscribe(
+        ({ code }) => {
+          if (code === 200) {
+            this.fetchClarifyList(true);
+          }
+          this.clarification_send.submitting = false;
+        },
+        err => {
+          console.error(err);
+          this.snackBar.open("Clarify add error.", "OK", {
+            duration: 2000
+          });
+          this.clarification_send.submitting = false;
+        }
+      );
   };
 }

@@ -9,13 +9,16 @@ table {
   width: 100%;
 }
 .ac-block {
-  background-color: #beffadc8;
+  background-color: #d3ffc7c8;
+}
+.ac-nobug-block {
+  background-color: #b3f9a2c8;
 }
 .myself-block {
   background-color: #c0fff6c8;
 }
 .wa-block {
-  background-color: #ffa8a8c8;
+  background-color: #ffbcbcc8;
 }
 .rank-container {
   font-size: smaller;
@@ -55,5 +58,24 @@ table {
 .score-board-blocked-notice {
   display: flex;
   justify-content: center;
+  margin: 12px 0;
+}
+.send-clarification-form {
+  width: 100%;
+  min-height: 180px;
+  margin: 0;
+}
+.admin-panel-send-clarification {
+  margin: 24px 0 12px 0;
+}
+.submit-clarification-button-container {
+  margin: 6px 0 0 0;
+  display: flex;
+  justify-content: flex-end;
+  & button {
+    margin: 0;
+  }
+}
+.clarify-item {
   margin: 12px 0;
 }
