@@ -51,6 +51,27 @@
           <textarea class="admin-content" matInput placeholder="内容 (Markdown)" [(ngModel)]="question.content"></textarea>
         </mat-form-field>
 
+        <div class="admin-sample-container">
+          <div class="sample-control-container">
+            <button mat-raised-button color="primary" (click)="handleAddSample()">
+              添加样例
+            </button>
+          </div>
+          <div class="admin-sample-list-container">
+            <div class="admin-sample-edit-container" *ngFor="let item of this.question.sample; let i = index">
+              <mat-form-field>
+                <textarea class="admin-edit" matInput [placeholder]="'#' + i + ' stdin'" [(ngModel)]="question.sample[i].in"></textarea>
+              </mat-form-field>
+              <mat-form-field>
+                <textarea class="admin-edit" matInput [placeholder]="'#' + i + ' stdout'" [(ngModel)]="question.sample[i].out"></textarea>
+              </mat-form-field>
+              <button mat-raised-button class="delete-sample" color="accent" (click)="handleDeleteSample(i)">
+                删除
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div class="submit-btn-container">
           <button mat-raised-button id="submit" color="primary" (click)="handleSubmitEdit()">
             提交变更

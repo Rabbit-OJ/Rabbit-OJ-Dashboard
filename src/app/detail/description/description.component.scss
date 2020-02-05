@@ -8,6 +8,7 @@
 .sample {
   display: flex;
   flex-flow: row;
+  margin: 6px 0;
   & .in,
   & .out {
     flex-grow: 1;

@@ -136,4 +136,10 @@ export class DetailComponent implements OnInit {
         }
       );
   };
+  handleAddSample = () => {
+    this.question.sample.push({ in: "", out: "" });
+  };
+  handleDeleteSample = (id: number) => {
+    this.question.sample = this.question.sample.filter((_, index) => index !== id);
+  };
 }

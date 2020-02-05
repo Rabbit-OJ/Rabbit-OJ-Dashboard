@@ -15,4 +15,21 @@
     display: flex;
     justify-content: center;
   }
+  & .admin-sample-list-container {
+    width: 100%;
+    & .admin-sample-edit-container {
+      display: flex;
+      flex-flow: row;
+      margin: 6px 0;
+      & > mat-form-field {
+        flex-grow: 1;
+        margin: 3px;
+        min-height: 48px;
+      }
+
+      & .delete-sample {
+        height: 48px;
+      }
+    }
+  }
 }
