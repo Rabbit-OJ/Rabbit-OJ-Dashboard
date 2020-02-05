@@ -65,17 +65,15 @@ export class DetailComponent implements OnInit {
   }
 
   handleUpdateRecord = (page: string) => {
-    this.http
-      .get<GeneralResponse<SubmissionResponse>>(UrlService.QUESTION.GET_RECORD(this.question.tid.toString(), page))
-      .subscribe(({ code, message }) => {
-        if (code === 200) {
-          this.totalCount = message.count;
-          this.submissionList = message.list.map(item => ({
-            ...item,
-            created_at: new Date(item.created_at)
-          }));
-        }
-      });
+    this.http.get<GeneralResponse<SubmissionResponse>>(UrlService.QUESTION.GET_RECORD(this.question.tid.toString(), page)).subscribe(({ code, message }) => {
+      if (code === 200) {
+        this.totalCount = message.count;
+        this.submissionList = message.list.map(item => ({
+          ...item,
+          created_at: new Date(item.created_at)
+        }));
+      }
+    });
   };
 
   codeSubmitting: boolean = false;
@@ -118,5 +116,24 @@ export class DetailComponent implements OnInit {
         this.handleUpdateRecord("1");
       }
     }
+  };
+  handleSubmitEdit = () => {
+    this.http
+      .put<GeneralResponse<string>>(UrlService.QUESTION.PUT_EDIT(this.question.tid.toString()), {
+        ...this.question
+      })
+      .subscribe(
+        () => {
+          this.snackBar.open("修改成功！", "OK", {
+            duration: 2000
+          });
+        },
+        err => {
+          console.error(err);
+          this.snackBar.open("修改失败！", "OK", {
+            duration: 2000
+          });
+        }
+      );
   };
 }

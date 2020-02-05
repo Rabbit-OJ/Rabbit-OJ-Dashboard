@@ -1,32 +1,62 @@
 <div class="detail">
   <h1>
+    <span *ngIf="question.hide">🔒</span>
     {{ question.subject }}
   </h1>
-  <mat-tab-group
-    [dynamicHeight]="true"
-    mat-align-tabs="center"
-    (selectedTabChange)="this.handleSelectedTabChange($event)"
-  >
+  <mat-tab-group [dynamicHeight]="true" mat-align-tabs="center" (selectedTabChange)="this.handleSelectedTabChange($event)">
     <mat-tab label="题目描述">
       <app-description [question]="question" [isContest]="false"></app-description>
     </mat-tab>
 
     <mat-tab label="提交代码" *ngIf="authService.currentUser.isLogin">
       <div class="submit-container">
-        <app-submit-code
-          (submit)="this.handleSubmit($event)"
-          [submitting]="codeSubmitting"
-          [tid]="this.question.tid"
-        ></app-submit-code>
+        <app-submit-code (submit)="this.handleSubmit($event)" [submitting]="codeSubmitting" [tid]="this.question.tid"></app-submit-code>
       </div>
     </mat-tab>
 
-    <mat-tab label="提交记录">
-      <app-submission-list
-        [totalCount]="totalCount"
-        [submissionList]="submissionList"
-        (pageChange)="this.pageChange($event)"
-      ></app-submission-list>
+    <mat-tab label="提交记录" *ngIf="authService.currentUser.isLogin">
+      <app-submission-list [totalCount]="totalCount" [submissionList]="submissionList" (pageChange)="this.pageChange($event)"></app-submission-list>
+    </mat-tab>
+
+    <mat-tab label="题目编辑" *ngIf="authService.currentUser.isLogin && authService.currentUser.isAdmin">
+      <div class="edit-container">
+        <mat-form-field>
+          <input matInput placeholder="标题" [(ngModel)]="question.subject" />
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-select placeholder="难度" [(value)]="question.difficulty">
+            <mat-option [value]="0">简单</mat-option>
+            <mat-option [value]="1">一般</mat-option>
+            <mat-option [value]="2">困难</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="时间限制 (ms)" [(ngModel)]="question.time_limit" />
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="空间限制 (MB)" [(ngModel)]="question.space_limit" />
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-select placeholder="隐藏" [(value)]="question.hide">
+            <mat-option [value]="true">仅管理员可见</mat-option>
+            <mat-option [value]="false">所有人可见</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <textarea class="admin-content" matInput placeholder="内容 (Markdown)" [(ngModel)]="question.content"></textarea>
+        </mat-form-field>
+
+        <div class="submit-btn-container">
+          <button mat-raised-button id="submit" color="primary" (click)="handleSubmitEdit()">
+            提交变更
+          </button>
+        </div>
+      </div>
     </mat-tab>
   </mat-tab-group>
 </div>

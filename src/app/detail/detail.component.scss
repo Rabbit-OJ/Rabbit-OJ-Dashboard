@@ -1,3 +1,18 @@
 .submit-container {
   padding: 24px;
 }
+.edit-container {
+  padding: 36px 36px;
+  display: flex;
+  flex-direction: column;
+  & > mat-form-field {
+    width: 100%;
+  }
+  & .admin-content {
+    min-height: 160px;
+  }
+  & .submit-btn-container {
+    display: flex;
+    justify-content: center;
+  }
+}
