@@ -34,10 +34,23 @@ export class ContestDashboardComponent implements OnInit {
     status: 1,
     participants: 0,
     penalty: 300,
-    count: 5,
+    count: 1,
     cid: 0,
     uid: 0
   };
+  contest_clone: Contest<number> = {
+    name: "Loading...",
+    start_time: new Date().getTime() | 0,
+    block_time: new Date().getTime() | 0,
+    end_time: new Date().getTime() | 0,
+    status: 1,
+    participants: 0,
+    penalty: 300,
+    count: 1,
+    cid: 0,
+    uid: 0
+  };
+
   clarification_send = {
     submitting: false,
     input: ""
@@ -101,9 +114,12 @@ export class ContestDashboardComponent implements OnInit {
             block_time: new Date(response.block_time).toLocaleString()
           };
 
-          interval(500)
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe(() => this.renderRemainTime());
+          this.contest_clone = {
+            ...response,
+            start_time: new Date(response.start_time).getTime(),
+            end_time: new Date(response.end_time).getTime(),
+            block_time: new Date(response.block_time).getTime()
+          };
 
           if (this.contest.status > 0) {
             this.fetchMyInfo();
@@ -116,6 +132,9 @@ export class ContestDashboardComponent implements OnInit {
           if (this.contest.status === 1) {
             this.connectContestSocket();
             this.scheduledFetchScoreboard();
+            interval(500)
+              .pipe(takeUntil(this.unsubscribe$))
+              .subscribe(() => this.renderRemainTime());
           }
 
           this.renderScoreBoardQuestions(response.count);
@@ -345,14 +364,16 @@ export class ContestDashboardComponent implements OnInit {
       },
       err => {
         console.error(err);
-        this.snackBar.open("WebSocket配信中断，10秒后将会自动重连！", "OK", {
-          duration: 2000
-        });
-        this.socketStatus = false;
+        if (this.authService.currentUser.isLogin) {
+          this.snackBar.open("WebSocket配信中断，10秒后将会自动重连！", "OK", {
+            duration: 2000
+          });
+          this.socketStatus = false;
 
-        timer(10000)
-          .pipe(takeUntil(this.unsubscribe$))
-          .subscribe(() => this.connectContestSocket());
+          timer(10000)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe(() => this.connectContestSocket());
+        }
       }
     );
   };
@@ -414,6 +435,28 @@ export class ContestDashboardComponent implements OnInit {
             duration: 2000
           });
           this.clarification_send.submitting = false;
+        }
+      );
+  };
+  handleSubmitEdit = () => {
+    this.http
+      .put<GeneralResponse<string>>(UrlService.CONTEST.PUT_EDIT(this.contest.cid.toString()), {
+        ...this.contest_clone,
+        start_time: (new Date(this.contest_clone.start_time).getTime() / 1000) | 0,
+        end_time: (new Date(this.contest_clone.end_time).getTime() / 1000) | 0,
+        block_time: (new Date(this.contest_clone.block_time).getTime() / 1000) | 0
+      })
+      .subscribe(
+        () => {
+          this.snackBar.open("修改成功！", "OK", {
+            duration: 2000
+          });
+        },
+        err => {
+          console.error(err);
+          this.snackBar.open("修改失败！", "OK", {
+            duration: 2000
+          });
         }
       );
   };

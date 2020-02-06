@@ -5,14 +5,16 @@
     <span *ngIf="myInfo.rank === 3">🥉</span>
     {{ contest.name }}
   </h1>
-  <div class="status-container socket-ok" *ngIf="contest.status === 1 && socketStatus">
-    WebSocket配信中, 比赛剩余 {{ remainTime }}{{ renderBlockedScoreboard() }}
-  </div>
-  <div class="status-container socket-fail" *ngIf="contest.status === 1 && !socketStatus">
-    WebSocket配信失败, 比赛剩余 {{ remainTime }}{{ renderBlockedScoreboard() }}
-  </div>
-  <div class="status-container contest-ok" *ngIf="contest.status === 3">
-    比赛结束，正在统计排行榜
+  <div class="status-container" *ngIf="this.authService.currentUser.isLogin">
+    <div class="status-container socket-ok" *ngIf="contest.status === 1 && socketStatus">
+      WebSocket配信中, 比赛剩余 {{ remainTime }}{{ renderBlockedScoreboard() }}
+    </div>
+    <div class="status-container socket-fail" *ngIf="contest.status === 1 && !socketStatus">
+      WebSocket配信失败, 比赛剩余 {{ remainTime }}{{ renderBlockedScoreboard() }}
+    </div>
+    <div class="status-container contest-ok" *ngIf="contest.status === 3">
+      比赛结束，正在统计排行榜
+    </div>
   </div>
   <mat-tab-group [dynamicHeight]="true" mat-align-tabs="center" (selectedTabChange)="this.handleSelectedTabChange($event)">
     <mat-tab label="SCOREBOARD" *ngIf="contest.status === 2 || (contest.status > 0 && myInfo.registered)">
@@ -191,6 +193,44 @@
         <div>封榜时间：{{ contest.block_time }}</div>
         <div>结束时间：{{ contest.end_time }}</div>
         <div>罚时时间：{{ renderTime(contest.penalty) }}</div>
+      </div>
+      <div class="contest-admin-container" *ngIf="this.authService.currentUser.isLogin && this.authService.currentUser.isAdmin">
+        <h3>比赛编辑</h3>
+        <div class="edit-container">
+          <mat-form-field>
+            <input matInput placeholder="标题" [(ngModel)]="contest_clone.name" />
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput type="number" placeholder="罚时 (秒)" [(ngModel)]="contest_clone.penalty" />
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput type="datetime-local" placeholder="开始时间" [(ngModel)]="contest_clone.start_time" />
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput type="datetime-local" placeholder="结束时间" [(ngModel)]="contest_clone.end_time" />
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput type="datetime-local" placeholder="封榜时间" [(ngModel)]="contest_clone.block_time" />
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-select placeholder="状态" [(value)]="contest_clone.status">
+              <mat-option [value]="0">未开始</mat-option>
+              <mat-option [value]="1">进行中</mat-option>
+              <mat-option [value]="2">已完毕</mat-option>
+              <mat-option [value]="3">统计中</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="submit-btn-container">
+          <button mat-raised-button id="submit" color="primary" (click)="handleSubmitEdit()">
+            提交变更
+          </button>
+        </div>
       </div>
       <div class="refresh-time-container" *ngIf="myInfo.registered">
         <button mat-button color="primary" (click)="fetchMyInfo(true)" *ngIf="contest.status === 1">

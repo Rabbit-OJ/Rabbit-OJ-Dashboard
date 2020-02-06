@@ -38,6 +38,7 @@ export class UrlService {
   };
 
   static CONTEST = {
+    PUT_EDIT: (cid: string) => `${BACKEND_URL}/contest/info/${cid}`,
     GET_LIST: (page: string) => `${BACKEND_URL}/contest/list/${page}`,
     GET_MY_INFO: (cid: string) => `${BACKEND_URL}/contest/my/info/${cid}`,
     POST_SUBMIT: (cid: string, id: string) => `${BACKEND_URL}/contest/submit/${cid}/${id}`,

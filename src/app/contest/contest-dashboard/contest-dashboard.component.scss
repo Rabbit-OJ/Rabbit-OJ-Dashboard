@@ -79,3 +79,12 @@ table {
 .clarify-item {
   margin: 12px 0;
 }
+.submit-btn-container {
+  display: flex;
+  justify-content: center;
+}
+.edit-container {
+  padding: 0 36px;
+  display: flex;
+  flex-direction: column;
+}
