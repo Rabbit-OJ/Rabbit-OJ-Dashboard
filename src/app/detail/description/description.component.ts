@@ -2,8 +2,6 @@ import { Component, OnInit, Input } from "@angular/core";
 import { QuestionDetail } from "src/app/interface/question-detail";
 import { ContestQuestion } from "src/app/interface/contest-question";
 
-import marked from "marked";
-
 @Component({
   selector: "app-description",
   templateUrl: "./description.component.html",
@@ -12,7 +10,7 @@ import marked from "marked";
 export class DescriptionComponent implements OnInit {
   @Input() question: QuestionDetail | ContestQuestion = {
     tid: 0,
-    content: "<p></p>",
+    content: "",
     subject: "",
     attempt: 0,
     accept: 0,
@@ -27,13 +25,4 @@ export class DescriptionComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
-
-  renderQuestionContent = () => {
-    const { content } = this.question;
-    if (content) {
-      return marked(content);
-    } else {
-      return "";
-    }
-  };
 }

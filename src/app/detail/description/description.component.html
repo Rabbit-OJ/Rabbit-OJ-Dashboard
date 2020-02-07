@@ -1,6 +1,6 @@
 <h3>题目描述</h3>
 <div class="description" id="description">
-  <ng-katex-html [html]="renderQuestionContent()"></ng-katex-html>
+  <div markdown ngPreserveWhitespaces katex [data]="question.content"></div>
 </div>
 <h3>测试样例</h3>
 <div class="sample" *ngFor="let _sample of question.sample">

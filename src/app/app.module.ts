@@ -4,7 +4,6 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppRoutingModule } from "./app-routing.module";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
-import { KatexModule } from "ng-katex";
 
 import { MatButtonModule } from "@angular/material/button";
 import { MatToolbarModule } from "@angular/material/toolbar";
@@ -25,6 +24,7 @@ import { MatBadgeModule } from "@angular/material/badge";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from "ngx-mat-datetime-picker";
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
+import { MarkdownModule } from 'ngx-markdown';
 
 import { AppComponent } from "./app.component";
 import { ListComponent } from "./list/list.component";
@@ -84,7 +84,7 @@ import { SubmitCodeComponent } from "./detail/submit-code/submit-code.component"
     NgxMatTimepickerModule,
     MatMomentDateModule,
     MatBadgeModule,
-    KatexModule
+    MarkdownModule.forRoot()
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]
