@@ -206,15 +206,21 @@
           </mat-form-field>
 
           <mat-form-field>
-            <input matInput type="datetime-local" placeholder="开始时间" [(ngModel)]="contest_clone.start_time" />
+            <input readonly matInput [ngxMatDatetimePicker]="picker1" placeholder="开始时间" [(ngModel)]="contest_clone.start_time" />
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker1 [showSpinners]="false"></ngx-mat-datetime-picker>
           </mat-form-field>
 
           <mat-form-field>
-            <input matInput type="datetime-local" placeholder="结束时间" [(ngModel)]="contest_clone.end_time" />
+            <input readonly matInput [ngxMatDatetimePicker]="picker2" placeholder="结束时间" [(ngModel)]="contest_clone.end_time" />
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker2 [showSpinners]="false"></ngx-mat-datetime-picker>
           </mat-form-field>
 
           <mat-form-field>
-            <input matInput type="datetime-local" placeholder="封榜时间" [(ngModel)]="contest_clone.block_time" />
+            <input readonly matInput [ngxMatDatetimePicker]="picker3" placeholder="封榜时间" [(ngModel)]="contest_clone.block_time" />
+            <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker3 [showSpinners]="false"></ngx-mat-datetime-picker>
           </mat-form-field>
 
           <mat-form-field>

@@ -22,6 +22,9 @@ import { MatTableModule } from "@angular/material/table";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatBadgeModule } from "@angular/material/badge";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from "ngx-mat-datetime-picker";
+import { MatMomentDateModule } from "@angular/material-moment-adapter";
 
 import { AppComponent } from "./app.component";
 import { ListComponent } from "./list/list.component";
@@ -34,10 +37,10 @@ import { SubmissionComponent } from "./submission/submission.component";
 import { SubmissionDetailComponent } from "./submission/submission-detail/submission-detail.component";
 import { CaseDotComponent } from "./submission/case-dot/case-dot.component";
 import { SubmissionListComponent } from "./submission/submission-list/submission-list.component";
-import { ContestListComponent } from './contest/contest-list/contest-list.component';
-import { ContestDashboardComponent } from './contest/contest-dashboard/contest-dashboard.component';
-import { DescriptionComponent } from './detail/description/description.component';
-import { SubmitCodeComponent } from './detail/submit-code/submit-code.component';
+import { ContestListComponent } from "./contest/contest-list/contest-list.component";
+import { ContestDashboardComponent } from "./contest/contest-dashboard/contest-dashboard.component";
+import { DescriptionComponent } from "./detail/description/description.component";
+import { SubmitCodeComponent } from "./detail/submit-code/submit-code.component";
 
 @NgModule({
   declarations: [
@@ -75,9 +78,13 @@ import { SubmitCodeComponent } from './detail/submit-code/submit-code.component'
     MatMenuModule,
     MatTableModule,
     MatPaginatorModule,
-    KatexModule,
     MatExpansionModule,
-    MatBadgeModule
+    MatDatepickerModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
+    MatMomentDateModule,
+    MatBadgeModule,
+    KatexModule
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]

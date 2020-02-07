@@ -18,6 +18,7 @@ import { AuthenticationService } from "src/app/service/authentication.service";
 import { WebSocketSubject } from "rxjs/webSocket";
 import { WebsocketMessage } from "src/app/interface/websocket";
 import { interval, Subject, timer } from "rxjs";
+import moment, { Moment } from "moment";
 
 @Component({
   selector: "app-contest-dashboard",
@@ -38,11 +39,11 @@ export class ContestDashboardComponent implements OnInit {
     cid: 0,
     uid: 0
   };
-  contest_clone: Contest<number> = {
+  contest_clone: Contest<Moment> = {
     name: "Loading...",
-    start_time: new Date().getTime() | 0,
-    block_time: new Date().getTime() | 0,
-    end_time: new Date().getTime() | 0,
+    start_time: moment(),
+    block_time: moment(),
+    end_time: moment(),
     status: 1,
     participants: 0,
     penalty: 300,
@@ -55,6 +56,7 @@ export class ContestDashboardComponent implements OnInit {
     submitting: false,
     input: ""
   };
+  test = moment();
   scoreBoardList: Array<ScoreBoard> = [];
   scoreBoardDisplayedColumns: string[] = ["username", "score"];
   scoreBoardExtraColumns: string[] = [];
@@ -116,9 +118,9 @@ export class ContestDashboardComponent implements OnInit {
 
           this.contest_clone = {
             ...response,
-            start_time: new Date(response.start_time).getTime(),
-            end_time: new Date(response.end_time).getTime(),
-            block_time: new Date(response.block_time).getTime()
+            start_time: moment(response.start_time),
+            end_time: moment(response.end_time),
+            block_time: moment(response.block_time)
           };
 
           if (this.contest.status > 0) {
@@ -442,9 +444,9 @@ export class ContestDashboardComponent implements OnInit {
     this.http
       .put<GeneralResponse<string>>(UrlService.CONTEST.PUT_EDIT(this.contest.cid.toString()), {
         ...this.contest_clone,
-        start_time: (new Date(this.contest_clone.start_time).getTime() / 1000) | 0,
-        end_time: (new Date(this.contest_clone.end_time).getTime() / 1000) | 0,
-        block_time: (new Date(this.contest_clone.block_time).getTime() / 1000) | 0
+        start_time: this.contest_clone.start_time.valueOf() / 1000 | 0,
+        end_time: this.contest_clone.end_time.valueOf() / 1000 | 0,
+        block_time: this.contest_clone.block_time.valueOf() / 1000 | 0
       })
       .subscribe(
         () => {
