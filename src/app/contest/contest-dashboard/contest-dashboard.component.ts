@@ -11,7 +11,7 @@ import { UrlService } from "src/app/service/url.service";
 import { ScoreBoard, ScoreBoardResponse } from "src/app/interface/score-board";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { HelperService } from "src/app/service/helper.service";
-import { ContestQuestion, ContestQuestionItem } from "src/app/interface/contest-question";
+import { ContestQuestion, ContestQuestionItem, ContestQuestionLite } from "src/app/interface/contest-question";
 import { ContestSubmission, Submission } from "src/app/interface/submission";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { AuthenticationService } from "src/app/service/authentication.service";
@@ -80,6 +80,7 @@ export class ContestDashboardComponent implements OnInit {
   };
   scoreBoardPage: number = 1;
   contestQuestions: Array<ContestQuestion> = [];
+  contestQuestions_clone: Array<ContestQuestionLite> = [];
   submissionList: Array<ContestSubmission> = [];
   questionMap: Map<number, ContestQuestionItem> = new Map<number, ContestQuestionItem>();
   submissionInfo: Map<string, Submission> = new Map<string, Submission>();
@@ -122,6 +123,10 @@ export class ContestDashboardComponent implements OnInit {
             end_time: moment(response.end_time),
             block_time: moment(response.block_time)
           };
+
+          if (this.contest.status === 0 && this.authService.currentUser.isAdmin) {
+            this.fetchQuestions();
+          }
 
           if (this.contest.status > 0) {
             this.fetchMyInfo();
@@ -231,6 +236,11 @@ export class ContestDashboardComponent implements OnInit {
         this.contestQuestions.forEach(item => {
           this.questionMap.set(item.tid, { id: item.id, subject: item.subject });
         });
+        this.contestQuestions_clone = this.contestQuestions.map(item => ({
+          tid: item.tid,
+          id: item.id,
+          score: item.score
+        }));
 
         this.refreshTime.question = new Date();
         if (notice) {
@@ -444,9 +454,9 @@ export class ContestDashboardComponent implements OnInit {
     this.http
       .put<GeneralResponse<string>>(UrlService.CONTEST.PUT_EDIT(this.contest.cid.toString()), {
         ...this.contest_clone,
-        start_time: this.contest_clone.start_time.valueOf() / 1000 | 0,
-        end_time: this.contest_clone.end_time.valueOf() / 1000 | 0,
-        block_time: this.contest_clone.block_time.valueOf() / 1000 | 0
+        start_time: (this.contest_clone.start_time.valueOf() / 1000) | 0,
+        end_time: (this.contest_clone.end_time.valueOf() / 1000) | 0,
+        block_time: (this.contest_clone.block_time.valueOf() / 1000) | 0
       })
       .subscribe(
         () => {
@@ -461,5 +471,34 @@ export class ContestDashboardComponent implements OnInit {
           });
         }
       );
+  };
+  handleDeleteContestQuestion = (id: number) => {
+    this.contestQuestions_clone = this.contestQuestions_clone.filter(item => item.id !== id);
+  };
+  handleSubmitContestQuestion = () => {
+    this.http
+      .put<GeneralResponse<string>>(UrlService.CONTEST.PUT_QUESTION(this.contest.cid.toString()), {
+        data: [...this.contestQuestions_clone]
+      })
+      .subscribe(
+        () => {
+          this.snackBar.open("修改成功！", "OK", {
+            duration: 2000
+          });
+        },
+        err => {
+          console.error(err);
+          this.snackBar.open("修改失败！", "OK", {
+            duration: 2000
+          });
+        }
+      );
+  };
+  handleAddContestQuestion = () => {
+    this.contestQuestions_clone.push({
+      tid: 0,
+      id: this.contestQuestions_clone.length,
+      score: 0
+    });
   };
 }

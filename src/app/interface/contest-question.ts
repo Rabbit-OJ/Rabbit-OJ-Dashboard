@@ -17,6 +17,12 @@ export interface ContestQuestion {
   accept: number;
 }
 
+export interface ContestQuestionLite {
+  tid: number;
+  id: number;
+  score: number;
+}
+
 export interface ContestQuestionItem {
   subject: string;
   id: number;

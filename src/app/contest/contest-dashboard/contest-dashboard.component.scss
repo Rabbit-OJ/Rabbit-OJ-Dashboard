@@ -82,9 +82,26 @@ table {
 .submit-btn-container {
   display: flex;
   justify-content: center;
+  & > button {
+    margin: 0 12px;
+  }
 }
 .edit-container {
   padding: 0 36px;
   display: flex;
   flex-direction: column;
+}
+.admin-contest-container {
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  margin: 6px 0;
+  & > mat-form-field {
+    flex-grow: 1;
+    margin: 3px;
+    min-height: 48px;
+  }
+  & .delete-contest-question {
+    height: 48px;
+  }
 }

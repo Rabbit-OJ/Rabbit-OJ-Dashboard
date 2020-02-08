@@ -195,53 +195,84 @@
         <div>罚时时间：{{ renderTime(contest.penalty) }}</div>
       </div>
       <div class="contest-admin-container" *ngIf="this.authService.currentUser.isLogin && this.authService.currentUser.isAdmin">
-        <h3>比赛编辑</h3>
-        <div class="edit-container">
-          <mat-form-field appearance="outline">
-            <mat-label>标题</mat-label>
-            <input matInput placeholder="标题" [(ngModel)]="contest_clone.name" />
-          </mat-form-field>
+        <div class="contest-admin-basic-container">
+          <h3>比赛编辑</h3>
+          <div class="edit-container">
+            <mat-form-field appearance="outline">
+              <mat-label>标题</mat-label>
+              <input matInput placeholder="标题" [(ngModel)]="contest_clone.name" />
+            </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>罚时 (秒)</mat-label>
-            <input matInput type="number" placeholder="罚时 (秒)" [(ngModel)]="contest_clone.penalty" />
-          </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>罚时 (秒)</mat-label>
+              <input matInput type="number" placeholder="罚时 (秒)" [(ngModel)]="contest_clone.penalty" />
+            </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>开始时间</mat-label>
-            <input readonly matInput [ngxMatDatetimePicker]="picker1" placeholder="开始时间" [(ngModel)]="contest_clone.start_time" />
-            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-            <ngx-mat-datetime-picker #picker1 [showSpinners]="false"></ngx-mat-datetime-picker>
-          </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>开始时间</mat-label>
+              <input readonly matInput [ngxMatDatetimePicker]="picker1" placeholder="开始时间" [(ngModel)]="contest_clone.start_time" />
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <ngx-mat-datetime-picker #picker1 [showSpinners]="false"></ngx-mat-datetime-picker>
+            </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>结束时间</mat-label>
-            <input readonly matInput [ngxMatDatetimePicker]="picker2" placeholder="结束时间" [(ngModel)]="contest_clone.end_time" />
-            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-            <ngx-mat-datetime-picker #picker2 [showSpinners]="false"></ngx-mat-datetime-picker>
-          </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>结束时间</mat-label>
+              <input readonly matInput [ngxMatDatetimePicker]="picker2" placeholder="结束时间" [(ngModel)]="contest_clone.end_time" />
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <ngx-mat-datetime-picker #picker2 [showSpinners]="false"></ngx-mat-datetime-picker>
+            </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>封榜时间</mat-label>
-            <input readonly matInput [ngxMatDatetimePicker]="picker3" placeholder="封榜时间" [(ngModel)]="contest_clone.block_time" />
-            <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
-            <ngx-mat-datetime-picker #picker3 [showSpinners]="false"></ngx-mat-datetime-picker>
-          </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>封榜时间</mat-label>
+              <input readonly matInput [ngxMatDatetimePicker]="picker3" placeholder="封榜时间" [(ngModel)]="contest_clone.block_time" />
+              <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+              <ngx-mat-datetime-picker #picker3 [showSpinners]="false"></ngx-mat-datetime-picker>
+            </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>状态</mat-label>
-            <mat-select placeholder="状态" [(value)]="contest_clone.status">
-              <mat-option [value]="0">未开始</mat-option>
-              <mat-option [value]="1">进行中</mat-option>
-              <mat-option [value]="2">已完毕</mat-option>
-              <mat-option [value]="3">统计中</mat-option>
-            </mat-select>
-          </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>状态</mat-label>
+              <mat-select placeholder="状态" [(value)]="contest_clone.status">
+                <mat-option [value]="0">未开始</mat-option>
+                <mat-option [value]="1">进行中</mat-option>
+                <mat-option [value]="2">已完毕</mat-option>
+                <mat-option [value]="3">统计中</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="submit-btn-container">
+            <button mat-raised-button color="primary" (click)="handleSubmitEdit()">
+              提交变更
+            </button>
+          </div>
         </div>
-        <div class="submit-btn-container">
-          <button mat-raised-button id="submit" color="primary" (click)="handleSubmitEdit()">
-            提交变更
-          </button>
+        <div class="contest-admin-question-container" *ngIf="contest.status === 0 || contest_clone.status === 0">
+          <h3>题目编辑</h3>
+          <div>警告⚠️：比赛开始后请勿修改比赛题目id、增删题目，否则可能会出现未定义的行为！</div>
+          <div class="admin-contest-container" *ngFor="let item of contestQuestions_clone; let i = index">
+            <mat-form-field appearance="outline">
+              <mat-label>tid</mat-label>
+              <input matInput type="number" placeholder="tid" [(ngModel)]="contestQuestions_clone[i].tid" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>分数</mat-label>
+              <input matInput type="number" placeholder="分数" [(ngModel)]="contestQuestions_clone[i].score" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>id</mat-label>
+              <input matInput type="number" placeholder="id" [(ngModel)]="contestQuestions_clone[i].id" />
+            </mat-form-field>
+            <button mat-raised-button class="delete-contest-question" color="accent" (click)="handleDeleteContestQuestion(item.id)">
+              删除
+            </button>
+          </div>
+          <div class="submit-btn-container">
+            <button mat-raised-button color="primary" (click)="handleAddContestQuestion()">
+              添加题目
+            </button>
+            <button mat-raised-button color="primary" (click)="handleSubmitContestQuestion()">
+              提交变更
+            </button>
+          </div>
         </div>
       </div>
       <div class="refresh-time-container" *ngIf="myInfo.registered">
