@@ -5,7 +5,14 @@
   padding: 36px 36px;
   display: flex;
   flex-direction: column;
-  & > mat-form-field {
+  &  h3 {
+    user-select: none;
+    text-align: center;
+  }
+  &  h3:first {
+    margin-top: 0;
+  }
+  &  mat-form-field {
     width: 100%;
   }
   & .admin-content {
@@ -14,6 +21,9 @@
   & .submit-btn-container {
     display: flex;
     justify-content: center;
+    & > button {
+      margin: 0 12px;
+    }
   }
   & .admin-sample-list-container {
     width: 100%;

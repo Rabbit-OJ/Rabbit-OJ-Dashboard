@@ -20,49 +20,53 @@
 
     <mat-tab label="题目编辑" *ngIf="authService.currentUser.isLogin && authService.currentUser.isAdmin">
       <div class="edit-container">
-        <mat-form-field>
+        <h3>编辑题目</h3>
+        <mat-form-field appearance="outline">
+          <mat-label>标题</mat-label>
           <input matInput placeholder="标题" [(ngModel)]="question.subject" />
         </mat-form-field>
 
-        <mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>难度</mat-label>
           <mat-select placeholder="难度" [(value)]="question.difficulty">
-            <mat-option [value]="0">简单</mat-option>
-            <mat-option [value]="1">一般</mat-option>
-            <mat-option [value]="2">困难</mat-option>
+            <mat-option [value]="1">简单</mat-option>
+            <mat-option [value]="2">一般</mat-option>
+            <mat-option [value]="3">困难</mat-option>
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field>
-          <input matInput placeholder="时间限制 (ms)" [(ngModel)]="question.time_limit" />
+        <mat-form-field appearance="outline">
+          <mat-label>时间限制 (ms)</mat-label>
+          <input matInput type="number" placeholder="时间限制 (ms)" [(ngModel)]="question.time_limit" />
         </mat-form-field>
 
-        <mat-form-field>
-          <input matInput placeholder="空间限制 (MB)" [(ngModel)]="question.space_limit" />
+        <mat-form-field appearance="outline">
+          <mat-label>空间限制 (MB)</mat-label>
+          <input matInput type="number" placeholder="空间限制 (MB)" [(ngModel)]="question.space_limit" />
         </mat-form-field>
 
-        <mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>隐藏</mat-label>
           <mat-select placeholder="隐藏" [(value)]="question.hide">
             <mat-option [value]="true">仅管理员可见</mat-option>
             <mat-option [value]="false">所有人可见</mat-option>
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>内容 (Markdown)</mat-label>
           <textarea class="admin-content" matInput placeholder="内容 (Markdown)" [(ngModel)]="question.content"></textarea>
         </mat-form-field>
 
         <div class="admin-sample-container">
-          <div class="sample-control-container">
-            <button mat-raised-button color="primary" (click)="handleAddSample()">
-              添加样例
-            </button>
-          </div>
           <div class="admin-sample-list-container">
             <div class="admin-sample-edit-container" *ngFor="let item of this.question.sample; let i = index">
-              <mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label># {{ i }} stdin</mat-label>
                 <textarea class="admin-edit" matInput [placeholder]="'#' + i + ' stdin'" [(ngModel)]="question.sample[i].in"></textarea>
               </mat-form-field>
-              <mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label># {{ i }} stdout</mat-label>
                 <textarea class="admin-edit" matInput [placeholder]="'#' + i + ' stdout'" [(ngModel)]="question.sample[i].out"></textarea>
               </mat-form-field>
               <button mat-raised-button class="delete-sample" color="accent" (click)="handleDeleteSample(i)">
@@ -73,9 +77,45 @@
         </div>
 
         <div class="submit-btn-container">
+          <button mat-raised-button color="primary" (click)="handleAddSample()">
+            添加样例
+          </button>
           <button mat-raised-button id="submit" color="primary" (click)="handleSubmitEdit()">
             提交变更
           </button>
+        </div>
+
+        <div class="dataset-edit-container" *ngIf="judge_activated">
+          <h3>编辑测试点</h3>
+          <div>
+            请预先通过scp、ftp等方式将测试点数据置于目录/files/judge/:tid/:version中，并且测试点从1开始依次递增，命名规范：1.in, 1.out,
+            ...确保文件上传无误后，再切换测试数据集。请务必确保下面的信息不要填写错误，否则可能会出现问题。
+          </div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>数据集版本</mat-label>
+            <input matInput type="number" placeholder="数据集版本" [(ngModel)]="questionJudge.version" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>测试点数量</mat-label>
+            <input matInput type="number" placeholder="测试点数量" [(ngModel)]="questionJudge.dataset_count" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>评测方法</mat-label>
+            <mat-select placeholder="评测方法" [(value)]="questionJudge.mode">
+              <mat-option value="STDIN_F">切分、浮点数比对 (误差 <= 1e-6)</mat-option>
+              <mat-option value="STDIN_S">切分、文本比对</mat-option>
+              <mat-option value="CMP">直接文本比对</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div class="submit-btn-container">
+            <button mat-raised-button id="submit" color="primary" (click)="handleSubmitQuestionJudge()">
+              提交变更
+            </button>
+          </div>
         </div>
       </div>
     </mat-tab>

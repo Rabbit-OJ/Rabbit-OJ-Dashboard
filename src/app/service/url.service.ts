@@ -16,7 +16,8 @@ export class UrlService {
     POST_CREATE: `${BACKEND_URL}/question/item`,
     PUT_EDIT: (tid: string)=>`${BACKEND_URL}/question/item/${tid}`,
     POST_SUBMIT: (tid: string) => `${BACKEND_URL}/question/submit/${tid}`,
-    GET_RECORD: (tid: string, page: string) => `${BACKEND_URL}/question/record/${tid}/${page}`
+    GET_RECORD: (tid: string, page: string) => `${BACKEND_URL}/question/record/${tid}/${page}`,
+    OPTIONS_JUDGE: (tid: string) => `${BACKEND_URL}/question/judge/${tid}`
   };
 
   static USER = {

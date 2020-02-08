@@ -12,6 +12,7 @@ import { AuthenticationService } from "../service/authentication.service";
 import { MatPaginator } from "@angular/material/paginator";
 import { SubmissionResponse } from "../interface/submission-response";
 import { MatTabChangeEvent } from "@angular/material/tabs";
+import { QuestionJudge } from "../interface/question-judge";
 
 @Component({
   selector: "app-detail",
@@ -32,10 +33,16 @@ export class DetailComponent implements OnInit {
     sample: [],
     hide: false
   };
+  questionJudge: QuestionJudge = {
+    mode: "CMP",
+    dataset_count: 1,
+    version: 1
+  };
   submissionList: Array<SubmissionLite> = [];
   totalCount: number = 0;
   currentPage: number = 0;
   firstVisitSubmission: boolean = true;
+  judge_activated: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -60,10 +67,32 @@ export class DetailComponent implements OnInit {
         )
         .subscribe(response => {
           this.question = response;
+          this.fetchQuestionJudgeInfo();
         });
     }, 0);
   }
+  fetchQuestionJudgeInfo = () => {
+    if (!this.authService.currentUser.isAdmin) return;
+    const { tid } = this.question;
 
+    this.http
+      .get<GeneralResponse<QuestionJudge>>(UrlService.QUESTION.OPTIONS_JUDGE(tid.toString()))
+      .pipe(
+        map(item => ({
+          ...item.message
+        }))
+      )
+      .subscribe(
+        response => {
+          this.questionJudge = response;
+          this.judge_activated = true;
+        },
+        err => {
+          console.error(err);
+          this.judge_activated = false;
+        }
+      );
+  };
   handleUpdateRecord = (page: string) => {
     this.http.get<GeneralResponse<SubmissionResponse>>(UrlService.QUESTION.GET_RECORD(this.question.tid.toString(), page)).subscribe(({ code, message }) => {
       if (code === 200) {
@@ -141,5 +170,24 @@ export class DetailComponent implements OnInit {
   };
   handleDeleteSample = (id: number) => {
     this.question.sample = this.question.sample.filter((_, index) => index !== id);
+  };
+  handleSubmitQuestionJudge = () => {
+    this.http
+      .post<GeneralResponse<string>>(UrlService.QUESTION.OPTIONS_JUDGE(this.question.tid.toString()), {
+        ...this.questionJudge
+      })
+      .subscribe(
+        () => {
+          this.snackBar.open("修改成功！", "OK", {
+            duration: 2000
+          });
+        },
+        err => {
+          console.error(err);
+          this.snackBar.open("修改失败！", "OK", {
+            duration: 2000
+          });
+        }
+      );
   };
 }
