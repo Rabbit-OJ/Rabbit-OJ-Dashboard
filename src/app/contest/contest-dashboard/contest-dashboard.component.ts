@@ -159,6 +159,7 @@ export class ContestDashboardComponent implements OnInit {
       });
   };
   fetchSubmissionList = (notice: boolean = false) => {
+    if (!this.authService.currentUser.isLogin) return;
     this.http
       .get<GeneralResponse<Array<ContestSubmission>>>(UrlService.CONTEST.GET_SUBMISSION_LIST(this.route.snapshot.paramMap.get("cid")))
       .pipe(map(item => item.message))
@@ -174,6 +175,8 @@ export class ContestDashboardComponent implements OnInit {
       });
   };
   fetchMyInfo = (notice: boolean = false) => {
+    if (!this.authService.currentUser.isLogin) return;
+
     this.http
       .get<GeneralResponse<ContestMyInfo>>(UrlService.CONTEST.GET_MY_INFO(this.route.snapshot.paramMap.get("cid")))
       .pipe(map(item => item.message))
@@ -358,6 +361,7 @@ export class ContestDashboardComponent implements OnInit {
     }
   };
   connectContestSocket = () => {
+    if (!this.authService.currentUser.isLogin) return;
     const socket$ = new WebSocketSubject<WebsocketMessage>(UrlService.CONTEST.SOCKET(this.contest.cid.toString(), this.authService.currentUser.uid.toString()));
 
     this.socketStatus = true;
