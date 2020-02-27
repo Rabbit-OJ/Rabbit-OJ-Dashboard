@@ -137,8 +137,10 @@ export class ContestDashboardComponent implements OnInit {
           }
 
           if (this.contest.status === 1) {
-            this.connectContestSocket();
-            this.scheduledFetchScoreboard();
+            if (this.myInfo.registered) {
+              this.connectContestSocket();
+              this.scheduledFetchScoreboard();
+            }
             interval(500)
               .pipe(takeUntil(this.unsubscribe$))
               .subscribe(() => this.renderRemainTime());
@@ -148,6 +150,7 @@ export class ContestDashboardComponent implements OnInit {
           this.scoreBoardCount = response.participants;
         });
     }, 0);
+    this.authService.currentUserObservable.subscribe(() => this.fetchMyInfo());
   }
   scheduledFetchScoreboard = () => {
     interval(5 * 60 * 1000)
@@ -361,7 +364,7 @@ export class ContestDashboardComponent implements OnInit {
     }
   };
   connectContestSocket = () => {
-    if (!this.authService.currentUser.isLogin) return;
+    if (!this.authService.currentUser.isLogin || !this.myInfo.registered) return;
     const socket$ = new WebSocketSubject<WebsocketMessage>(UrlService.CONTEST.SOCKET(this.contest.cid.toString(), this.authService.currentUser.uid.toString()));
 
     this.socketStatus = true;
